@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>{% block title project.config('title') %}</title>
+        {% block head %}
+            <link rel="stylesheet" type="text/css" href="{{ path('stylesheet.css') }}">
+        {% endblock %}
+        {% if project.config('favicon') %}
+            <link rel="shortcut icon" href="{{ project.config('favicon') }}" />
+        {% endif %}
+        {% if project.config('base_url') %}
+            {%- for version in project.versions -%}
+                <link rel="search" type="application/opensearchdescription+xml" href="{{ project.config('base_url')|replace({'%version%': version}) }}/opensearch.xml" title="{{ project.config('title') }} ({{ version }})" />
+            {% endfor -%}
+        {% endif %}
+    </head>
+    {% block html %}
+    {% endblock %}
+</html>

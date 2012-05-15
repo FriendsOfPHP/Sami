@@ -1,0 +1,11 @@
+{% extends "layout/base.twig" %}
+
+{% block html %}
+    <body id="{% block body_class '' %}">
+        {% block header '' %}
+        <div class="content">
+            {% block content '' %}
+        </div>
+        {% block footer '' %}
+    </body>
+{% endblock %}

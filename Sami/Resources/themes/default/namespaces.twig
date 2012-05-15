@@ -1,0 +1,26 @@
+{% extends "layout/base.twig" %}
+
+{% block title %}Namespaces | {{ parent() }}{% endblock %}
+
+{% block body_class 'frame' %}
+
+{% block header %}
+    <div class="header">
+        <h1>{{ project.config('title') }}</h1>
+
+        <ul>
+            <li><a href="{{ path('classes-frame.html') }}">Classes</a></li>
+            <li><a href="{{ path('namespaces-frame.html') }}">Namespaces</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h1>Namespaces</h1>
+
+    <ul>
+        {% for namespace in namespaces %}
+            <li><a href="{{ namespace }}/namespace-frame.html" target="index">{{ namespace }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

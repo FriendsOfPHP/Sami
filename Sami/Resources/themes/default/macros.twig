@@ -1,0 +1,59 @@
+{% macro attributes(attributes) %}
+    {%- for key, value in attributes %} {{ key }}="{{ value }}"{% endfor -%}
+{% endmacro %}
+
+{% macro namespace_link(namespace, attributes) -%}
+    <a href="{{ namespace_path(namespace) }}"{{ _self.attributes(attributes) }}>{{ namespace }}</a>
+{%- endmacro %}
+
+{% macro class_link(class, attributes, absolute) -%}
+    {%- if class.projectclass -%}
+        <a href="{{ class_path(class) }}"{{ _self.attributes(attributes) }}>
+    {%- elseif class.phpclass -%}
+        <a href="http://php.net/{{ class }}"{{ _self.attributes(attributes) }}>
+    {%- endif %}
+        {{- _self.abbr_class(class, absolute|default(false)) }}
+    {%- if class.projectclass or class.phpclass %}</a>{% endif %}
+{%- endmacro %}
+
+{% macro method_link(method, attributes, absolute, classonly) -%}
+    <a href="{{ method_path(method) }}"{{ _self.attributes(attributes) }}>
+        {{- _self.abbr_class(method.class) }}{% if not classonly|default(false) %}::{{ method.name }}{% endif -%}
+    </a>
+{%- endmacro %}
+
+{% macro property_link(property, attributes, absolute, classonly) -%}
+    <a href="{{ property_path(property) }}"{{ _self.attributes(attributes) }}>
+        {{- _self.abbr_class(property.class) }}{% if not classonly|default(true) %}#{{ property.name }}{% endif -%}
+    </a>
+{%- endmacro %}
+
+{% macro hint_link(hints, attributes) -%}
+    {% if hints %}
+        {%- for hint in hints %}
+            {%- if hint.class %}
+                {{- _self.class_link(hint.name) }}
+            {%- elseif hint.name %}
+                {{- abbr_class(hint.name) }}
+            {%- endif %}
+            {%- if hint.array %}[]{% endif %}
+            {%- if not loop.last %}|{% endif %}
+        {%- endfor %}
+    {%- endif %}
+{%- endmacro %}
+
+{% macro abbr_class(class, absolute) -%}
+    <abbr title="{{ class }}">{{ absolute|default(false) ? class : class.shortname }}</abbr>
+{%- endmacro %}
+
+{% macro method_parameters_signature(method) -%}
+    {%- from "macros.twig" import hint_link -%}
+    (
+        {%- for parameter in method.parameters %}
+            {%- if parameter.hashint %}{{ hint_link(parameter.hint) }} {% endif -%}
+            ${{ parameter.name }}
+            {%- if parameter.default %} = {{ parameter.default }}{% endif %}
+            {%- if not loop.last %}, {% endif %}
+        {%- endfor -%}
+    )
+{%- endmacro %}

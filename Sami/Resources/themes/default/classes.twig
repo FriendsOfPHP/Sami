@@ -1,0 +1,33 @@
+{% extends "layout/base.twig" %}
+
+{% from "macros.twig" import class_link %}
+
+{% block title %}All Classes | {{ parent() }}{% endblock %}
+
+{% block body_class 'frame' %}
+
+{% block header %}
+    <div class="header">
+        <h1>{{ project.config('title') }}</h1>
+
+        <ul>
+            <li><a href="{{ path('classes-frame.html') }}">Classes</a></li>
+            {% if has_namespaces %}
+                <li><a href="{{ path('namespaces-frame.html') }}">Namespaces</a></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h1>Classes</h1>
+    <ul>
+        {% for class in classes %}
+            <li>
+                {% if class.isinterface %}<em>{% endif %}
+                {{ class_link(class, {'target': 'main'}) }}
+                {% if class.isinterface %}</em>{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

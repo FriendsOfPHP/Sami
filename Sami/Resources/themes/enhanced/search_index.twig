@@ -1,0 +1,39 @@
+{% from "macros.twig" import method_parameters_signature %}
+
+{%- autoescape false -%}
+var search_data = {
+    'index': {
+        'searchIndex': {{ index['searchIndex']|json_encode }},
+        'info': [
+            {%- for item in index['info'] -%}
+                [
+                    {%- if 1 == item[0] %}
+                        {{- item[1].shortname|json_encode }},
+                        {{- item[1].namespace|json_encode }},
+                        {{- class_path(item[1])|json_encode }},
+                        {{- (item[1].parent ? ' < ' ~ item[1].parent.shortname : '')|json_encode }},
+                        {{- item[1].shortdesc|snippet|json_encode }},
+                        {{- 1 }}
+                    {%- elseif 2 == item[0] %}
+                        {{- (item[1].class.shortname ~ '::' ~ item[1].name)|json_encode }},
+                        {{- item[1].class.name|json_encode }},
+                        {{- method_path(item[1])|json_encode }},
+                        {{- method_parameters_signature(item[1])|json_encode }},
+                        {{- item[1].shortdesc|snippet|json_encode }},
+                        {{- 2 }}
+                    {%- elseif 3 == item[0] %}
+                        {{- item[1]|json_encode }},
+                        {{- '""' }},
+                        {{- namespace_path(item[1])|json_encode }},
+                        {{- '""' }},
+                        {{- '""' }},
+                        {{- 3 }}
+                    {%- endif -%}
+                ]
+                {{- loop.last ? '' : ',' }}
+            {%- endfor -%}
+        ]
+    }
+}
+search_data['index']['longSearchIndex'] = search_data['index']['searchIndex']
+{%- endautoescape %}

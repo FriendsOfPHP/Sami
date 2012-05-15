@@ -1,0 +1,213 @@
+{% extends page_layout %}
+
+{% from "macros.twig" import namespace_link, class_link, method_link, hint_link %}
+
+{% block title %}{{ class.name }} | {{ parent() }}{% endblock %}
+
+{% block body_class 'class' %}
+
+{% block content_header %}
+    <div class="type">{% if class.interface %}Interface{% else %}Class{% endif %}</div>
+    <h1>{{ namespace_link(class.namespace) }}{% if class.namespace %}\{% endif %}{{ class.shortname }}</h1>
+{% endblock %}
+
+{% block content %}
+    <p>{{ block('class_signature') }}</p>
+
+    {% if class.shortdesc or class.longdesc %}
+        <div class="description">
+            <p>{{ class.shortdesc|desc(class)|nl2br }}</p>
+            <p>{{ class.longdesc|desc(class)|nl2br }}</p>
+        </div>
+    {% endif %}
+
+    {% if constants %}
+        <h2>Constants</h2>
+
+        {{ block('constants') }}
+    {% endif %}
+
+    {% if properties %}
+        <h2>Properties</h2>
+
+        {{ block('properties') }}
+    {% endif %}
+
+    {% if methods %}
+        <h2>Methods</h2>
+
+        {{ block('methods') }}
+
+        <h2>Details</h2>
+
+        {{ block('methods_details') }}
+    {% endif %}
+{% endblock %}
+
+{% block class_signature -%}
+    {% if not class.interface and class.abstract %}abstract {% endif %}
+    {%- if class.interface %}interface{% else %}class{% endif %}
+    <strong>{{ class.shortname }}</strong>
+    {%- if class.parent %}
+        extends {{ class_link(class.parent) }}
+    {%- endif %}
+    {%- if class.interfaces|length > 0 %}
+        implements
+        {% for interface in class.interfaces %}
+            {{- class_link(interface) }}
+            {%- if not loop.last %}, {% endif %}
+        {%- endfor %}
+    {%- endif %}
+{% endblock %}
+
+{% block method_signature -%}
+    {% if method.final %}final{% endif %}
+    {% if method.abstract %}abstract{% endif %}
+    {% if method.static %}static{% endif %}
+    {% if method.public %}public{% endif %}
+    {% if method.protected %}protected{% endif %}
+    {% if method.private %}private{% endif %}
+    {{ hint_link(method.hint) }}
+    <strong>{{ method.name }}</strong>{{ block('method_parameters_signature') }}
+{%- endblock %}
+
+{% block method_parameters_signature -%}
+    {%- from "macros.twig" import method_parameters_signature -%}
+    {{ method_parameters_signature(method) }}
+{%- endblock %}
+
+{% block parameters %}
+    <table>
+        {% for parameter in method.parameters %}
+            <tr>
+                <td>{% if parameter.hint %}{{ hint_link(parameter.hint) }}{% endif %}</td>
+                <td>${{ parameter.name }}</td>
+                <td>{{ parameter.shortdesc|desc(class)|nl2br }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block return %}
+    <table>
+        <tr>
+            <td>{{ hint_link(method.hint) }}</td>
+            <td>{{ method.hintDesc|desc(class)|nl2br }}</td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block exceptions %}
+    <table>
+        {% for exception in method.exceptions %}
+            <tr>
+                <td>{{ class_link(exception[0]) }}</td>
+                <td>{{ exception[1]|desc(class)|nl2br }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block see %}
+    <table>
+        {% for tag in method.tags('see') %}
+            <tr>
+                <td>{{ tag[0] }}</td>
+                <td>{{ tag[1:]|join(' ') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block constants %}
+    <table>
+        {% for constant in constants %}
+            <tr>
+                <td>{{ constant.name }}</td>
+                <td class="last">
+                    <p><em>{{ constant.shortdesc|desc(class)|nl2br }}</em></p>
+                    <p>{{ constant.longdesc|desc(class)|nl2br }}</p>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block properties %}
+    <table>
+        {% for property in properties %}
+            <tr>
+                <td class="type" id="property_{{ property.name }}">
+                    {% if property.static %}static{% endif %}
+                    {% if property.protected %}protected{% endif %}
+                    {{ hint_link(property.hint) }}
+                </td>
+                <td>${{ property.name }}</td>
+                <td class="last">{{ property.shortdesc|desc(class)|nl2br }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block methods %}
+    <table>
+        {% for method in methods %}
+            <tr>
+                <td class="type">
+                    {% if method.static %}static&nbsp;{% endif %}{{ hint_link(method.hint) }}
+                </td>
+                <td class="last">
+                    <a href="#method_{{ method.name }}">{{ method.name }}</a>{{ block('method_parameters_signature') }}
+                    <p>{{ method.shortdesc|desc(class)|nl2br }}</p>
+                </td>
+                <td>
+                    {%- if method.class != class -%}
+                        <small>from&nbsp;{{ method_link(method, {}, false, true) }}</small>
+                    {%- endif -%}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block methods_details %}
+    {% for method in methods %}
+        {{ block('method') }}
+    {% endfor %}
+{% endblock %}
+
+{% block method %}
+    <h3 id="method_{{ method.name }}">
+        <div class="location">{% if method.class != class %}in {{ method_link(method, {}, false, true) }} {% endif %}at line {{ method.line }}</div>
+        <code>{{ block('method_signature') }}</code>
+    </h3>
+    <div class="details">
+        <p>{{ method.shortdesc|desc(class)|nl2br }}</p>
+        <p>{{ method.longdesc|desc(class)|nl2br }}</p>
+        <div class="tags">
+            {% if method.parameters %}
+                <h4>Parameters</h4>
+
+                {{ block('parameters') }}
+            {% endif %}
+
+            {% if method.hintDesc or method.hint %}
+                <h4>Return Value</h4>
+
+                {{ block('return') }}
+            {% endif %}
+
+            {% if method.exceptions %}
+                <h4>Exceptions</h4>
+
+                {{ block('exceptions') }}
+            {% endif %}
+
+            {% if method.tags('see') %}
+                <h4>See also</h4>
+
+                {{ block('see') }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

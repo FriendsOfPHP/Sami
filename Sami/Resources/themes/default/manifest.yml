@@ -1,0 +1,21 @@
+name: default
+
+static:
+    'stylesheet.css':        'stylesheet.css'
+
+global:
+    'index.twig':            'index.html'
+    'namespaces.twig':       'namespaces-frame.html'
+    'classes.twig':          'classes-frame.html'
+    'pages/opensearch.twig': 'opensearch.xml'
+    'pages/index.twig':      'doc-index.html'
+    'pages/namespaces.twig': 'namespaces.html'
+    'pages/interfaces.twig': 'interfaces.html'
+    'pages/classes.twig':    'classes.html'
+
+namespace:
+    'namespace.twig':        '%s/namespace-frame.html'
+    'pages/namespace.twig':  '%s.html'
+
+class:
+    'pages/class.twig':      '%s.html'
