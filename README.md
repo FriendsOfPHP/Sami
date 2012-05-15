@@ -8,8 +8,9 @@ Installation
 ------------
 
 First, get Sami from [Github](https://github.com/fabpot/Sami) (or integrate it
-as a dependency in your project [Composer](packagist.org/fabpot/Sami) file --
-you are using [Composer](http://getcomposer.org/), right?):
+as a dependency in your project
+[Composer](http://packagist.org/packages/sami/sami) file -- you are using
+[Composer](http://getcomposer.org/), right?):
 
     https://github.com/fabpot/Sami
 
