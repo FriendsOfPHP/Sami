@@ -210,3 +210,8 @@ td.type {
     padding: 10px;
     background-color: #efefef;
 }
+
+pre.code {
+    background-color: #f5f5f5;
+    padding: 12px;
+}
