@@ -113,6 +113,7 @@ class Sami extends \Pimple
         $this['traverser'] = $this->share(function () use ($sc) {
             $visitors = array(
                 new ClassVisitor\InheritdocClassVisitor(),
+                new ClassVisitor\MethodClassVisitor(),
             );
 
             return new ClassTraverser($visitors);
