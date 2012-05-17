@@ -57,7 +57,7 @@ class Tree
             $parts = explode('\\', $namespace);
             $url = '';
             if (!$project->getConfig('simulate_namespaces')) {
-                $url = $parts[count($parts) - 1] && $project->hasNamespace($namespace) ? $namespace : '';
+                $url = $parts[count($parts) - 1] && count($cl) ? $namespace : '';
             }
             $short = $parts[count($parts) - 1] ? $parts[count($parts) - 1] : '[Global Namespace]';
 
