@@ -21,6 +21,18 @@
         </div>
     {% endif %}
 
+    {% if class.tags('see') %}
+        <h4>See also</h4>
+
+        {{ block('see_class') }}
+    {% endif %}
+
+    {% if class.tags('link') %}
+        <h4>External links</h4>
+
+        {{ block('link_class') }}
+    {% endif %}
+
     {% if constants %}
         <h2>Constants</h2>
 
@@ -112,7 +124,40 @@
     <table>
         {% for tag in method.tags('see') %}
             <tr>
-                <td>{{ tag[0] }}</td>
+                <td><a href="{{ resolve_method_path(tag[0]) }}">{{ tag[0] }}</a></td>
+                <td>{{ tag[1:]|join(' ') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block see_class %}
+    <table>
+        {% for tag in class.tags('see') %}
+            <tr>
+                <td><a href="{{ class_path(tag[0]) }}">{{ tag[0] }}</a></td>
+                <td>{{ tag[1:]|join(' ') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block link %}
+    <table>
+        {% for tag in method.tags('link') %}
+            <tr>
+                <td><a href="{{ tag[0] }}">{{ tag[0] }}</a></td>
+                <td>{{ tag[1:]|join(' ') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block link_class %}
+    <table>
+        {% for tag in class.tags('link') %}
+            <tr>
+                <td><a href="{{ tag[0] }}">{{ tag[0] }}</a></td>
                 <td>{{ tag[1:]|join(' ') }}</td>
             </tr>
         {% endfor %}
@@ -208,6 +253,13 @@
 
                 {{ block('see') }}
             {% endif %}
+
+            {% if method.tags('link') %}
+                <h4>External links</h4>
+
+                {{ block('link') }}
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}
