@@ -56,7 +56,7 @@ class TwigExtension extends \Twig_Extension
 
     public function pathForNamespace(array $context, $namespace)
     {
-        return $this->relativeUri($context['depth']).str_replace('\\', '/', $namespace).'.html';
+        return ($this->relativeUri($context['depth']).str_replace('\\', '/', $namespace) ?: 'namespaces').'.html';
     }
 
     public function pathForMethod(array $context, MethodReflection $method)
