@@ -40,17 +40,8 @@ class Diff
             $this->previous = new Index();
         }
 
-        $this->previousNamespaces = array();
-        foreach (array_keys($this->previous->getClasses()) as $class) {
-            $this->previousNamespaces[] = substr($class, 0, strrpos($class, '\\'));
-        }
-        $this->previousNamespaces = array_unique($this->previousNamespaces);
-
-        $this->currentNamespaces = array();
-        foreach (array_keys($this->current->getClasses()) as $class) {
-            $this->currentNamespaces[] = substr($class, 0, strrpos($class, '\\'));
-        }
-        $this->currentNamespaces = array_unique($this->currentNamespaces);
+        $this->previousNamespaces = $this->previous->getNamespaces();
+        $this->currentNamespaces = $this->current->getNamespaces();
     }
 
     public function isEmpty()
