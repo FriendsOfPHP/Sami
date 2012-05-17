@@ -6,7 +6,7 @@ var tree = {{ _self.element(tree) }}
             {%- for element in tree -%}
                 [
                 {{- element[0]|json_encode }},
-                {{- (not element[2] ? class_path(element[1]) : namespace_path(element[1]))|json_encode }},
+                {{- element[1] ? ((not element[2] ? class_path(element[1]) : namespace_path(element[1]))|json_encode) : '' }},
                 {{- (not element[2] and element[1].parent ? ' < ' ~ element[1].parent.shortname : '')|json_encode }},
                 {{ _self.element(element[2]) -}}
                 ]
