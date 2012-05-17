@@ -366,7 +366,13 @@ class Project
 
         if ($this->getConfig('simulate_namespaces')) {
             if (false !== $pos = strrpos($name, '_')) {
-                $this->simulatedNamespaces[str_replace('_', '\\', substr($name, 0, $pos))][$name] = $class;
+                $this->simulatedNamespaces[$namespace = str_replace('_', '\\', substr($name, 0, $pos))][$name] = $class;
+                // add sub-namespaces
+                while ($namespace = substr($namespace, 0, strrpos($namespace, '\\'))) {
+                    if (!isset($this->simulatedNamespaces[$namespace])) {
+                        $this->simulatedNamespaces[$namespace] = array();
+                    }
+                }
             } else {
                 $this->simulatedNamespaces[''][$name] = $class;
             }
