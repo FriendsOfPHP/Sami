@@ -219,6 +219,23 @@ class Project
         return $this->namespaceInterfaces[$namespace];
     }
 
+    public function getNamespaceSubNamespaces($parent)
+    {
+        $prefix = $parent;
+        if (strlen($prefix)) $prefix .= '\\';
+        $len = strlen($prefix);
+
+        $subNamespaces = array();
+
+        foreach ($this->namespaces as $sub)
+        {
+            if (substr($sub, 0, $len) == $prefix && strpos(substr($sub, $len), '\\') === false)
+                $subNamespaces[$sub] = $sub;
+        }
+
+        return $subNamespaces;
+    }
+
     public function addClass(ClassReflection $class)
     {
         $this->classes[$class->getName()] = $class;
