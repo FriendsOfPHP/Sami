@@ -30,20 +30,20 @@ class ParseCommand extends Command
             ->setName('parse')
             ->setDescription('Parses a project')
             ->setHelp(<<<EOF
-The <info>parse</info> command parses a project and generates a database
+The <info>%command.name%</info> command parses a project and generates a database
 with API information:
 
-    <info>php sami.php config/symfony.php parse</info>
+    <info>php %command.full_name% config/symfony.php parse</info>
 
 The <comment>--force</comment> option forces a rebuild (it disables the
 incremental parsing algorithm):
 
-    <info>php sami.php parse config/symfony.php --force</info>
+    <info>php %command.full_name% parse config/symfony.php --force</info>
 
 The <comment>--version</comment> option overrides the version specified
 in the configuration:
 
-    <info>php sami.php parse config/symfony.php --version=master</info>
+    <info>php %command.full_name% parse config/symfony.php --version=master</info>
 EOF
             );
     }

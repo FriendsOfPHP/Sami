@@ -30,19 +30,19 @@ class RenderCommand extends Command
             ->setName('render')
             ->setDescription('Renders a project')
             ->setHelp(<<<EOF
-The <info>render</info> command renders a project as a static set of HTML files:
+The <info>%command.name%</info> command renders a project as a static set of HTML files:
 
-    <info>php sami.php config/symfony.php render</info>
+    <info>php %command.full_name% config/symfony.php render</info>
 
 The <comment>--force</comment> option forces a rebuild (it disables the
 incremental rendering algorithm):
 
-    <info>php sami.php render config/symfony.php --force</info>
+    <info>php %command.full_name% render config/symfony.php --force</info>
 
 The <comment>--version</comment> option overrides the version specified
 in the configuration:
 
-    <info>php sami.php render config/symfony.php --version=master</info>
+    <info>php %command.full_name% render config/symfony.php --version=master</info>
 EOF
             );
     }

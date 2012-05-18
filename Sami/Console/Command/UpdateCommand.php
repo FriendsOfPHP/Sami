@@ -30,9 +30,9 @@ class UpdateCommand extends Command
             ->setName('update')
             ->setDescription('Parses then renders a project')
             ->setHelp(<<<EOF
-The <info>update</info> command parses and renders a project:
+The <info>%command.name%</info> command parses and renders a project:
 
-    <info>php sami.php config/symfony.php parses</info>
+    <info>php %command.full_name% config/symfony.php parses</info>
 
 This command is the same as running the parse command followed
 by the render command.
