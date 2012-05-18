@@ -14,20 +14,26 @@
 {% block content %}
     {% if namespaces %}
         <h2>Namespaces</h2>
-        <ul>
+        <table>
             {% for subnamespace in namespaces %}
-                <li>{{ namespace_link(subnamespace, {'target': 'main' }) }}</li>
+                <tr>
+                    <td>{{ namespace_link(subnamespace, {'target': 'main' }) }}</td>
+                    <td class="last">&nbsp;</td>
+                </tr>
             {% endfor %}
-        </ul>
+        </table>
     {% endif %}
 
     {% if classes %}
         <h2>Classes</h2>
-        <ul>
+        <table>
             {% for class in classes %}
-                <li>{{ class_link(class, {'target': 'main'}) }}</li>
+                <tr>
+                    <td>{{ class_link(class) }}</td>
+                    <td class="last">{{ class.shortdesc|desc(class)|nl2br }}</td>
+                </tr>
             {% endfor %}
-        </ul>
+        </table>
     {% endif %}
     
     {% if interfaces %}
