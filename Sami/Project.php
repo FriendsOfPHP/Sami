@@ -222,15 +222,17 @@ class Project
     public function getNamespaceSubNamespaces($parent)
     {
         $prefix = $parent;
-        if (strlen($prefix)) $prefix .= '\\';
+        if (strlen($prefix)) {
+            $prefix .= '\\';
+        }
         $len = strlen($prefix);
 
         $subNamespaces = array();
 
-        foreach ($this->namespaces as $sub)
-        {
-            if (substr($sub, 0, $len) == $prefix && strpos(substr($sub, $len), '\\') === false)
+        foreach ($this->namespaces as $sub) {
+            if (substr($sub, 0, $len) == $prefix && strpos(substr($sub, $len), '\\') === false) {
                 $subNamespaces[$sub] = $sub;
+            }
         }
 
         return $subNamespaces;
