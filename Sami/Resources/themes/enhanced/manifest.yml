@@ -13,6 +13,6 @@ static:
     'js/searchdoc.js':         'js/searchdoc.js'
 
 global:
-    'panel.twig':        'panel.html',
-    'search_index.twig': 'search_index.js',
-    'tree.twig':         'tree.js',
+    'panel.twig':        'panel.html'
+    'search_index.twig': 'search_index.js'
+    'tree.twig':         'tree.js'
