@@ -41,7 +41,7 @@ class GitVersionCollection extends VersionCollection
 
     protected function switchVersion(Version $version)
     {
-        $this->execute(array('co', (string) $version));
+        $this->execute(array('checkout', (string) $version));
     }
 
     public function setGitPath($path)
