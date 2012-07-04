@@ -26,5 +26,6 @@
     "autoload": {
         "psr-0": { "Sami": "." }
     },
-    "bin": ["sami.php"]
+    "bin": ["sami.php"],
+    "minimum-stability": "dev"
 }
