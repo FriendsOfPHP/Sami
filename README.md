@@ -118,7 +118,8 @@ Now that we have a configuration file, let's generate the API documentation:
 
 The generated documentation can be found under the configured `build/`
 directory (note that the client side search engine does not work on Chrome due
-to JavaScript execution restriction -- it works fine in Firefox).
+to JavaScript execution restriction, unless Chrome is started with the
+"--allow-file-access-from-files" option -- it works fine in Firefox).
 
 By default, Sami is configured to run in "incremental" mode. It means that
 when running the `update` command, Sami only re-generates the files that needs
