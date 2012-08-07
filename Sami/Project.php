@@ -121,7 +121,9 @@ class Project
 
     public function switchVersion(Version $version, $callback = null)
     {
-        call_user_func($callback, Message::SWITCH_VERSION, $version);
+        if (null !== $callback) {
+            call_user_func($callback, Message::SWITCH_VERSION, $version);
+        }
 
         $this->version = $version;
         $this->read();
@@ -420,7 +422,9 @@ class Project
 
         $transaction = $this->parser->parse($this, $callback);
 
-        call_user_func($callback, Message::PARSE_VERSION_FINISHED, $transaction);
+        if (null !== $callback) {
+            call_user_func($callback, Message::PARSE_VERSION_FINISHED, $transaction);
+        }
     }
 
     protected function renderVersion(Version $version, $previous, $callback = null, $force = false)
@@ -437,6 +441,8 @@ class Project
 
         $diff = $this->renderer->render($this, $callback);
 
-        call_user_func($callback, Message::RENDER_VERSION_FINISHED, $diff);
+        if (null !== $callback) {
+            call_user_func($callback, Message::RENDER_VERSION_FINISHED, $diff);
+        }
     }
 }
