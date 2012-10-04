@@ -210,7 +210,7 @@ class ClassReflection extends Reflection
             }
         }
 
-        foreach ($this->getInterfaces() as $interface) {
+        foreach ($this->getInterfaces(true) as $interface) {
             foreach ($interface->getMethods() as $n => $method) {
                 if ($name == $n) {
                     return $method;
