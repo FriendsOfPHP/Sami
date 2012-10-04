@@ -40,23 +40,53 @@ class TwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'namespace_path' => new \Twig_Function_Method($this, 'pathForNamespace', array('needs_context' => true)),
-            'class_path'     => new \Twig_Function_Method($this, 'pathForClass', array('needs_context' => true)),
-            'method_path'    => new \Twig_Function_Method($this, 'pathForMethod', array('needs_context' => true)),
-            'property_path'  => new \Twig_Function_Method($this, 'pathForProperty', array('needs_context' => true)),
-            'path'           => new \Twig_Function_Method($this, 'pathForStaticFile', array('needs_context' => true)),
-            'abbr_class'     => new \Twig_Function_Method($this, 'abbrClass', array('is_safe' => array('html'))),
+            'namespace_path'      => new \Twig_Function_Method($this, 'pathForNamespace', array('needs_context' => true)),
+            'class_path'          => new \Twig_Function_Method($this, 'pathForClass', array('needs_context' => true)),
+            'method_path'         => new \Twig_Function_Method($this, 'pathForMethod', array('needs_context' => true)),
+            'resolve_method_path' => new \Twig_Function_Method($this, 'pathForClassMethod', array('needs_context' => true)),
+            'property_path'       => new \Twig_Function_Method($this, 'pathForProperty', array('needs_context' => true)),
+            'path'                => new \Twig_Function_Method($this, 'pathForStaticFile', array('needs_context' => true)),
+            'abbr_class'          => new \Twig_Function_Method($this, 'abbrClass', array('is_safe' => array('html'))),
         );
     }
 
-    public function pathForClass(array $context, ClassReflection $class)
+    /**
+     * Get the path to a class
+     *
+     * @param array                  $context
+     * @param string|ClassReflection $class Class to resolve
+     *
+     * @return string
+     */
+    public function pathForClass(array $context, $class)
     {
+        if (is_string($class)) {
+            $class = $this->resolveClass($context, $class);
+        }
+
+        if (!($class instanceof ClassReflection)) {
+            throw new \InvalidArgumentException('class must be a string or instanceof Sami\Reflection\ClassReflection');
+        }
+
         return $this->relativeUri($context['depth']).str_replace('\\', '/', $class).'.html';
     }
 
     public function pathForNamespace(array $context, $namespace)
     {
         return $this->relativeUri($context['depth']).str_replace('\\', '/', $namespace).'.html';
+    }
+
+    public function pathForClassMethod(array $context, $method)
+    {
+        if (!strpos($method, '::')) {
+            return '';
+        }
+
+        list($class, $method) = str_replace('()', '', explode('::', $method));
+        $class = $this->resolveClass($context, $class);
+        $method = $class->getMethod($method);
+
+        return $method ? $this->pathForMethod($context, $method) : '';
     }
 
     public function pathForMethod(array $context, MethodReflection $method)
@@ -129,5 +159,24 @@ class TwigExtension extends \Twig_Extension
     public function getName()
     {
         return 'sami';
+    }
+
+    /**
+     * Resolve the path to a class based on context
+     *
+     * @param array  $context Twig context
+     * @param string $class Class name to resolve
+     *
+     * @return ClassReflection
+     */
+    protected function resolveClass(array $context, $class)
+    {
+        if ($context['project']->hasClass($class)) {
+            return $context['project']->getClass($class);
+        } elseif ($context['project']->hasClass($context['class']->getNamespace() . '\\' . $class)) {
+            return $context['project']->getClass($context['class']->getNamespace() . '\\' . $class);
+        } else {
+            return false;
+        }
     }
 }

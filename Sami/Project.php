@@ -279,6 +279,18 @@ class Project
         return $class;
     }
 
+    /**
+     * Check if a class has been loaded and exists
+     *
+     * @param string $class Class to check
+     *
+     * @return bool
+     */
+    public function hasClass($name)
+    {
+        return isset($this->classes[$name]);
+    }
+
     // this must only be used in LazyClassReflection to get the right values
     public function loadClass($name)
     {
