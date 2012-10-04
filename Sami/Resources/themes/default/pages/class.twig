@@ -161,7 +161,7 @@
                     <p>{{ method.shortdesc|desc(class)|nl2br }}</p>
                 </td>
                 <td>
-                    {%- if method.class != class -%}
+                    {%- if method.class is not sameas(class) -%}
                         <small>from&nbsp;{{ method_link(method, {}, false, true) }}</small>
                     {%- endif -%}
                 </td>
@@ -178,7 +178,7 @@
 
 {% block method %}
     <h3 id="method_{{ method.name }}">
-        <div class="location">{% if method.class != class %}in {{ method_link(method, {}, false, true) }} {% endif %}at line {{ method.line }}</div>
+        <div class="location">{% if method.class is not sameas(class) %}in {{ method_link(method, {}, false, true) }} {% endif %}at line {{ method.line }}</div>
         <code>{{ block('method_signature') }}</code>
     </h3>
     <div class="details">
