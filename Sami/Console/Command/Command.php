@@ -197,7 +197,10 @@ abstract class Command extends BaseCommand
 
     public function displayParseSummary()
     {
-        if (count($this->transactions) <= 0) return;
+        if (count($this->transactions) <= 0) {
+            return;
+        }
+        
         $this->output->writeln('');
         $this->output->writeln('<bg=cyan;fg=white> Version </>  <bg=cyan;fg=white> Updated C </>  <bg=cyan;fg=white> Removed C </>');
 
@@ -209,7 +212,10 @@ abstract class Command extends BaseCommand
 
     public function displayRenderSummary()
     {
-        if (count($this->diffs) <= 0) return;
+        if (count($this->diffs) <= 0) {
+            return;
+        }
+        
         $this->output->writeln('<bg=cyan;fg=white> Version </>  <bg=cyan;fg=white> Updated C </>  <bg=cyan;fg=white> Updated N </>  <bg=cyan;fg=white> Removed C </>  <bg=cyan;fg=white> Removed N </>');
 
         foreach ($this->diffs as $version => $diff) {
