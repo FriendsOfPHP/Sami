@@ -46,7 +46,7 @@ class GitVersionCollection extends VersionCollection
 
     public function setGitPath($path)
     {
-        $this->gitPath = $gitPath;
+        $this->gitPath = $path;
     }
 
     public function setFilter(\Closure $filter)
