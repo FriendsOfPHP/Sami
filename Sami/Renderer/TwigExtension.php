@@ -18,6 +18,7 @@ use Sami\Reflection\PropertyReflection;
 class TwigExtension extends \Twig_Extension
 {
     protected $project;
+    protected $currentDepth;
 
     /**
      * Returns a list of filters to add to the existing list.
@@ -49,29 +50,34 @@ class TwigExtension extends \Twig_Extension
         );
     }
 
+    public function setCurrentDepth($depth)
+    {
+        $this->currentDepth = $depth;
+    }
+
     public function pathForClass(array $context, ClassReflection $class)
     {
-        return $this->relativeUri($context['depth']).str_replace('\\', '/', $class).'.html';
+        return $this->relativeUri($this->currentDepth).str_replace('\\', '/', $class).'.html';
     }
 
     public function pathForNamespace(array $context, $namespace)
     {
-        return $this->relativeUri($context['depth']).str_replace('\\', '/', $namespace).'.html';
+        return $this->relativeUri($this->currentDepth).str_replace('\\', '/', $namespace).'.html';
     }
 
     public function pathForMethod(array $context, MethodReflection $method)
     {
-        return $this->relativeUri($context['depth']).str_replace('\\', '/', $method->getClass()->getName()).'.html#method_'.$method->getName();
+        return $this->relativeUri($this->currentDepth).str_replace('\\', '/', $method->getClass()->getName()).'.html#method_'.$method->getName();
     }
 
     public function pathForProperty(array $context, PropertyReflection $property)
     {
-        return $this->relativeUri($context['depth']).str_replace('\\', '/', $property->getClass()->getName()).'.html#property_'.$property->getName();
+        return $this->relativeUri($this->currentDepth).str_replace('\\', '/', $property->getClass()->getName()).'.html#property_'.$property->getName();
     }
 
     public function pathForStaticFile(array $context, $file)
     {
-        return $this->relativeUri($context['depth']).$file;
+        return $this->relativeUri($this->currentDepth).$file;
     }
 
     public function abbrClass($class)

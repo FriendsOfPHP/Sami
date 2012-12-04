@@ -160,7 +160,7 @@ class Renderer
 
     protected function save(Project $project, $uri, $template, $variables)
     {
-        $this->twig->addGlobal('depth', substr_count($uri, '/'));
+        $this->twig->getExtension('sami')->setCurrentDepth(substr_count($uri, '/'));
 
         $file = $project->getBuildDir().'/'.$uri;
 
