@@ -91,7 +91,7 @@ class DocBlockParser
 
             switch ($type = $match[1]) {
                 case 'param':
-                    if (!preg_match('/^([^\s]*)\s*(?:\$([^\s]+))?\s*(.*)$/s', $match[2], $m)) {
+                    if (!preg_match('/^([^\s]*)\s*(?:(?:\$|\&\$)([^\s]+))?\s*(.*)$/s', $match[2], $m)) {
                         throw new \LogicException(sprintf('Unable to parse "@%s" tag " %s"', $type, $match[2]));
 
                         return;
