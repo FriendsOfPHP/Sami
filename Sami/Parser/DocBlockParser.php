@@ -14,139 +14,136 @@ namespace Sami\Parser;
 use Sami\Parser\Node\DocBlockNode;
 
 class DocBlockParser
-{
-    const TAG_REGEX = '@([^ ]+)(?:\s+(.*?))?(?=(\n[ \t]*@|\s*$))';
+{   
 
-    protected $position;
-    protected $comment;
-    protected $lineno;
-    protected $cursor;
-
-    public function parse($comment)
+    /**
+     * Parses a DocBlock comment into a data structure.
+     *
+     * @link    https://github.com/digitalnature/php-ref/blob/master/ref.php#L1212
+     * @link    http://pear.php.net/manual/en/standards.sample.php
+     * @param   string $comment
+     * @return  DocBlockNode
+     */
+    public static function parse($comment)
     {
-        // remove comment characters and normalize
-        $comment = preg_replace(array('#^/\*\*\s*#', '#\s*\*/$#', '#^\s*\*#m'), '', trim($comment));
-        $comment = "\n".preg_replace('/(\r\n|\r)/', "\n", $comment);
 
-        $this->position = 'desc';
-        $this->comment = $comment;
-        $this->lineno = 1;
-        $this->cursor = 0;
+        $title       = '';
+        $description = '';
+        $tags        = array();
+        $tag         = null;
+        $pointer     = null;
+        $padding     = false;
+        $doc         = new DocBlockNode();
 
-        $doc = new DocBlockNode();
-        while ($this->cursor < strlen($this->comment)) {
-            switch ($this->position) {
-                case 'desc':
-                    list($short, $long) = $this->parseDesc();
-                    $doc->setShortDesc($short);
-                    $doc->setLongDesc($long);
-                    break;
+        foreach(array_slice(preg_split('/\r\n|\r|\n/', $comment), 1, -1) as $line){
 
-                case 'tag':
-                    try {
-                        list($type, $values) = $this->parseTag();
-                        $doc->addTag($type, $values);
-                    } catch (\LogicException $e) {
-                        $doc->addError($e->getMessage());
-                    }
-                    break;
-            }
+            // drop any leading spaces
+            $line = ltrim($line);
 
-            if (preg_match('/\s*$/As', $this->comment, $match, null, $this->cursor)) {
-                $this->cursor = strlen($this->comment);
-            }
-        }
+            // drop "* "
+            if($line !== '')
+                $line = substr($line, 2);      
 
-        return $doc;
-    }
+            if(strpos($line, '@') === 0){
+                $padding = false;        
+                $pos     = strpos($line, ' ');
+                $tag     = substr($line, 1, $pos - 1);
+                $line    = trim(substr($line, $pos));
 
-    protected function parseDesc()
-    {
-        if (preg_match('/(.*?)(\n[ \t]*'.self::TAG_REGEX.'|$)/As', $this->comment, $match, null, $this->cursor)) {
-            $this->move($match[1]);
+                // tags that have two or more values;
+                // note that 'throws' may also have two values, however most people use it like "@throws ExceptioClass if whatever...",
+                // which, if broken into two values, leads to an inconsistent description sentence...
+                if(in_array($tag, array('global', 'param', 'return', 'var'))){
+                    $parts = array();
 
-            $short = trim($match[1]);
-            $long = '';
+                    if(($pos = strpos($line, ' ')) !== false){
+                        $parts[] = substr($line, 0, $pos);
+                        $line = ltrim(substr($line, $pos));
 
-            // short desc ends at the first dot or when \n\n occurs
-            if (preg_match('/(.*?)(\.\s|\n\n|$)/s', $short, $match)) {
-                $long = trim(substr($short, strlen($match[0])));
-                $short = trim($match[0]);
-            }
-        }
+                        if(($pos = strpos($line, ' ')) !== false){
 
-        $this->position = 'tag';
+                          // we expect up to 3 elements in 'param' tags
+                          if(($tag === 'param') && in_array($line[0], array('&', '$'), true)){
+                               $parts[] = substr($line, 0, $pos);
+                               $parts[] = ltrim(substr($line, $pos));
+                            
+                          }else{
+                               if($tag === 'param')
+                                   $parts[] = '';
 
-        return array(str_replace("\n", '', $short), $long);
-    }
+                              $parts[] = ltrim($line);
+                          }
 
-    protected function parseTag()
-    {
-        if (preg_match('/\n\s*'.self::TAG_REGEX.'/As', $this->comment, $match, null, $this->cursor)) {
-            $this->move($match[0]);
+                        }else{
+                            $parts[] = $line;
+                        }
 
-            switch ($type = $match[1]) {
-                case 'param':
-                    if (!preg_match('/^([^\s]*)\s*(?:(?:\$|\&\$)([^\s]+))?\s*(.*)$/s', $match[2], $m)) {
-                        throw new \LogicException(sprintf('Unable to parse "@%s" tag " %s"', $type, $match[2]));
-
-                        return;
+                    }else{
+                        $parts[] = $line;            
                     }
 
-                    return array($type, array($this->parseHint(trim($m[1])), trim($m[2]), $this->normalizeString($m[3])));
+                    $parts += array_fill(0, ($tag !== 'param') ? 2 : 3, '');
 
-                case 'return':
-                case 'var':
-                    if (!preg_match('/^([^\s]+)\s*(.*)$/s', $match[2], $m)) {
-                        throw new \LogicException(sprintf('Unable to parse "@%s" tag "%s"', $type, $match[2]));
+                    // following exists just to make it compatabile with the old parser;            
+                    $parts[0] = explode('|', $parts[0]);
+                    foreach($parts[0] as &$p)
+                        $p = array($p, false); // old parser has a weird false value here...           
 
-                        return;
-                    }
+                    // maybe we should leave out empty (invalid) entries?
+                    if(array_filter($parts)){
+                        $tags[$tag][] = $parts;
+                        $pointer = &$tags[$tag][count($tags[$tag]) - 1][count($parts) - 1];
+                    }  
 
-                    return array($type, array($this->parseHint(trim($m[1])), $this->normalizeString($m[2])));
+                // tags that have only one value (eg. 'link', 'license', 'author' ...)
+                }else{
+                    $tags[$tag][] = trim($line);
+                    $pointer = &$tags[$tag][count($tags[$tag]) - 1];
+                }
 
-                case 'throws':
-                    if (!preg_match('/^([^\s]+)\s*(.*)$/s', $match[2], $m)) {
-                        throw new \LogicException(sprintf('Unable to parse "@%s" tag "%s"', $type, $match[2]));
-
-                        return;
-                    }
-
-                    return array($type, array(trim($m[1]), $this->normalizeString($m[2])));
-
-                default:
-                    return array($type, $this->normalizeString($match[2]));
+                continue;
             }
-        } else {
-            // skip
-            $this->cursor = strlen($this->comment);
 
-            throw new \LogicException(sprintf('Unable to parse block comment near "... %s ...".', substr($this->comment, max(0, $this->cursor - 15), 15)));
-        }
-    }
+            // preserve formatting of tag descriptions, because
+            // in some frameworks (like Lithium) they span across multiple lines
+            if($tag !== null){
 
-    protected function parseHint($hint)
-    {
-        $hints = array();
-        foreach (explode('|', $hint) as $hint) {
-            if ('[]' == substr($hint, -2)) {
-                $hints[] = array(substr($hint, 0, -2), true);
-            } else {
-                $hints[] = array($hint, false);
+                $trimmed = trim($line);
+
+                if($padding !== false){
+                    $trimmed = str_pad($trimmed, strlen($line) - $padding, ' ', STR_PAD_LEFT);
+                  
+                }else{
+                    $padding = strlen($line) - strlen($trimmed);
+                }  
+
+                $pointer .=  "\n{$trimmed}";
+                continue;
             }
-        }
 
-        return $hints;
+            // tag definitions have not started yet;
+            // assume this is title / description text
+            $description .= "\n{$line}";
+          }
+
+          $description = trim($description);
+
+          // determine the real title and description by splitting the text
+          // at the nearest encountered [dot + space] or [2x new line]
+          if($description !== ''){
+              $stop = min(array_filter(array(strlen($description), strpos($description, '. '), strpos($description, "\n\n"))));
+              $title = substr($description, 0, $stop + 1);
+              $description = ltrim(substr($description, $stop + 1));
+          }
+
+          $doc->setShortDesc($title);
+          $doc->setLongDesc($description);
+
+          foreach($tags as $tag => $values)
+              foreach($values as $value)
+                   $doc->addTag($tag, $value);
+
+          return $doc;
     }
 
-    protected function normalizeString($str)
-    {
-        return preg_replace('/\s*\n\s*/', ' ', trim($str));
-    }
-
-    protected function move($text)
-    {
-        $this->lineno += substr_count($text, "\n");
-        $this->cursor += strlen($text);
-    }
 }
