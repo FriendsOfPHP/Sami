@@ -74,12 +74,10 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
 
     protected function addClass(\PHPParser_Node_Stmt_Class $node)
     {
-        $class = $this->addClassOrInterface($node);
-
+    	$class = $this->addClassOrInterface($node);
         foreach ($node->implements as $interface) {
             $class->addInterface((string) $interface);
         }
-
         if ($node->extends) {
             $class->setParent((string) $node->extends);
         }
@@ -87,24 +85,26 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
 
     protected function addClassOrInterface($node)
     {
-        $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
+    	$class = new ClassReflection((string) $node->namespacedName, $node->getLine());
         $class->setModifiers($node->type);
         $class->setNamespace($this->context->getNamespace());
         $class->setAliases($this->context->getAliases());
         $class->setHash($this->context->getHash());
         $class->setFile($this->context->getFile());
-
+        
+        $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $class);
+        
+        $class->setDocComment($node->getDocComment());
+        $class->setShortDesc($comment->getShortDesc());
+        $class->setLongDesc($comment->getLongDesc());
+        
+        if ($errors = $comment->getErrors()) {
+        	$this->context->addErrors((string) $class, $node->getLine(), $errors);
+        } else {
+        	$class->setTags($comment->getOtherTags());
+        }
+        
         if ($this->context->getFilter()->acceptClass($class)) {
-            $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $class);
-            $class->setDocComment($node->getDocComment());
-            $class->setShortDesc($comment->getShortDesc());
-            $class->setLongDesc($comment->getLongDesc());
-            if ($errors = $comment->getErrors()) {
-                $this->context->addErrors((string) $class, $node->getLine(), $errors);
-            } else {
-                $class->setTags($comment->getOtherTags());
-            }
-
             $this->context->enterClass($class);
         }
 
@@ -115,42 +115,42 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
     {
         $method = new MethodReflection($node->name, $node->getLine());
         $method->setModifiers((string) $node->type);
-
+            
+        $method->setByRef((string) $node->byRef);
+         
+        foreach ($node->params as $param) {
+        	$parameter = new ParameterReflection($param->name, $param->getLine());
+        	$parameter->setModifiers((string) $param->type);
+        	$parameter->setByRef($param->byRef);
+        	if ($param->default) {
+        		$parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
+        	}
+        	if ((string) $param->type) {
+        		$parameter->setHint($this->resolveHint(array(array((string) $param->type, false))));
+        	}
+        	$method->addParameter($parameter);
+        }
+        
+        $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $method);
+        $method->setDocComment($node->getDocComment());
+        $method->setShortDesc($comment->getShortDesc());
+        $method->setLongDesc($comment->getLongDesc());
+        if (!$errors = $comment->getErrors()) {
+        	$errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'));
+        
+        	if ($tag = $comment->getTag('return')) {
+        		$method->setHint($this->resolveHint($tag[0][0]));
+        		$method->setHintDesc($tag[0][1]);
+        	}
+        
+        	$method->setExceptions($comment->getTag('throws'));
+        	$method->setTags($comment->getOtherTags());
+        }
+        
+        $this->context->addErrors((string) $method, $node->getLine(), $errors);
+        
         if ($this->context->getFilter()->acceptMethod($method)) {
-            $this->context->getClass()->addMethod($method);
-
-            $method->setByRef((string) $node->byRef);
-
-            foreach ($node->params as $param) {
-                $parameter = new ParameterReflection($param->name, $param->getLine());
-                $parameter->setModifiers((string) $param->type);
-                $parameter->setByRef($param->byRef);
-                if ($param->default) {
-                    $parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
-                }
-                if ((string) $param->type) {
-                    $parameter->setHint($this->resolveHint(array(array((string) $param->type, false))));
-                }
-                $method->addParameter($parameter);
-            }
-
-            $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $method);
-            $method->setDocComment($node->getDocComment());
-            $method->setShortDesc($comment->getShortDesc());
-            $method->setLongDesc($comment->getLongDesc());
-            if (!$errors = $comment->getErrors()) {
-                $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'));
-
-                if ($tag = $comment->getTag('return')) {
-                    $method->setHint($this->resolveHint($tag[0][0]));
-                    $method->setHintDesc($tag[0][1]);
-                }
-
-                $method->setExceptions($comment->getTag('throws'));
-                $method->setTags($comment->getOtherTags());
-            }
-
-            $this->context->addErrors((string) $method, $node->getLine(), $errors);
+        	$this->context->getClass()->addMethod($method);
         }
     }
 
