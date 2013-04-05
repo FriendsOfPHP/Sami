@@ -4,7 +4,6 @@
     "description": "Sami, an API documentation generator",
     "keywords": ["phpdoc"],
     "homepage": "http://sami.sensiolabs.org",
-    "version": "1.0.0",
     "license": "MIT",
     "authors": [
         {
@@ -25,6 +24,11 @@
     },
     "autoload": {
         "psr-0": { "Sami": "." }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     },
     "bin": ["sami.php"]
 }
