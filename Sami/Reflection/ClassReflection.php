@@ -63,7 +63,7 @@ class ClassReflection extends Reflection
     public function getShortName()
     {
         if (false !== $pos = strrpos($this->name, '\\')) {
-            return substr($this->name, strrpos($this->name, '\\') + 1);
+            return substr($this->name, $pos + 1);
         }
 
         return $this->name;

@@ -96,7 +96,7 @@ abstract class Command extends BaseCommand
     {
         $callback = $this->output->isDecorated() ? array($this, 'messageCallback') : null;
 
-        $diff = $project->render($callback, $this->input->getOption('force'));
+        $project->render($callback, $this->input->getOption('force'));
 
         $this->displayRenderSummary();
     }
