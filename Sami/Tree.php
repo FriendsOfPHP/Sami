@@ -21,7 +21,7 @@ class Tree
         $ns = $project->getConfig('simulate_namespaces') ? $project->getSimulatedNamespaces() : $project->getNamespaces();
         foreach ($ns as $namespace) {
             if (false !== $pos = strpos($namespace, '\\')) {
-                $namespaces[substr($namespace, 0, strpos($namespace, '\\'))][] = $namespace;
+                $namespaces[substr($namespace, 0, $pos)][] = $namespace;
             } else {
                 $namespaces[$namespace][] = $namespace;
             }
