@@ -56,33 +56,34 @@ class Parser
             if (null !== $callback) {
                 call_user_func($callback, Message::PARSE_ERROR, $context->getErrors());
             }
+
             foreach ($context->leaveFile() as $class) {
-            	if ($class != null){
-            		if (null !== $callback) {
-            			call_user_func($callback, Message::PARSE_CLASS, array(floor($step / $steps * 100), $class));
-            		}
-            		
-            		$project->addClass($class);
-            		$transaction->addClass($class);
-            		$this->store->writeClass($project, $class);
-            	}
+                if ($class != null){
+                    if (null !== $callback) {
+                        call_user_func($callback, Message::PARSE_CLASS, array(floor($step / $steps * 100), $class));
+                    }
+
+                    $project->addClass($class);
+                    $transaction->addClass($class);
+                    $this->store->writeClass($project, $class);
+                }
             }
         }
 
         // cleanup
         foreach ($transaction->getRemovedClasses() as $class) {
-        	if ($class != null){
-	            $project->removeClass(new LazyClassReflection($class));
-	            $this->store->removeClass($project, $class);
-        	}
+            if ($class != null){
+                $project->removeClass(new LazyClassReflection($class));
+                $this->store->removeClass($project, $class);
+            }
         }
 
         // visit each class for stuff that can only be done when all classes are parsed
         $modified = $this->traverser->traverse($project);
         foreach ($modified as $class) {
-        	if ($class != null){
-            	$this->store->writeClass($project, $class);
-        	}
+            if ($class != null){
+                $this->store->writeClass($project, $class);
+            }
         }
 
         return $transaction;

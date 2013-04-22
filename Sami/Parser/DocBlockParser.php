@@ -115,9 +115,9 @@ class DocBlockParser
                     return array($type, array(trim($m[1]), $this->normalizeString($m[2])));
 
                 default:
-                	if (!isset($match[2])){
-                		$match[2] = '';
-                	}
+                    if (!isset($match[2])){
+                        $match[2] = '';
+                    }
                     return array($type, $this->normalizeString($match[2]));
             }
         } else {
