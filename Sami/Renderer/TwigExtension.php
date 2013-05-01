@@ -11,12 +11,14 @@
 
 namespace Sami\Renderer;
 
+use dflydev\markdown\MarkdownParser;
 use Sami\Reflection\ClassReflection;
 use Sami\Reflection\MethodReflection;
 use Sami\Reflection\PropertyReflection;
 
 class TwigExtension extends \Twig_Extension
 {
+    protected $markdown;
     protected $project;
     protected $currentDepth;
 
@@ -100,13 +102,17 @@ class TwigExtension extends \Twig_Extension
 
     public function parseDesc(array $context, $desc, ClassReflection $class)
     {
+        if (null === $this->markdown) {
+            $this->markdown = new MarkdownParser();
+        }
+
         // FIXME: the @see argument is more complex than just a class (Class::Method, local method directly, ...)
         $that = $this;
         $desc = preg_replace_callback('/@see ([^ ]+)/', function ($match) use ($that, $context, $class) {
             return 'see '.$match[1];
         }, $desc);
 
-        return $desc;
+        return $this->markdown->transformMarkdown($desc);
     }
 
     public function getSnippet($string)
