@@ -75,8 +75,8 @@ class DocBlockParser
             }
 
             // remove single lead space
-            $short = preg_replace('/^\s/', '', $short);
-            $long = preg_replace('/^\s/m', '', $long);
+            $short = preg_replace('/^ /', '', $short);
+            $long = preg_replace('/^ /m', '', $long);
         }
 
         $this->position = 'tag';
