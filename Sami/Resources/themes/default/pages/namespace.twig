@@ -17,7 +17,7 @@
             {% for class in classes %}
                 <tr>
                     <td>{{ class_link(class) }}</td>
-                    <td class="last">{{ class.shortdesc|desc(class)|nl2br }}</td>
+                    <td class="last">{{ class.shortdesc|desc(class) }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -29,7 +29,7 @@
             {% for interface in interfaces %}
                 <tr>
                     <td>{{ class_link(interface) }}</td>
-                    <td class="last">{{ interface.shortdesc|desc(interface)|nl2br }}</td>
+                    <td class="last">{{ interface.shortdesc|desc(interface) }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -41,7 +41,7 @@
             {% for exception in exceptions %}
                 <tr>
                     <td>{{ class_link(exception) }}</td>
-                    <td class="last">{{ exception.shortdesc|desc(exception)|nl2br }}</td>
+                    <td class="last">{{ exception.shortdesc|desc(exception) }}</td>
                 </tr>
             {% endfor %}
         </table>

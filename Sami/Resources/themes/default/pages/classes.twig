@@ -20,7 +20,7 @@
                     {% if class.interface %}</em>{% endif %}
                 </td>
                 <td>
-                    {{ class.shortdesc|desc(class)|nl2br }}
+                    {{ class.shortdesc|desc(class) }}
                 </td>
             </tr>
         {% endfor %}

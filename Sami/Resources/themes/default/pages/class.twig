@@ -16,8 +16,8 @@
 
     {% if class.shortdesc or class.longdesc %}
         <div class="description">
-            <p>{{ class.shortdesc|desc(class)|nl2br }}</p>
-            <p>{{ class.longdesc|desc(class)|nl2br }}</p>
+            <p>{{ class.shortdesc|desc(class) }}</p>
+            <p>{{ class.longdesc|desc(class) }}</p>
         </div>
     {% endif %}
 
@@ -82,7 +82,7 @@
             <tr>
                 <td>{% if parameter.hint %}{{ hint_link(parameter.hint) }}{% endif %}</td>
                 <td>${{ parameter.name }}</td>
-                <td>{{ parameter.shortdesc|desc(class)|nl2br }}</td>
+                <td>{{ parameter.shortdesc|desc(class) }}</td>
             </tr>
         {% endfor %}
     </table>
@@ -92,7 +92,7 @@
     <table>
         <tr>
             <td>{{ hint_link(method.hint) }}</td>
-            <td>{{ method.hintDesc|desc(class)|nl2br }}</td>
+            <td>{{ method.hintDesc|desc(class) }}</td>
         </tr>
     </table>
 {% endblock %}
@@ -102,7 +102,7 @@
         {% for exception in method.exceptions %}
             <tr>
                 <td>{{ class_link(exception[0]) }}</td>
-                <td>{{ exception[1]|desc(class)|nl2br }}</td>
+                <td>{{ exception[1]|desc(class) }}</td>
             </tr>
         {% endfor %}
     </table>
@@ -125,8 +125,8 @@
             <tr>
                 <td>{{ constant.name }}</td>
                 <td class="last">
-                    <p><em>{{ constant.shortdesc|desc(class)|nl2br }}</em></p>
-                    <p>{{ constant.longdesc|desc(class)|nl2br }}</p>
+                    <p><em>{{ constant.shortdesc|desc(class) }}</em></p>
+                    <p>{{ constant.longdesc|desc(class) }}</p>
                 </td>
             </tr>
         {% endfor %}
@@ -143,7 +143,7 @@
                     {{ hint_link(property.hint) }}
                 </td>
                 <td>${{ property.name }}</td>
-                <td class="last">{{ property.shortdesc|desc(class)|nl2br }}</td>
+                <td class="last">{{ property.shortdesc|desc(class) }}</td>
             </tr>
         {% endfor %}
     </table>
@@ -158,7 +158,7 @@
                 </td>
                 <td class="last">
                     <a href="#method_{{ method.name }}">{{ method.name }}</a>{{ block('method_parameters_signature') }}
-                    <p>{{ method.shortdesc|desc(class)|nl2br }}</p>
+                    <p>{{ method.shortdesc|desc(class) }}</p>
                 </td>
                 <td>
                     {%- if method.class is not sameas(class) -%}
@@ -182,8 +182,8 @@
         <code>{{ block('method_signature') }}</code>
     </h3>
     <div class="details">
-        <p>{{ method.shortdesc|desc(class)|nl2br }}</p>
-        <p>{{ method.longdesc|desc(class)|nl2br }}</p>
+        <p>{{ method.shortdesc|desc(class) }}</p>
+        <p>{{ method.longdesc|desc(class) }}</p>
         <div class="tags">
             {% if method.parameters %}
                 <h4>Parameters</h4>
