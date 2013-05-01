@@ -16,7 +16,7 @@
             <tr>
                 <td>{{ class_link(interface, {'target': 'main'}, true) }}</td>
                 <td class="last">
-                    {{ interface.shortdesc|desc(interface)|nl2br }}
+                    {{ interface.shortdesc|desc(interface) }}
                 </td>
             </tr>
         {% endfor %}

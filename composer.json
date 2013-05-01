@@ -16,6 +16,7 @@
         "pimple/pimple": "1.0.*",
         "twig/twig": "1.*",
         "nikic/php-parser": "0.9.*",
+        "dflydev/markdown": "1.0.*",
         "symfony/console": "~2.1",
         "symfony/finder": "~2.1",
         "symfony/filesystem": "~2.1",
