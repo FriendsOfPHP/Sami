@@ -30,7 +30,7 @@ class TwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'desc'    => new \Twig_Filter_Method($this, 'parseDesc', array('needs_context' => true)),
+            'desc'    => new \Twig_Filter_Method($this, 'parseDesc', array('needs_context' => true, 'is_safe' => array('html'))),
             'snippet' => new \Twig_Filter_Method($this, 'getSnippet'),
         );
     }
@@ -112,7 +112,7 @@ class TwigExtension extends \Twig_Extension
             return 'see '.$match[1];
         }, $desc);
 
-        return $this->markdown->transformMarkdown($desc);
+        return preg_replace(array('#^<p>\s*#s', '#\s*</p>\s*$#s'), '', $this->markdown->transformMarkdown($desc));
     }
 
     public function getSnippet($string)

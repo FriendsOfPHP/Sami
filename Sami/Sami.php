@@ -132,7 +132,6 @@ class Sami extends \Pimple
                 'debug'            => true,
                 'auto_reload'      => true,
                 'cache'            => false,
-                'autoescape'       => false
             ));
             $twig->addExtension(new TwigExtension());
 
