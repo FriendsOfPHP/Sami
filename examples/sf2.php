@@ -24,6 +24,6 @@ return new Sami($iterator, array(
     'title'                => 'Symfony2 API',
     'build_dir'            => __DIR__.'/../build/sf2/%version%',
     'cache_dir'            => __DIR__.'/../cache/sf2/%version%',
-    'template_dirs'        => array(__DIR__.'/themes/symfony'),
+    'template_dirs'        => array(__DIR__.'/../Sami/Resources/themes'),
     'default_opened_level' => 2,
 ));
