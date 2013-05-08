@@ -15,7 +15,7 @@ use Sami\Parser\Node\DocBlockNode;
 
 class DocBlockParser
 {
-    const TAG_REGEX = '@([^ ]+)(?:\s+(.*?))?(?=(\n[ \t]*@|\s*$))';
+    const TAG_REGEX = '@([^ ]+)(?:\s+([^@]*?))?(?=(\n[\s\t]*@|\s*$))';
 
     protected $position;
     protected $comment;
@@ -89,7 +89,7 @@ class DocBlockParser
         if (preg_match('/\n\s*'.self::TAG_REGEX.'/As', $this->comment, $match, null, $this->cursor)) {
             $this->move($match[0]);
 
-            switch ($type = $match[1]) {
+            switch ($type = trim($match[1])) {
                 case 'param':
                     if (!preg_match('/^([^\s]*)\s*(?:(?:\$|\&\$)([^\s]+))?\s*(.*)$/s', $match[2], $m)) {
                         throw new \LogicException(sprintf('Unable to parse "@%s" tag " %s"', $type, $match[2]));
@@ -119,6 +119,9 @@ class DocBlockParser
                     return array($type, array(trim($m[1]), $this->normalizeString($m[2])));
 
                 default:
+                    if (!isset($match[2])){
+                        $match[2] = '';
+                    }
                     return array($type, $this->normalizeString($match[2]));
             }
         } else {
