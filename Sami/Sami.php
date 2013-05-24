@@ -114,6 +114,7 @@ class Sami extends \Pimple
             $visitors = array(
                 new ClassVisitor\InheritdocClassVisitor(),
                 new ClassVisitor\MethodClassVisitor(),
+                new ClassVisitor\PropertyClassVisitor(),
             );
 
             return new ClassTraverser($visitors);
