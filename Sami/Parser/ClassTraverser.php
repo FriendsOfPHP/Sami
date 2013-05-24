@@ -53,7 +53,7 @@ class ClassTraverser
 
             $isModified = false;
             foreach ($this->visitors as $visitor) {
-                $isModified = $isModified || $visitor->visit($class);
+                $isModified = $visitor->visit($class) || $isModified;
             }
 
             if ($isModified) {
