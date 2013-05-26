@@ -1,0 +1,17 @@
+{% extends "default/layout/layout.twig" %}
+
+{% block html %}
+    <body id="{% block body_class '' %}">
+        {% block header '' %}
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                {% block content_header '' %}
+                {% block content '' %}
+                {% block footer '' %}
+                </div>
+            </div>
+        </div>
+
+    </body>
+{% endblock %}
