@@ -13,7 +13,6 @@ namespace Sami\Parser;
 
 use Sami\Store\StoreInterface;
 use Sami\Reflection\LazyClassReflection;
-use Sami\Parser\Parser;
 use Sami\Parser\Transaction;
 use Sami\Project;
 use Sami\Message;

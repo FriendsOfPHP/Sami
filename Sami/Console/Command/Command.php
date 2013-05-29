@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Sami\Sami;
 use Sami\Project;
-use Sami\Version\Version;
 use Sami\Parser\Transaction;
 use Sami\Renderer\Diff;
 use Sami\Message;

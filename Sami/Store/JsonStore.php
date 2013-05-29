@@ -13,7 +13,6 @@ namespace Sami\Store;
 
 use Sami\Reflection\ClassReflection;
 use Sami\Project;
-use Sami\Sami;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 
