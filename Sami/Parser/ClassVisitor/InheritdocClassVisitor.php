@@ -11,6 +11,7 @@
 
 namespace Sami\Parser\ClassVisitor;
 
+use Sami\Parser\Node\DocBlockNode;
 use Sami\Reflection\ClassReflection;
 use Sami\Parser\ClassVisitorInterface;
 
@@ -51,15 +52,47 @@ class InheritdocClassVisitor implements ClassVisitorInterface
                 $modified = true;
             }
 
-            if ('{@inheritdoc}' == strtolower(trim($method->getShortDesc())) || !$method->getDocComment()) {
+            if ($this->stringIsInheritdoc($method->getShortDesc())) {
+                $inheritedModified = $this->findInherited($method, $class);
+                if (!$modified) $modified = $inheritedModified;
+            }
+        }
+        return $modified;
+    }
+
+    protected function stringIsInheritdoc($string)
+    {
+        return '{@inheritdoc}' == strtolower(trim($string));
+    }
+
+    protected function findInherited($method, $class)
+    {
+        $parents = $class->getParent(true);
+        $shortDesc = $method->getShortDesc();
+        $parents = array_merge($parents, $class->getInterfaces(true));
+
+        foreach ($parents as $parent) {
+            if (!$parentMethod = $parent->getMethod($method->getName())) {
+                continue;
+            }
+            foreach ($parent->getMethods(true) as $name => $parentMethod) {
+                if ($name != $method->getName()) {
+                    continue;
+                }
+
+                if ($this->stringIsInheritdoc($parentMethod->getShortDesc())) {
+                    $this->findInherited($parentMethod, $parent);
+                }
+
                 $method->setShortDesc($parentMethod->getShortDesc());
                 $method->setLongDesc($parentMethod->getLongDesc());
                 $method->setExceptions($parentMethod->getRawExceptions());
-
-                $modified = true;
+                if ($shortDesc != $method->getShortDesc()) {
+                    return true;
+                }
             }
         }
 
-        return $modified;
+        return false;
     }
 }
