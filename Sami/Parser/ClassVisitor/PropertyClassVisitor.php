@@ -25,81 +25,29 @@ class PropertyClassVisitor implements ClassVisitorInterface
     public function visit(ClassReflection $class)
     {
         $modified = false;
-
         $properties = $class->getTags('property');
         if (!empty($properties)) {
-          foreach ($properties as $propertyTag) {
-            if ($this->injectProperty($class, implode(' ', $propertyTag))) {
-              $modified = true;
+            foreach ($properties as $propertyTag) {
+                if ($this->injectProperty($class, implode(' ', $propertyTag))) {
+                    $modified = true;
+                }
             }
-          }
         }
 
         return $modified;
     }
 
     /**
-     * Parse the parts of an @property tag into an associative array
-     *
-     * @param string $tag Property tag contents
-     *
-     * @return array
-     */
-    protected function parseProperty($tag)
-    {
-      // Account for default array syntax
-      $tag = str_replace('array()', 'array', $tag);
-
-      $parts = preg_split(
-        '/(\s+)/Su',
-        $tag,
-        3,
-        PREG_SPLIT_DELIM_CAPTURE
-      );
-
-      // if the first item that is encountered is not a identifier; it is a type
-      if (isset($parts[0])
-        && (strlen($parts[0]) > 0)
-        && ($parts[0][0] !== '$')
-      ) {
-        $type = array_shift($parts);
-        array_shift($parts);
-      }
-
-      // if the next item starts with a $ it must be the property name
-      if (isset($parts[0])
-        && (strlen($parts[0]) > 0)
-        && ($parts[0][0] == '$')
-      ) {
-        $propertyName = substr(array_shift($parts), 1);
-        array_shift($parts);
-      }
-
-      $description = implode('', $parts);
-      $property = array('name' => $propertyName);
-      if (isset($type)){
-        $property['hint'] = $type;
-      }
-      if (isset($description)){
-        $property['description'] = $description;
-      }
-      return $property;
-    }
-
-    /**
-     * Adds a new property to the class using an array of tokens
+     * Adds a new property to the class using an array of tokens.
      *
      * @param ClassReflection $class       Class reflection
      * @param string          $propertyTag Property tag contents
      *
-     * @return bool
+     * @return Boolean
      */
     protected function injectProperty(ClassReflection $class, $propertyTag)
     {
-        $data = $this->parseProperty($propertyTag);
-
-        // Bail if the property format is invalid
-        if (!$data) {
+        if (!$data = $this->parseProperty($propertyTag)) {
             return false;
         }
 
@@ -112,6 +60,45 @@ class PropertyClassVisitor implements ClassVisitorInterface
         }
 
         $class->addProperty($property);
+
         return true;
+    }
+
+    /**
+     * Parses the parts of an @property tag into an associative array.
+     *
+     * @param string $tag Property tag contents
+     *
+     * @return array
+     */
+    protected function parseProperty($tag)
+    {
+        // Account for default array syntax
+        $tag = str_replace('array()', 'array', $tag);
+
+        $parts = preg_split('/(\s+)/Su', $tag, 3, PREG_SPLIT_DELIM_CAPTURE);
+
+        // if the first item that is encountered is not a identifier; it is a type
+        if (isset($parts[0]) && strlen($parts[0]) > 0 && '$' !== $parts[0][0]) {
+            $type = array_shift($parts);
+            array_shift($parts);
+        }
+
+        // if the next item starts with a $ it must be the property name
+        if (isset($parts[0]) && strlen($parts[0]) > 0 && '$' === $parts[0][0]) {
+            $propertyName = substr(array_shift($parts), 1);
+            array_shift($parts);
+        }
+
+        $description = implode('', $parts);
+        $property = array('name' => $propertyName);
+        if (isset($type)) {
+            $property['hint'] = $type;
+        }
+        if (isset($description)) {
+            $property['description'] = $description;
+        }
+
+        return $property;
     }
 }
