@@ -41,12 +41,11 @@ class Project
     protected $version;
     protected $filesystem;
 
-    public function __construct(VersionCollection $versions, StoreInterface $store, Parser $parser, Renderer $renderer, Sami $sami)
+    public function __construct(VersionCollection $versions, StoreInterface $store, Parser $parser, Sami $sami)
     {
         $this->versions = $versions;
         $this->store = $store;
         $this->parser = $parser;
-        $this->renderer = $renderer;
         $this->sami = $sami;
         $this->filesystem = new Filesystem();
 
@@ -59,6 +58,11 @@ class Project
         }
 
         $this->initialize();
+    }
+
+    public function setRenderer(Renderer $renderer)
+    {
+        $this->renderer = $renderer;
     }
 
     public function getConfig($name, $default = null)
@@ -415,6 +419,10 @@ class Project
 
     protected function renderVersion(Version $version, $previous, $callback = null, $force = false)
     {
+        if (null === $this->renderer) {
+            throw new \LogicException('You must set a renderer.');
+        }
+
         $frozen = $version->isFrozen() && $this->renderer->isRendered($this) && $this->version === file_get_contents($this->getBuildDir().'/PROJECT_VERSION');
 
         if ($force && !$frozen) {

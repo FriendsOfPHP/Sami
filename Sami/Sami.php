@@ -55,7 +55,10 @@ class Sami extends \Pimple
         });
 
         $this['project'] = $this->share(function () use ($sc) {
-            return new Project($sc['_versions'], $sc['store'], $sc['parser'], $sc['renderer'], $sc);
+            $project = new Project($sc['_versions'], $sc['store'], $sc['parser'], $sc);
+            $project->setRenderer($sc['renderer']);
+
+            return $project;
         });
 
         $this['parser'] = $this->share(function () use ($sc) {
