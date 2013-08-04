@@ -37,21 +37,21 @@ class Project
     protected $namespaceExceptions;
     protected $namespaces;
     protected $simulatedNamespaces;
-    protected $sami;
+    protected $config;
     protected $version;
     protected $filesystem;
 
-    public function __construct(VersionCollection $versions, StoreInterface $store, Parser $parser, Sami $sami)
+    public function __construct(VersionCollection $versions, StoreInterface $store, Parser $parser, array $config)
     {
         $this->versions = $versions;
         $this->store = $store;
         $this->parser = $parser;
-        $this->sami = $sami;
+        $this->config = $config;
         $this->filesystem = new Filesystem();
 
         if (count($this->versions) > 1) {
             foreach (array('build_dir', 'cache_dir') as $dir) {
-                if (false === strpos($this->sami[$dir], '%version%')) {
+                if (false === strpos($this->config[$dir], '%version%')) {
                     throw new \LogicException(sprintf('The "%s" setting must have the "%%version%%" placeholder as the project has more than one version.', $dir));
                 }
             }
@@ -67,7 +67,7 @@ class Project
 
     public function getConfig($name, $default = null)
     {
-        return isset($this->sami[$name]) ? $this->sami[$name] : $default;
+        return isset($this->config[$name]) ? $this->config[$name] : $default;
     }
 
     public function getVersion()
@@ -308,12 +308,12 @@ class Project
 
     public function getBuildDir()
     {
-        return $this->prepareDir($this->sami['build_dir']);
+        return $this->prepareDir($this->config['build_dir']);
     }
 
     public function getCacheDir()
     {
-        return $this->prepareDir($this->sami['cache_dir']);
+        return $this->prepareDir($this->config['cache_dir']);
     }
 
     public function flushDir($dir)

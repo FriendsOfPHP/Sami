@@ -14,6 +14,8 @@ namespace Sami\Renderer;
 use Symfony\Component\Filesystem\Filesystem;
 use Sami\Project;
 use Sami\Message;
+use Sami\Tree;
+use Sami\Indexer;
 
 class Renderer
 {
