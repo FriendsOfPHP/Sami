@@ -18,6 +18,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class JsonStore implements StoreInterface
 {
+    const JSON_PRETTY_PRINT = 128;
+
     /**
      * @return ReflectionClass A ReflectionClass instance
      *
@@ -43,7 +45,7 @@ class JsonStore implements StoreInterface
 
     public function writeClass(Project $project, ClassReflection $class)
     {
-        file_put_contents($this->getFilename($project, $class->getName()), json_encode($class->toArray()));
+        file_put_contents($this->getFilename($project, $class->getName()), json_encode($class->toArray(), self::JSON_PRETTY_PRINT));
     }
 
     public function readProject(Project $project)
