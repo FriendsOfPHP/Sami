@@ -28,6 +28,7 @@ class ClassReflection extends Reflection
     protected $interface = false;
     protected $projectClass = true;
     protected $aliases = array();
+    protected $errors = array();
 
     public function __toString()
     {
@@ -332,6 +333,16 @@ class ClassReflection extends Reflection
         $this->aliases = $aliases;
     }
 
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    public function setErrors($errors)
+    {
+        $this->errors = $errors;
+    }
+
     public function toArray()
     {
         return array(
@@ -348,6 +359,7 @@ class ClassReflection extends Reflection
             'modifiers'    => $this->modifiers,
             'is_interface' => $this->interface,
             'aliases'      => $this->aliases,
+            'errors'       => $this->errors,
             'interfaces'   => $this->interfaces,
             'properties'   => array_map(function ($property) { return $property->toArray(); }, $this->properties),
             'methods'      => array_map(function ($method) { return $method->toArray(); }, $this->methods),
@@ -368,6 +380,7 @@ class ClassReflection extends Reflection
         $class->modifiers  = $array['modifiers'];
         $class->interface  = $array['is_interface'];
         $class->aliases    = $array['aliases'];
+        $class->errors     = $array['errors'];
         $class->parent     = $array['parent'];
         $class->interfaces = $array['interfaces'];
         $class->constants  = $array['constants'];

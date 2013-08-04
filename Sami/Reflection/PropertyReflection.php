@@ -18,6 +18,7 @@ class PropertyReflection extends Reflection
     protected $class;
     protected $modifiers;
     protected $default;
+    protected $errors = array();
 
     public function __toString()
     {
@@ -74,6 +75,16 @@ class PropertyReflection extends Reflection
         $this->class = $class;
     }
 
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    public function setErrors($errors)
+    {
+        $this->errors = $errors;
+    }
+
     public function toArray()
     {
         return array(
@@ -86,6 +97,7 @@ class PropertyReflection extends Reflection
             'tags'       => $this->tags,
             'modifiers'  => $this->modifiers,
             'default'    => $this->default,
+            'errors'     => $this->errors,
         );
     }
 
@@ -99,6 +111,7 @@ class PropertyReflection extends Reflection
         $property->tags      = $array['tags'];
         $property->modifiers = $array['modifiers'];
         $property->default   = $array['default'];
+        $property->errors    = $array['errors'];
 
         return $property;
     }

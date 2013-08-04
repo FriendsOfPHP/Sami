@@ -101,6 +101,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
             $class->setLongDesc($comment->getLongDesc());
             if ($errors = $comment->getErrors()) {
                 $this->context->addErrors((string) $class, $node->getLine(), $errors);
+                $class->setErrors($errors);
             } else {
                 $class->setTags($comment->getOtherTags());
             }
@@ -151,6 +152,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
             }
 
             $this->context->addErrors((string) $method, $node->getLine(), $errors);
+            $method->setErrors($errors);
         }
     }
 
@@ -171,6 +173,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
                 $property->setLongDesc($comment->getLongDesc());
                 if ($errors = $comment->getErrors()) {
                     $this->context->addErrors((string) $property, $prop->getLine(), $errors);
+                    $property->setErrors($errors);
                 } else {
                     if ($tag = $comment->getTag('var')) {
                         $property->setHint($this->resolveHint($tag[0][0]));

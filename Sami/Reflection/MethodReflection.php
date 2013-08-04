@@ -20,6 +20,7 @@ class MethodReflection extends Reflection
     protected $byRef;
     protected $modifiers;
     protected $exceptions = array();
+    protected $errors = array();
 
     public function __toString()
     {
@@ -132,6 +133,16 @@ class MethodReflection extends Reflection
         return $this->exceptions;
     }
 
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    public function setErrors($errors)
+    {
+        $this->errors = $errors;
+    }
+
     public function toArray()
     {
         return array(
@@ -145,6 +156,7 @@ class MethodReflection extends Reflection
             'modifiers'  => $this->modifiers,
             'is_by_ref'  => $this->byRef,
             'exceptions' => $this->exceptions,
+            'errors'     => $this->errors,
             'parameters' => array_map(function ($parameter) { return $parameter->toArray(); }, $this->parameters),
         );
     }
@@ -160,6 +172,7 @@ class MethodReflection extends Reflection
         $method->modifiers  = $array['modifiers'];
         $method->byRef      = $array['is_by_ref'];
         $method->exceptions = $array['exceptions'];
+        $method->errors = $array['errors'];
 
         foreach ($array['parameters'] as $parameter) {
             $parameter = ParameterReflection::fromArray($project, $parameter);
