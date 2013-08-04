@@ -55,7 +55,7 @@ class Sami extends \Pimple
         });
 
         $this['project'] = $this->share(function () use ($sc) {
-            return new Project($sc['_versions'], $sc['store'], $sc['parser'], $sc['renderer'], $sc['tree'], $sc['indexer'], $sc);
+            return new Project($sc['_versions'], $sc['store'], $sc['parser'], $sc['renderer'], $sc);
         });
 
         $this['parser'] = $this->share(function () use ($sc) {
@@ -107,7 +107,7 @@ class Sami extends \Pimple
         });
 
         $this['renderer'] = $this->share(function () use ($sc) {
-            return new Renderer($sc['twig'], $sc['themes']);
+            return new Renderer($sc['twig'], $sc['themes'], $sc['tree'], $sc['indexer']);
         });
 
         $this['traverser'] = $this->share(function () use ($sc) {

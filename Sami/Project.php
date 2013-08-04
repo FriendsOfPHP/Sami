@@ -38,20 +38,16 @@ class Project
     protected $namespaces;
     protected $simulatedNamespaces;
     protected $sami;
-    protected $indexer;
-    protected $tree;
     protected $version;
     protected $filesystem;
 
-    public function __construct(VersionCollection $versions, StoreInterface $store, Parser $parser, Renderer $renderer, Tree $tree, Indexer $indexer, Sami $sami)
+    public function __construct(VersionCollection $versions, StoreInterface $store, Parser $parser, Renderer $renderer, Sami $sami)
     {
         $this->versions = $versions;
         $this->store = $store;
         $this->parser = $parser;
         $this->renderer = $renderer;
         $this->sami = $sami;
-        $this->tree = $tree;
-        $this->indexer = $indexer;
         $this->filesystem = new Filesystem();
 
         if (count($this->versions) > 1) {
@@ -127,16 +123,6 @@ class Project
 
         $this->version = $version;
         $this->read();
-    }
-
-    public function getIndex()
-    {
-        return $this->indexer->getIndex($this);
-    }
-
-    public function getTree()
-    {
-        return $this->tree->getTree($this);
     }
 
     public function hasNamespaces()

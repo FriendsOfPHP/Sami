@@ -24,11 +24,15 @@ class Renderer
     protected $theme;
     protected $steps;
     protected $step;
+    protected $tree;
+    protected $indexer;
 
-    public function __construct(\Twig_Environment $twig, ThemeSet $themes)
+    public function __construct(\Twig_Environment $twig, ThemeSet $themes, Tree $tree, Indexer $indexer)
     {
         $this->twig = $twig;
         $this->themes = $themes;
+        $this->tree = $tree;
+        $this->indexer = $indexer;
         $this->filesystem = new Filesystem();
     }
 
@@ -107,8 +111,8 @@ class Renderer
             'interfaces' => $project->getProjectInterfaces(),
             'classes'    => $project->getProjectClasses(),
             'items'      => $this->getIndex($project),
-            'index'      => $project->getIndex(),
-            'tree'       => $project->getTree(),
+            'index'      => $this->indexer->getIndex($project),
+            'tree'       => $this->tree->getTree($project),
         );
 
         foreach ($this->theme->getTemplates('global') as $template => $target) {
