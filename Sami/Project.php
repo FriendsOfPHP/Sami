@@ -41,11 +41,10 @@ class Project
     protected $version;
     protected $filesystem;
 
-    public function __construct(VersionCollection $versions, StoreInterface $store, Parser $parser, array $config)
+    public function __construct(VersionCollection $versions, StoreInterface $store, array $config)
     {
         $this->versions = $versions;
         $this->store = $store;
-        $this->parser = $parser;
         $this->config = $config;
         $this->filesystem = new Filesystem();
 
@@ -63,6 +62,11 @@ class Project
     public function setRenderer(Renderer $renderer)
     {
         $this->renderer = $renderer;
+    }
+
+    public function setParser(Parser $parser)
+    {
+        $this->parser = $parser;
     }
 
     public function getConfig($name, $default = null)
@@ -398,6 +402,10 @@ class Project
 
     protected function parseVersion(Version $version, $previous, $callback = null, $force = false)
     {
+        if (null === $this->parser) {
+            throw new \LogicException('You must set a parser.');
+        }
+
         if ($version->isFrozen() && count($this->classes) > 0) {
             return;
         }
