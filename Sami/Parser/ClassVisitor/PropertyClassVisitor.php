@@ -76,18 +76,19 @@ class PropertyClassVisitor implements ClassVisitorInterface
         // Account for default array syntax
         $tag = str_replace('array()', 'array', $tag);
 
-        $parts = preg_split('/(\s+)/Su', $tag, 3, PREG_SPLIT_DELIM_CAPTURE);
-
-        // if the first item that is encountered is not a identifier; it is a type
-        if (isset($parts[0]) && strlen($parts[0]) > 0 && '$' !== $parts[0][0]) {
-            $type = array_shift($parts);
-            array_shift($parts);
-        }
-
-        // if the next item starts with a $ it must be the property name
-        if (isset($parts[0]) && strlen($parts[0]) > 0 && '$' === $parts[0][0]) {
-            $propertyName = substr(array_shift($parts), 1);
-            array_shift($parts);
+        $parts = preg_split('/(?:\s+)/Su', $tag, 3, PREG_SPLIT_DELIM_CAPTURE);
+        if (isset($parts[1])) {
+            if ('$' !== $parts[0][0]) {
+                $type = $parts[0];
+                $propertyName = substr($parts[1], 1);
+            } elseif ('$' !== $parts[1][0]) {
+                $type = $parts[1];
+                $propertyName = substr($parts[0], 1);
+            }
+        } elseif (isset($parts[0])) {
+            $propertyName = substr($parts[0], 1);
+        } else {
+            return array();
         }
 
         $description = implode('', $parts);
