@@ -55,7 +55,7 @@ class Sami extends \Pimple
         });
 
         $this['project'] = $this->share(function () use ($sc) {
-            $project = new Project($sc['_versions'], $sc['store'], array(
+            $project = new Project($sc['store'], $sc['_versions'], array(
                 'build_dir' => $sc['build_dir'],
                 'cache_dir' => $sc['cache_dir'],
                 'simulate_namespaces' => $sc['simulate_namespaces'],

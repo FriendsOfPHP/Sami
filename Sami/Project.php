@@ -18,6 +18,7 @@ use Sami\Parser\Parser;
 use Sami\Renderer\Renderer;
 use Sami\Version\Version;
 use Sami\Version\VersionCollection;
+use Sami\Version\SingleVersionCollection;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -41,11 +42,20 @@ class Project
     protected $version;
     protected $filesystem;
 
-    public function __construct(VersionCollection $versions, StoreInterface $store, array $config)
+    public function __construct(StoreInterface $store, VersionCollection $versions = null, array $config = array())
     {
+        if (null === $versions) {
+            $versions = new SingleVersionCollection(new Version('master'));
+        }
         $this->versions = $versions;
         $this->store = $store;
-        $this->config = $config;
+        $this->config = array_merge(array(
+            'build_dir' => sys_get_temp_dir().'sami/build',
+            'cache_dir' => sys_get_temp_dir().'sami/cache',
+            'simulate_namespaces' => false,
+            'include_parent_data' => true,
+            'theme' => 'enhanced',
+        ), $config);
         $this->filesystem = new Filesystem();
 
         if (count($this->versions) > 1) {
