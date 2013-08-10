@@ -26,6 +26,7 @@ class ClassReflection extends Reflection
     protected $parent;
     protected $file;
     protected $interface = false;
+    protected $isTrait = false;
     protected $projectClass = true;
     protected $aliases = array();
     protected $errors = array();
@@ -311,6 +312,16 @@ class ClassReflection extends Reflection
         return $this->interface;
     }
 
+    public function setTrait($boolean)
+    {
+        $this->isTrait = (Boolean) $boolean;
+    }
+
+    public function isTrait()
+    {
+        return $this->isTrait;
+    }
+    
     public function isException()
     {
         $parent = $this;

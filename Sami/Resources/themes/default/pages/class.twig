@@ -7,7 +7,7 @@
 {% block body_class 'class' %}
 
 {% block content_header %}
-    <div class="type">{% if class.interface %}Interface{% else %}Class{% endif %}</div>
+    <div class="type">{% if class.trait %}Trait{% elseif class.interface %}Interface{% else %}Class{% endif %}</div>
     <h1>{{ namespace_link(class.namespace) }}{% if class.namespace %}\{% endif %}{{ class.shortname }}</h1>
 {% endblock %}
 
@@ -46,7 +46,7 @@
 
 {% block class_signature -%}
     {% if not class.interface and class.abstract %}abstract {% endif %}
-    {%- if class.interface %}interface{% else %}class{% endif %}
+    {%- if class.trait %}trait{% elseif class.interface %}interface{% else %}class{% endif %}
     <strong>{{ class.shortname }}</strong>
     {%- if class.parent %}
         extends {{ class_link(class.parent) }}

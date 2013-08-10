@@ -37,6 +37,8 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
             $this->addInterface($node);
         } elseif ($node instanceof \PHPParser_Node_Stmt_Class) {
             $this->addClass($node);
+        } elseif ($node instanceof \PHPParser_Node_Stmt_Trait) {
+            $this->addTrait($node);
         } elseif ($this->context->getClass() && $node instanceof \PHPParser_Node_Stmt_Property) {
             $this->addProperty($node);
         } elseif ($this->context->getClass() && $node instanceof \PHPParser_Node_Stmt_ClassMethod) {
@@ -50,7 +52,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
     {
         if ($node instanceof \PHPParser_Node_Stmt_Namespace) {
             $this->context->leaveNamespace();
-        } elseif ($node instanceof \PHPParser_Node_Stmt_Class || $node instanceof \PHPParser_Node_Stmt_Interface) {
+        } elseif ($node instanceof \PHPParser_Node_Stmt_Class || $node instanceof \PHPParser_Node_Stmt_Interface || $node instanceof \PHPParser_Node_Stmt_Trait) {
             $this->context->leaveClass();
         }
     }
@@ -85,6 +87,14 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         }
     }
 
+   protected function addTrait(\PHPParser_Node_Stmt_Trait $node)
+    {
+        $class = $this->addClassOrInterface($node);
+
+        $class->setTrait(true);        
+    }
+    
+    
     protected function addClassOrInterface($node)
     {
         $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
