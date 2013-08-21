@@ -15,6 +15,16 @@ use Sami\Project;
 
 class ClassReflection extends Reflection
 {
+    const CATEGORY_CLASS = 111;
+    const CATEGORY_INTERFACE = 222;
+    const CATEGORY_TRAIT = 333;
+    
+    static protected $categoryName = array(
+        111 => 'class',
+        222 => 'interface',
+        333 => 'trait'
+    );
+    
     protected $project;
     protected $hash;
     protected $namespace;
@@ -25,8 +35,7 @@ class ClassReflection extends Reflection
     protected $constants = array();
     protected $parent;
     protected $file;
-    protected $interface = false;
-    protected $isTrait = false;
+    protected $category = self::CATEGORY_CLASS;
     protected $projectClass = true;
     protected $aliases = array();
     protected $errors = array();
@@ -304,22 +313,31 @@ class ClassReflection extends Reflection
 
     public function setInterface($boolean)
     {
-        $this->interface = (Boolean) $boolean;
+        if ($boolean){
+            $this->category = self::CATEGORY_INTERFACE;
+        }
     }
 
     public function isInterface()
     {
-        return $this->interface;
+        return $this->category === self::CATEGORY_INTERFACE;
     }
 
     public function setTrait($boolean)
     {
-        $this->isTrait = (Boolean) $boolean;
+        if ($boolean){
+            $this->category = self::CATEGORY_TRAIT;
+        }
     }
 
     public function isTrait()
     {
-        return $this->isTrait;
+        return $this->category === self::CATEGORY_TRAIT;
+    }
+    
+    public function setCategory($cat)
+    {
+        $this->category = $cat;
     }
     
     public function isException()
@@ -368,7 +386,8 @@ class ClassReflection extends Reflection
             'hash'         => $this->hash,
             'parent'       => $this->parent,
             'modifiers'    => $this->modifiers,
-            'is_interface' => $this->interface,
+            'is_trait'     => $this->isTrait(),
+            'is_interface' => $this->isInterface(),
             'aliases'      => $this->aliases,
             'errors'       => $this->errors,
             'interfaces'   => $this->interfaces,
@@ -389,7 +408,12 @@ class ClassReflection extends Reflection
         $class->hash       = $array['hash'];
         $class->file       = $array['file'];
         $class->modifiers  = $array['modifiers'];
-        $class->interface  = $array['is_interface'];
+        if ($array['is_interface']) {
+            $class->setInterface(true);
+        }
+        if ($array['is_trait']) {
+            $class->setTrait(true);
+        }
         $class->aliases    = $array['aliases'];
         $class->errors     = $array['errors'];
         $class->parent     = $array['parent'];
@@ -417,5 +441,10 @@ class ClassReflection extends Reflection
         }
 
         return $class;
+    }
+    
+    public function getCategoryName()
+    {
+        return static::$categoryName[$this->category];
     }
 }
