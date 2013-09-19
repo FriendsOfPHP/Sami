@@ -347,7 +347,7 @@ class Project
 
     static public function isPhpTypeHint($hint)
     {
-        return in_array(strtolower($hint), array('', 'scalar', 'object', 'boolean', 'bool', 'int', 'integer', 'array', 'string', 'mixed', 'void', 'null'));
+        return in_array(strtolower($hint), array('', 'scalar', 'object', 'boolean', 'bool', 'int', 'integer', 'array', 'string', 'mixed', 'void', 'null', 'resource', 'double', 'float', 'callable'));
     }
 
     protected function updateCache(ClassReflection $class)
