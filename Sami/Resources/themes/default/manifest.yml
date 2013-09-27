@@ -12,6 +12,7 @@ global:
     'pages/namespaces.twig': 'namespaces.html'
     'pages/interfaces.twig': 'interfaces.html'
     'pages/classes.twig':    'classes.html'
+    'pages/traits.twig':     'traits.html'
 
 namespace:
     'namespace.twig':        '%s/namespace-frame.html'
