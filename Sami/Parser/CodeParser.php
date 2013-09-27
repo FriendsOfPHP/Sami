@@ -19,8 +19,8 @@ class CodeParser
 
     public function __construct(ParserContext $context, \PHPParser_Parser $parser, \PHPParser_NodeTraverser $traverser)
     {
-        $this->context = $context;
-        $this->parser = $parser;
+        $this->context   = $context;
+        $this->parser    = $parser;
         $this->traverser = $traverser;
     }
 
@@ -32,7 +32,11 @@ class CodeParser
     public function parse($code)
     {
         try {
-            $this->traverser->traverse($this->parser->parse($code));
+            try {
+                $this->traverser->traverse($this->parser->parse($code));
+            } catch (\ErrorException $e) {
+                $this->traverser->traverse($this->parser->parse(new \PHPParser_Lexer($code)));
+            }
         } catch (\PHPParser_Error $e) {
             $this->context->addError($this->context->getFile(), 0, $e->getMessage());
         }
