@@ -12,6 +12,7 @@
 namespace Sami\Version;
 
 use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Finder\Glob;
 
 class GitVersionCollection extends VersionCollection
@@ -41,6 +42,12 @@ class GitVersionCollection extends VersionCollection
 
     protected function switchVersion(Version $version)
     {
+        $process = new Process('git status --porcelain | grep -v "??" | wc -l', $this->repo);
+        $process->run();
+        if (!$process->isSuccessful() || (int) $process->getOutput() > 0) {
+            throw new \RuntimeException(sprintf('Unable to switch to version "%s" as the repository is not clean.', $version));
+        }
+
         $this->execute(array('checkout', '-qf', (string) $version));
     }
 
