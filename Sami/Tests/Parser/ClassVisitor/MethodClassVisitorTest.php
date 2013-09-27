@@ -11,10 +11,26 @@
 
 namespace Sami\Tests\Parser\ClassVisitor;
 
+use Sami\Parser\ClassVisitor\MethodClassVisitor;
+
 class MethodClassVisitorTest extends \PHPUnit_Framework_TestCase
 {
+
     public function testAddsMethods()
     {
-        $this->markTestIncomplete();
+        $class = $this->getMock('Sami\Reflection\ClassReflection', array('getTags'), array('Mock', 1));
+        $property = array(
+            explode(' ', 'string askQuestion() Ask 3 questions')
+        );
+        $class->expects($this->any())
+                ->method('getTags')
+                ->with($this->equalTo('method'))
+                ->will($this->returnValue($property));
+
+        $visitor = new MethodClassVisitor();
+        $visitor->visit($class);
+
+        $this->assertTrue(array_key_exists('askQuestion', $class->getMethods()));
     }
+
 }
