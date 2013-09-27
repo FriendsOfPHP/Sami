@@ -15,7 +15,6 @@ use Sami\Parser\ClassVisitor\MethodClassVisitor;
 
 class MethodClassVisitorTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testAddsMethods()
     {
         $class = $this->getMock('Sami\Reflection\ClassReflection', array('getTags'), array('Mock', 1));
@@ -32,5 +31,4 @@ class MethodClassVisitorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(array_key_exists('askQuestion', $class->getMethods()));
     }
-
 }

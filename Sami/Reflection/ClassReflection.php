@@ -15,14 +15,14 @@ use Sami\Project;
 
 class ClassReflection extends Reflection
 {
-    const CATEGORY_CLASS = 111;
-    const CATEGORY_INTERFACE = 222;
-    const CATEGORY_TRAIT = 333;
+    const CATEGORY_CLASS = 1;
+    const CATEGORY_INTERFACE = 2;
+    const CATEGORY_TRAIT = 3;
     
     static protected $categoryName = array(
-        111 => 'class',
-        222 => 'interface',
-        333 => 'trait'
+        1 => 'class',
+        2 => 'interface',
+        3 => 'trait',
     );
     
     protected $project;
@@ -313,8 +313,10 @@ class ClassReflection extends Reflection
 
     public function setInterface($boolean)
     {
-        if ($boolean){
+        if ($boolean) {
             $this->category = self::CATEGORY_INTERFACE;
+        } else {
+            $this->category = self::CATEGORY_CLASS;
         }
     }
 
@@ -325,8 +327,10 @@ class ClassReflection extends Reflection
 
     public function setTrait($boolean)
     {
-        if ($boolean){
+        if ($boolean) {
             $this->category = self::CATEGORY_TRAIT;
+        } else {
+            $this->category = self::CATEGORY_CLASS;
         }
     }
 
@@ -335,9 +339,9 @@ class ClassReflection extends Reflection
         return $this->category === self::CATEGORY_TRAIT;
     }
     
-    public function setCategory($cat)
+    public function setCategory($category)
     {
-        $this->category = $cat;
+        $this->category = $category;
     }
     
     public function isException()
