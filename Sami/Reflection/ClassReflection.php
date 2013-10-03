@@ -18,13 +18,13 @@ class ClassReflection extends Reflection
     const CATEGORY_CLASS = 1;
     const CATEGORY_INTERFACE = 2;
     const CATEGORY_TRAIT = 3;
-    
-    static protected $categoryName = array(
+
+    static private $categoryName = array(
         1 => 'class',
         2 => 'interface',
         3 => 'trait',
     );
-    
+
     protected $project;
     protected $hash;
     protected $namespace;
@@ -449,6 +449,6 @@ class ClassReflection extends Reflection
     
     public function getCategoryName()
     {
-        return static::$categoryName[$this->category];
+        return self::$categoryName[$this->category];
     }
 }
