@@ -60,6 +60,7 @@ class Sami extends \Pimple
                 'cache_dir' => $sc['cache_dir'],
                 'simulate_namespaces' => $sc['simulate_namespaces'],
                 'include_parent_data' => $sc['include_parent_data'],
+                'default_opened_level' => $sc['default_opened_level'],
                 'theme' => $sc['theme'],
             ));
             $project->setRenderer($sc['renderer']);
