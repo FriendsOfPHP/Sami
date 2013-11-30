@@ -1,7 +1,11 @@
 CHANGELOG
 =========
 
-* 1.3 (2013-XX-XX)
+* 1.4 (2013-XX-XX)
+
+  * n/a
+
+* 1.3 (2013-11-30)
 
   * fixed deep inheritance
   * added forwarding of default_opened_level configuration parameter from Pimple to Project
