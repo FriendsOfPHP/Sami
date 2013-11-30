@@ -214,7 +214,7 @@ class ClassReflection extends Reflection
     public function getParentMethod($name)
     {
         if ($this->getParent()) {
-            foreach ($this->getParent()->getMethods() as $n => $method) {
+            foreach ($this->getParent()->getMethods(true) as $n => $method) {
                 if ($name == $n) {
                     return $method;
                 }
@@ -222,7 +222,7 @@ class ClassReflection extends Reflection
         }
 
         foreach ($this->getInterfaces(true) as $interface) {
-            foreach ($interface->getMethods() as $n => $method) {
+            foreach ($interface->getMethods(true) as $n => $method) {
                 if ($name == $n) {
                     return $method;
                 }
@@ -238,15 +238,15 @@ class ClassReflection extends Reflection
 
         $methods = array();
         if ($this->isInterface()) {
-            foreach ($this->getInterfaces() as $interface) {
-                foreach ($interface->getMethods() as $name => $method) {
+            foreach ($this->getInterfaces(true) as $interface) {
+                foreach ($interface->getMethods(true) as $name => $method) {
                     $methods[$name] = $method;
                 }
             }
         }
 
         if ($this->getParent()) {
-            foreach ($this->getParent()->getMethods() as $name => $method) {
+            foreach ($this->getParent()->getMethods(true) as $name => $method) {
                 $methods[$name] = $method;
             }
         }
@@ -281,11 +281,11 @@ class ClassReflection extends Reflection
 
         $allInterfaces = $interfaces;
         foreach ($interfaces as $interface) {
-            $allInterfaces = array_merge($allInterfaces, $interface->getInterfaces());
+            $allInterfaces = array_merge($allInterfaces, $interface->getInterfaces(true));
         }
 
         if ($parent = $this->getParent()) {
-            $allInterfaces = array_merge($allInterfaces, $parent->getInterfaces());
+            $allInterfaces = array_merge($allInterfaces, $parent->getInterfaces(true));
         }
 
         return $allInterfaces;
