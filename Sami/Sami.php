@@ -30,7 +30,7 @@ use Sami\Version\SingleVersionCollection;
 
 class Sami extends \Pimple
 {
-    const VERSION = '1.3-DEV';
+    const VERSION = '1.3';
 
     public function __construct($iterator = null, array $config = array())
     {
