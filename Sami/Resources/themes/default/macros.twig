@@ -38,6 +38,12 @@
     {%- endif %}
 {%- endmacro %}
 
+{% macro source_link(project, class) -%}
+    {% if class.sourcepath %}
+        <a href="{{ class.sourcepath }}">View source</a>
+    {%- endif %}
+{%- endmacro %}
+
 {% macro abbr_class(class, absolute) -%}
     <abbr title="{{ class }}">{{ absolute|default(false) ? class : class.shortname }}</abbr>
 {%- endmacro %}

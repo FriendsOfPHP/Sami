@@ -36,6 +36,7 @@ class ClassReflection extends Reflection
     protected $traits = array();
     protected $parent;
     protected $file;
+    protected $plainFile;
     protected $category = self::CATEGORY_CLASS;
     protected $projectClass = true;
     protected $aliases = array();
@@ -109,6 +110,39 @@ class ClassReflection extends Reflection
     public function setFile($file)
     {
         $this->file = $file;
+    }
+
+    public function setPlainFile($plainFile)
+    {
+        $this->plainFile = $plainFile;
+    }
+
+    public function getPlainFile()
+    {
+        return $this->plainFile;
+    }
+
+    public function getSourcePath($line = null)
+    {
+        if (null === $this->project) {
+            return;
+        }
+
+        if (!$root = $this->project->getSourceRoot()) {
+            return;
+        }
+
+        if (null === $this->plainFile) {
+            return;
+        }
+
+        $url = $root . $this->plainFile;
+
+        if (null !== $line) {
+            $url .= '#L' . (int) $line;
+        }
+
+        return $url;
     }
 
     public function getProject()
@@ -433,6 +467,8 @@ class ClassReflection extends Reflection
             'tags'         => $this->tags,
             'namespace'    => $this->namespace,
             'file'         => $this->file,
+            'plain_file'   => $this->getPlainFile(),
+            'source_path'  => $this->getSourcePath(),
             'hash'         => $this->hash,
             'parent'       => $this->parent,
             'modifiers'    => $this->modifiers,
@@ -458,6 +494,7 @@ class ClassReflection extends Reflection
         $class->namespace  = $array['namespace'];
         $class->hash       = $array['hash'];
         $class->file       = $array['file'];
+        $class->plainFile  = $array['plain_file'];
         $class->modifiers  = $array['modifiers'];
         if ($array['is_interface']) {
             $class->setInterface(true);

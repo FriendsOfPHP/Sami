@@ -69,6 +69,8 @@ class Sami extends Container
                 'default_opened_level' => $sc['default_opened_level'],
                 'theme' => $sc['theme'],
                 'title' => $sc['title'],
+                'source_url' => $sc['source_url'],
+                'source_dir' => $sc['source_dir'],
             ));
             $project->setRenderer($sc['renderer']);
             $project->setParser($sc['parser']);
@@ -163,6 +165,8 @@ class Sami extends Container
         $this['template_dirs'] = array();
         $this['build_dir'] = getcwd().'/build';
         $this['cache_dir'] = getcwd().'/cache';
+        $this['source_dir'] = '';
+        $this['source_url'] = '';
         $this['default_opened_level'] = 2;
 
         // simulate namespaces for projects based on the PEAR naming conventions
