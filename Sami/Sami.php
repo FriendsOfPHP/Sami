@@ -159,6 +159,7 @@ class Sami extends \Pimple
         $this['build_dir'] = getcwd().'/build';
         $this['cache_dir'] = getcwd().'/cache';
         $this['source_dir'] = '';
+        $this['source_url'] = '';
 
         // simulate namespaces for projects based on the PEAR naming conventions
         $this['simulate_namespaces'] = false;
