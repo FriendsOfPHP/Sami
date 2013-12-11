@@ -39,6 +39,7 @@ class Parser
         $steps = iterator_count($this->iterator);
         $context = $this->parser->getContext();
         $transaction = new Transaction($project);
+        $dirs = $this->iterator->getIterator();
         foreach ($this->iterator as $file) {
             ++$step;
 
@@ -59,6 +60,13 @@ class Parser
             foreach ($context->leaveFile() as $class) {
                 if (null !== $callback) {
                     call_user_func($callback, Message::PARSE_CLASS, array(floor($step / $steps * 100), $class));
+                }
+
+                foreach ($dirs as $dir) {
+                    if ($file !== ($plainFile = str_replace($dir, '', $file))) {
+                        $class->setPlainFile($plainFile);
+                        break;
+                    }
                 }
 
                 $project->addClass($class);
