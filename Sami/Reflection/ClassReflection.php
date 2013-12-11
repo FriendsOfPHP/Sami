@@ -121,19 +121,27 @@ class ClassReflection extends Reflection
         return $this->plainFile;
     }
 
-    public function getSourcePath()
+    public function getSourcePath($line = null)
     {
         if (null === $this->project) {
             return;
         }
 
-        if (!$root = $this->project->getConfig('source')) {
+        if (!$root = $this->project->getSourceRoot()) {
             return;
         }
 
-        if (null !== $this->plainFile) {
-            return $root . '/' . $this->plainFile;
+        if (null === $this->plainFile) {
+            return;
         }
+
+        $url = $root . $this->plainFile;
+
+        if (null !== $line) {
+            $url .= '#L' . (int) $line;
+        }
+
+        return $url;
     }
 
     public function getProject()
@@ -413,7 +421,7 @@ class ClassReflection extends Reflection
             'tags'         => $this->tags,
             'namespace'    => $this->namespace,
             'file'         => $this->file,
-            'plain_file'   => $this->plainFile,
+            'plain_file'   => $this->getPlainFile(),
             'source_path'  => $this->getSourcePath(),
             'hash'         => $this->hash,
             'parent'       => $this->parent,
