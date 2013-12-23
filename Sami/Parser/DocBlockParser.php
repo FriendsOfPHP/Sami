@@ -93,8 +93,6 @@ class DocBlockParser
                 case 'param':
                     if (!preg_match('/^([^\s]*)\s*(?:(?:\$|\&\$)([^\s]+))?\s*(.*)$/s', $match[2], $m)) {
                         throw new \LogicException(sprintf('Unable to parse "@%s" tag " %s"', $type, $match[2]));
-
-                        return;
                     }
 
                     return array($type, array($this->parseHint(trim($m[1])), trim($m[2]), $this->normalizeString($m[3])));
@@ -103,8 +101,6 @@ class DocBlockParser
                 case 'var':
                     if (!preg_match('/^([^\s]+)\s*(.*)$/s', $match[2], $m)) {
                         throw new \LogicException(sprintf('Unable to parse "@%s" tag "%s"', $type, $match[2]));
-
-                        return;
                     }
 
                     return array($type, array($this->parseHint(trim($m[1])), $this->normalizeString($m[2])));
@@ -112,8 +108,6 @@ class DocBlockParser
                 case 'throws':
                     if (!preg_match('/^([^\s]+)\s*(.*)$/s', $match[2], $m)) {
                         throw new \LogicException(sprintf('Unable to parse "@%s" tag "%s"', $type, $match[2]));
-
-                        return;
                     }
 
                     return array($type, array(trim($m[1]), $this->normalizeString($m[2])));
