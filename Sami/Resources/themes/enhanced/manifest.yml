@@ -11,6 +11,7 @@ static:
     'i/tree_bg.png':           'i/tree_bg.png'
     'js/jquery-1.3.2.min.js':  'js/jquery-1.3.2.min.js'
     'js/searchdoc.js':         'js/searchdoc.js'
+    'js/permalink.js':         'js/permalink.js'
 
 global:
     'panel.twig':        'panel.html'
