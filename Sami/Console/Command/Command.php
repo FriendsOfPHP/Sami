@@ -39,10 +39,8 @@ abstract class Command extends BaseCommand
      */
     protected function configure()
     {
-        $this->getDefinition()->addArgument(
-            new InputArgument('config', InputArgument::REQUIRED, 'The configuration'),
-            new InputOption('version', '', InputOption::VALUE_REQUIRED, 'The version to build')
-        );
+        $this->getDefinition()->addArgument(new InputArgument('config', InputArgument::REQUIRED, 'The configuration'));
+        $this->getDefinition()->addOption(new InputOption('only-version', '', InputOption::VALUE_REQUIRED, 'The version to build'));
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -63,8 +61,8 @@ abstract class Command extends BaseCommand
 
         $this->sami = require $config;
 
-        if ($input->getOption('version')) {
-            $this->sami['version'] = $input->getOption('version');
+        if ($input->getOption('only-version')) {
+            $this->sami['versions'] = $input->getOption('only-version');
         }
 
         if (!$this->sami instanceof Sami) {
