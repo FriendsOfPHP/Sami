@@ -32,7 +32,7 @@ class UpdateCommand extends Command
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command parses and renders a project:
 
-    <info>php %command.full_name% config/symfony.php parses</info>
+    <info>php %command.full_name% update config/symfony.php</info>
 
 This command is the same as running the parse command followed
 by the render command.

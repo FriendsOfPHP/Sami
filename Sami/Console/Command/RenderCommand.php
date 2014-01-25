@@ -32,7 +32,7 @@ class RenderCommand extends Command
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command renders a project as a static set of HTML files:
 
-    <info>php %command.full_name% config/symfony.php render</info>
+    <info>php %command.full_name% render config/symfony.php</info>
 
 The <comment>--force</comment> option forces a rebuild (it disables the
 incremental rendering algorithm):

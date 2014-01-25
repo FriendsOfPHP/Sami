@@ -33,7 +33,7 @@ class ParseCommand extends Command
 The <info>%command.name%</info> command parses a project and generates a database
 with API information:
 
-    <info>php %command.full_name% config/symfony.php parse</info>
+    <info>php %command.full_name% parse config/symfony.php</info>
 
 The <comment>--force</comment> option forces a rebuild (it disables the
 incremental parsing algorithm):
