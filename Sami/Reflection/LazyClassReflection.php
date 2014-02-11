@@ -17,7 +17,7 @@ class LazyClassReflection extends ClassReflection
 
     public function __construct($name)
     {
-        parent::__construct($name, -1, '');
+        parent::__construct($name, -1);
     }
 
     public function isProjectClass()

@@ -23,6 +23,8 @@ class Diff
     protected $previousNamespaces;
     protected $currentNamespaces;
 
+    private $previous;
+
     public function __construct(Project $project, $filename)
     {
         $this->project = $project;
