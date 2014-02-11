@@ -18,11 +18,11 @@ class SymfonyFilter extends DefaultFilter
 {
     public function acceptClass(ClassReflection $class)
     {
-        return $class->getDocBlock()->getTag('api');
+        return $class->getTags('api');
     }
 
     public function acceptMethod(MethodReflection $method)
     {
-        return parent::acceptMethod($method) && $method->getDocBlock()->getTag('api');
+        return parent::acceptMethod($method) && $method->getTags('api');
     }
 }
