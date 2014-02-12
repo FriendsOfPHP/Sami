@@ -62,6 +62,7 @@ class Sami extends \Pimple
                 'include_parent_data' => $sc['include_parent_data'],
                 'default_opened_level' => $sc['default_opened_level'],
                 'theme' => $sc['theme'],
+                'file_encoding' => $sc['file_encoding'],
             ));
             $project->setRenderer($sc['renderer']);
             $project->setParser($sc['parser']);

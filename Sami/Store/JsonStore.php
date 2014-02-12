@@ -45,14 +45,22 @@ class JsonStore implements StoreInterface
 
     public function writeClass(Project $project, ClassReflection $class)
     {
-        file_put_contents($this->getFilename($project, $class->getName()), json_encode($class->toArray(), self::JSON_PRETTY_PRINT));
+        $data = json_encode($class->toArray(), self::JSON_PRETTY_PRINT);
+        if ($data === false) {
+            throw new \RuntimeException(sprintf('Cannot json encode "%s": %s', $class, json_last_error_msg()));
+        }
+        file_put_contents($this->getFilename($project, $class->getName()), $data);
     }
 
     public function readProject(Project $project)
     {
         $classes = array();
         foreach (Finder::create()->name('c_*.json')->in($this->getStoreDir($project)) as $file) {
-            $classes[] = ClassReflection::fromArray($project, json_decode(file_get_contents($file), true));
+            $data = json_decode(file_get_contents($file), true);
+            if ($data === false) {
+                throw new \RuntimeException(sprintf('Cannot json decode "%s": %s', $class, json_last_error_msg()));
+            }
+            $classes[] = ClassReflection::fromArray($project, $data);
         }
 
         return $classes;

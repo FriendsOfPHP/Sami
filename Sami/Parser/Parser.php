@@ -43,6 +43,10 @@ class Parser
             ++$step;
 
             $code = file_get_contents($file);
+            if ($project->getConfig('file_encoding') !== 'UTF-8') {
+                $code = iconv($project->getConfig('file_encoding'), 'UTF-8', $code);
+            }
+
             $hash = sha1($code);
             if ($transaction->hasHash($hash)) {
                 continue;

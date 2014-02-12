@@ -55,6 +55,7 @@ class Project
             'simulate_namespaces' => false,
             'include_parent_data' => true,
             'theme' => 'enhanced',
+            'file_encoding' => 'UTF-8',
         ), $config);
         $this->filesystem = new Filesystem();
 
