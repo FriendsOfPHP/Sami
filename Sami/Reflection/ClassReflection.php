@@ -338,12 +338,12 @@ class ClassReflection extends Reflection
     {
         return $this->category === self::CATEGORY_TRAIT;
     }
-    
+
     public function setCategory($category)
     {
         $this->category = $category;
     }
-    
+
     public function isException()
     {
         $parent = $this;
@@ -446,7 +446,7 @@ class ClassReflection extends Reflection
 
         return $class;
     }
-    
+
     public function getCategoryName()
     {
         return self::$categoryName[$this->category];
