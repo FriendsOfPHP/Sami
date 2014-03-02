@@ -140,6 +140,11 @@ abstract class Reflection
         return isset($this->tags[$name]) ? $this->tags[$name] : array();
     }
 
+    public function setTag($name, array $tag)
+    {
+        $this->tags[$name] = $tag;
+    }
+
     // not serialized as it is only useful when parsing
     public function setDocComment($comment)
     {

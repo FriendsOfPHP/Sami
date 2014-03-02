@@ -176,6 +176,17 @@
     {% endfor %}
 {% endblock %}
 
+{% block example %}
+    {% for tag in method.tags('example') %}
+        {% if tag[2] is defined %}
+            {% if tag[1] is defined %}
+                <h5>{{ tag[1] }}</h5>
+            {% endif %}
+            <pre class="code">{{ tag[2]|raw }}</pre>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
 {% block method %}
     <h3 id="method_{{ method.name }}">
         <div class="location">{% if method.class is not sameas(class) %}in {{ method_link(method, {}, false, true) }} {% endif %}at line {{ method.line }}</div>
@@ -207,6 +218,12 @@
                 <h4>See also</h4>
 
                 {{ block('see') }}
+            {% endif %}
+
+            {% if method.tags('example') %}
+                <h4>Examples</h4>
+
+                {{ block('example') }}
             {% endif %}
         </div>
     </div>
