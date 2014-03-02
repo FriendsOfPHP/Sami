@@ -55,7 +55,7 @@ abstract class Command extends BaseCommand
             $config = getcwd().'/'.$config;
         }
 
-        if (!file_exists($config)) {
+        if (!is_file($config)) {
             throw new \InvalidArgumentException(sprintf('Configuration file "%s" does not exist.', $config));
         }
 
