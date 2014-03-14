@@ -457,4 +457,15 @@ class Project
             call_user_func($callback, Message::RENDER_VERSION_FINISHED, $diff);
         }
     }
+
+    public function getSourceRoot()
+    {
+        if (!$root = $this->getConfig('source_url')) {
+            return;
+        }
+
+        if (strpos($root, 'github') !== false) {
+            return $root . '/tree/' . $this->version;
+        }
+    }
 }

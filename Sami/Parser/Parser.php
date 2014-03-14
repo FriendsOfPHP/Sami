@@ -24,13 +24,15 @@ class Parser
     protected $iterator;
     protected $parser;
     protected $traverser;
+    protected $sourceDir;
 
-    public function __construct($iterator, StoreInterface $store, CodeParser $parser, ClassTraverser $traverser)
+    public function __construct($iterator, StoreInterface $store, CodeParser $parser, ClassTraverser $traverser, $sourceDir)
     {
         $this->iterator = $this->createIterator($iterator);
         $this->store = $store;
         $this->parser = $parser;
         $this->traverser = $traverser;
+        $this->sourceDir = (array) $sourceDir;
     }
 
     public function parse(Project $project, $callback = null)
@@ -59,6 +61,13 @@ class Parser
             foreach ($context->leaveFile() as $class) {
                 if (null !== $callback) {
                     call_user_func($callback, Message::PARSE_CLASS, array(floor($step / $steps * 100), $class));
+                }
+
+                foreach ($this->sourceDir as $dir) {
+                    if ($file !== ($plainFile = str_replace($dir, '', $file))) {
+                        $class->setPlainFile($plainFile);
+                        break;
+                    }
                 }
 
                 $project->addClass($class);

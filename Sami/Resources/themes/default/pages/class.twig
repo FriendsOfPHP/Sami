@@ -1,6 +1,6 @@
 {% extends page_layout %}
 
-{% from "macros.twig" import namespace_link, class_link, method_link, hint_link %}
+{% from "macros.twig" import namespace_link, class_link, method_link, hint_link, source_link %}
 
 {% block title %}{{ class.name }} | {{ parent() }}{% endblock %}
 
@@ -58,6 +58,7 @@
             {%- if not loop.last %}, {% endif %}
         {%- endfor %}
     {%- endif %}
+    {{- source_link(project, class) }}
 {% endblock %}
 
 {% block method_signature -%}

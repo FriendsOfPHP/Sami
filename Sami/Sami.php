@@ -62,6 +62,8 @@ class Sami extends \Pimple
                 'include_parent_data' => $sc['include_parent_data'],
                 'default_opened_level' => $sc['default_opened_level'],
                 'theme' => $sc['theme'],
+                'source_url' => $sc['source_url'],
+                'source_dir' => $sc['source_dir'],
             ));
             $project->setRenderer($sc['renderer']);
             $project->setParser($sc['parser']);
@@ -70,7 +72,7 @@ class Sami extends \Pimple
         });
 
         $this['parser'] = $this->share(function () use ($sc) {
-            return new Parser($sc['files'], $sc['store'], $sc['code_parser'], $sc['traverser']);
+            return new Parser($sc['files'], $sc['store'], $sc['code_parser'], $sc['traverser'], $sc['source_dir']);
         });
 
         $this['indexer'] = $this->share(function () use ($sc) {
@@ -156,6 +158,8 @@ class Sami extends \Pimple
         $this['template_dirs'] = array();
         $this['build_dir'] = getcwd().'/build';
         $this['cache_dir'] = getcwd().'/cache';
+        $this['source_dir'] = '';
+        $this['source_url'] = '';
 
         // simulate namespaces for projects based on the PEAR naming conventions
         $this['simulate_namespaces'] = false;
