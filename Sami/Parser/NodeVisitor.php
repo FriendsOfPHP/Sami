@@ -217,7 +217,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         }
 
         if (count($method->getParameters()) != count($tags)) {
-            return array(sprintf('"%d" @param tags are defined by "%d" are expected', count($tags), count($method->getParameters())));
+            return array(sprintf('"%d" @param tags are expected but only "%d" found', count($method->getParameters()), count($tags)));
         }
 
         $errors = array();
