@@ -94,7 +94,6 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         $class->setTrait(true);
     }
 
-
     protected function addClassOrInterface($node)
     {
         $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
@@ -217,7 +216,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         }
 
         if (count($method->getParameters()) != count($tags)) {
-            return array(sprintf('"%d" @param tags are defined by "%d" are expected', count($tags), count($method->getParameters())));
+            return array(sprintf('"%d" @param tags are expected but only "%d" found', count($method->getParameters()), count($tags)));
         }
 
         $errors = array();
