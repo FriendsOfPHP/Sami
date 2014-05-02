@@ -94,7 +94,6 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         $class->setTrait(true);
     }
 
-
     protected function addClassOrInterface($node)
     {
         $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
