@@ -139,7 +139,9 @@
             <tr>
                 <td class="type" id="property_{{ property.name }}">
                     {% if property.static %}static{% endif %}
+                    {% if property.public %}public{% endif %}
                     {% if property.protected %}protected{% endif %}
+                    {% if property.private %}private{% endif %}
                     {{ hint_link(property.hint) }}
                 </td>
                 <td>${{ property.name }}</td>
