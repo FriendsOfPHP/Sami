@@ -64,7 +64,6 @@
     {% if method.final %}final{% endif %}
     {% if method.abstract %}abstract{% endif %}
     {% if method.static %}static{% endif %}
-    {% if method.public %}public{% endif %}
     {% if method.protected %}protected{% endif %}
     {% if method.private %}private{% endif %}
     {{ hint_link(method.hint) }}
@@ -139,7 +138,6 @@
             <tr>
                 <td class="type" id="property_{{ property.name }}">
                     {% if property.static %}static{% endif %}
-                    {% if property.public %}public{% endif %}
                     {% if property.protected %}protected{% endif %}
                     {% if property.private %}private{% endif %}
                     {{ hint_link(property.hint) }}
