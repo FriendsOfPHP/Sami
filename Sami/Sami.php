@@ -11,6 +11,7 @@
 
 namespace Sami;
 
+use Pimple\Container;
 use Sami\Tree;
 use Sami\Indexer;
 use Sami\Parser\CodeParser;
@@ -28,9 +29,9 @@ use Sami\Renderer\TwigExtension;
 use Sami\Version\Version;
 use Sami\Version\SingleVersionCollection;
 
-class Sami extends \Pimple
+class Sami extends Container
 {
-    const VERSION = '1.4-DEV';
+    const VERSION = '2.0-DEV';
 
     public function __construct($iterator = null, array $config = array())
     {
@@ -40,7 +41,7 @@ class Sami extends \Pimple
             $this['files'] = $iterator;
         }
 
-        $this['_versions'] = $this->share(function () use ($sc) {
+        $this['_versions'] = function () use ($sc) {
             $versions = isset($sc['versions']) ? $sc['versions'] : $sc['version'];
 
             if (is_string($versions)) {
@@ -52,9 +53,9 @@ class Sami extends \Pimple
             }
 
             return $versions;
-        });
+        };
 
-        $this['project'] = $this->share(function () use ($sc) {
+        $this['project'] = function () use ($sc) {
             $project = new Project($sc['store'], $sc['_versions'], array(
                 'build_dir' => $sc['build_dir'],
                 'cache_dir' => $sc['cache_dir'],
@@ -68,61 +69,61 @@ class Sami extends \Pimple
             $project->setParser($sc['parser']);
 
             return $project;
-        });
+        };
 
-        $this['parser'] = $this->share(function () use ($sc) {
+        $this['parser'] = function () use ($sc) {
             return new Parser($sc['files'], $sc['store'], $sc['code_parser'], $sc['traverser']);
-        });
+        };
 
-        $this['indexer'] = $this->share(function () use ($sc) {
+        $this['indexer'] = function () use ($sc) {
             return new Indexer();
-        });
+        };
 
-        $this['tree'] = $this->share(function () use ($sc) {
+        $this['tree'] = function () use ($sc) {
             return new Tree();
-        });
+        };
 
-        $this['parser_context'] = $this->share(function () use ($sc) {
+        $this['parser_context'] = function () use ($sc) {
             return new ParserContext($sc['filter'], $sc['docblock_parser'], $sc['pretty_printer']);
-        });
+        };
 
-        $this['docblock_parser'] = $this->share(function () use ($sc) {
+        $this['docblock_parser'] = function () use ($sc) {
             return new DocBlockParser();
-        });
+        };
 
-        $this['php_parser'] = $this->share(function () {
+        $this['php_parser'] = function () {
             return new \PHPParser_Parser(new \PHPParser_Lexer());
-        });
+        };
 
-        $this['php_traverser'] = $this->share(function () use ($sc) {
+        $this['php_traverser'] = function () use ($sc) {
             $traverser = new \PHPParser_NodeTraverser();
             $traverser->addVisitor(new \PHPParser_NodeVisitor_NameResolver());
             $traverser->addVisitor(new NodeVisitor($sc['parser_context']));
 
             return $traverser;
-        });
+        };
 
-        $this['code_parser'] = $this->share(function () use ($sc) {
+        $this['code_parser'] = function () use ($sc) {
             return new CodeParser($sc['parser_context'], $sc['php_parser'], $sc['php_traverser']);
-        });
+        };
 
-        $this['pretty_printer'] = $this->share(function () use ($sc) {
+        $this['pretty_printer'] = function () use ($sc) {
             return new \PHPParser_PrettyPrinter_Zend();
-        });
+        };
 
-        $this['filter'] = $this->share(function () use ($sc) {
+        $this['filter'] = function () use ($sc) {
             return new DefaultFilter();
-        });
+        };
 
-        $this['store'] = $this->share(function () use ($sc) {
+        $this['store'] = function () use ($sc) {
             return new JsonStore();
-        });
+        };
 
-        $this['renderer'] = $this->share(function () use ($sc) {
+        $this['renderer'] = function () use ($sc) {
             return new Renderer($sc['twig'], $sc['themes'], $sc['tree'], $sc['indexer']);
-        });
+        };
 
-        $this['traverser'] = $this->share(function () use ($sc) {
+        $this['traverser'] = function () use ($sc) {
             $visitors = array(
                 new ClassVisitor\InheritdocClassVisitor(),
                 new ClassVisitor\MethodClassVisitor(),
@@ -130,16 +131,16 @@ class Sami extends \Pimple
             );
 
             return new ClassTraverser($visitors);
-        });
+        };
 
-        $this['themes'] = $this->share(function () use ($sc) {
+        $this['themes'] = function () use ($sc) {
             $templates = $sc['template_dirs'];
             $templates[] = __DIR__.'/Resources/themes';
 
             return new ThemeSet($templates);
-        });
+        };
 
-        $this['twig'] = $this->share(function () use ($sc) {
+        $this['twig'] = function () use ($sc) {
             $twig = new \Twig_Environment(new \Twig_Loader_Filesystem(array('/')), array(
                 'strict_variables' => true,
                 'debug'            => true,
@@ -149,7 +150,7 @@ class Sami extends \Pimple
             $twig->addExtension(new TwigExtension());
 
             return $twig;
-        });
+        };
 
         $this['theme'] = 'enhanced';
         $this['title'] = 'API';

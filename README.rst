@@ -6,26 +6,18 @@ Curious about what Sami generates? Have a look at the `Symfony API`_.
 Installation
 ------------
 
-First, get Sami from `Github`_ (or integrate it as a dependency in your project
-`Composer file`_):
-
-    https://github.com/fabpot/Sami
-
-You can also download an `archive`_ from Github.
-
-As Sami uses Composer to manage its dependencies, installing it is a matter of
-running composer:
+Get Sami from as a `phar file`_:
 
 .. code-block:: bash
 
-    $ composer.phar install
+    $ curl -O http://get.sensiolabs.org/sami.phar
 
-Check that everything worked as expected by executing the ``sami.php`` file
+Check that everything worked as expected by executing the ``sami.phar`` file
 without any arguments:
 
 .. code-block:: bash
 
-    $ php sami.php
+    $ php sami.phar
 
 Configuration
 -------------
@@ -123,9 +115,9 @@ the default configured ``filter`` to change this behavior::
 
     $sami = new Sami(...);
     // document all methods and properties
-    $this['filter'] = $this->share(function () use ($sc) {
+    $this['filter'] = function () {
         return new TrueFilter();
-    });
+    };
 
 Rendering
 ---------
@@ -222,8 +214,6 @@ Files are contained into sections, depending on how Sami needs to treat them:
 
 * ``class``: Templates that should be generated for every class.
 
-.. _Symfony API:   http://api.symfony.com/
-.. _Github:        https://github.com/fabpot/Sami
-.. _Composer file: http://packagist.org/packages/sami/sami
-.. _archive:       https://github.com/fabpot/Sami/downloads
-.. _Finder:        http://symfony.com/doc/current/components/finder.html
+.. _Symfony API: http://api.symfony.com/
+.. _phar file:   http://get.sensiolabs.org/sami.phar
+.. _Finder:      http://symfony.com/doc/current/components/finder.html
