@@ -1,0 +1,25 @@
+{
+    "output": "sami.phar",
+    "chmod": "0755",
+    "compactors": [
+        "Herrera\\Box\\Compactor\\Php"
+    ],
+    "extract": false,
+    "main": "sami.php",
+    "files": [
+        "LICENSE"
+    ],
+    "finder": [
+        {
+            "name": ["*.php", "*.pem*"],
+            "exclude": ["Tests", "tests"],
+            "in": "vendor"
+        },
+        {
+            "exclude": ["Tests"],
+            "in": "Sami"
+        }
+    ],
+    "stub": true,
+    "web": false
+}
