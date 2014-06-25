@@ -1,9 +1,17 @@
 CHANGELOG
 =========
 
-* 1.4 (2013-XX-XX)
+* 2.0 (2014-XX-XX)
 
-  * n/a
+  * switched to a phar file as the recommended way to install Sami
+  * upgraded to Pimple 2.0
+
+* 1.4 (2014-06-25)
+
+  * fixed a bunch of typos
+  * fixed CLI when passing a directory as a config file
+  * fixed missing project title in generated documentation
+  * allowed permalinks in the frames interface via the URI fragment
 
 * 1.3 (2013-11-30)
 
