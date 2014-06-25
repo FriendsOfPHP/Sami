@@ -1,6 +1,6 @@
 {% extends page_layout %}
 
-{% from "macros.twig" import namespace_link, class_link, method_link, hint_link %}
+{% from "macros.twig" import namespace_link, class_link, property_link, method_link, hint_link %}
 
 {% block title %}{{ class.name }} | {{ parent() }}{% endblock %}
 
@@ -144,6 +144,11 @@
                 </td>
                 <td>${{ property.name }}</td>
                 <td class="last">{{ property.shortdesc|desc(class) }}</td>
+                <td>
+                    {%- if property.class is not sameas(class) -%}
+                        <small>from&nbsp;{{ property_link(property, {}, false, true) }}</small>
+                    {%- endif -%}
+                </td>
             </tr>
         {% endfor %}
     </table>
