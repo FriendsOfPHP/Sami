@@ -158,6 +158,7 @@ class Sami extends Container
         $this['template_dirs'] = array();
         $this['build_dir'] = getcwd().'/build';
         $this['cache_dir'] = getcwd().'/cache';
+        $this['default_opened_level'] = 2;
 
         // simulate namespaces for projects based on the PEAR naming conventions
         $this['simulate_namespaces'] = false;
