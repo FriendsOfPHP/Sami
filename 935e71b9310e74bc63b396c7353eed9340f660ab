@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2014-06-25T19:28:46Z
+
+What about removing `public` everywhere? The less we display, the better. And as by default we only display `public` method and properties, I think it makes more sense.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-06-25T20:57:45Z
+
+Agreed.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-06-25T21:03:43Z
+
+Done.
