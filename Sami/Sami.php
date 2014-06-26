@@ -31,7 +31,7 @@ use Sami\Version\SingleVersionCollection;
 
 class Sami extends Container
 {
-    const VERSION = '2.0.0';
+    const VERSION = '2.0.1-DEV';
 
     public function __construct($iterator = null, array $config = array())
     {

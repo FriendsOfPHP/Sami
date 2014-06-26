@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 2.0.1 (2014-XX-XX)
+
+ * n/a
+
 * 2.0.0 (2014-06-25)
 
   * switched to a phar file as the recommended way to install Sami
