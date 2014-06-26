@@ -43,6 +43,7 @@ that matter any instance of the Symfony `Finder`_ class):
     <?php
 
     use Sami\Sami;
+    use Sami\RemoteRepository\GitHubRemoteRepository;
     use Symfony\Component\Finder\Finder;
 
     $iterator = Finder::create()
@@ -65,6 +66,7 @@ argument:
         'title'                => 'Symfony2 API',
         'build_dir'            => __DIR__.'/build',
         'cache_dir'            => __DIR__.'/cache',
+        'remote_repository'    => new GitHubRemoteRepository('username/repository', '/path/to/repository'),
         'default_opened_level' => 2,
     ));
 
@@ -75,6 +77,7 @@ And here is how you can configure different versions:
     <?php
 
     use Sami\Sami;
+    use Sami\RemoteRepository\GitHubRemoteRepository;
     use Sami\Version\GitVersionCollection;
     use Symfony\Component\Finder\Finder;
 
@@ -99,6 +102,7 @@ And here is how you can configure different versions:
         'title'                => 'Symfony2 API',
         'build_dir'            => __DIR__.'/../build/sf2/%version%',
         'cache_dir'            => __DIR__.'/../cache/sf2/%version%',
+        'remote_repository'    => new GitHubRemoteRepository('symfony/symfony', dirname($dir)),
         'default_opened_level' => 2,
     ));
 

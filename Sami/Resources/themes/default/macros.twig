@@ -40,7 +40,7 @@
 
 {% macro source_link(project, class) -%}
     {% if class.sourcepath %}
-        <a href="{{ class.sourcepath }}">View source</a>
+        (<a href="{{ class.sourcepath }}">View source</a>)
     {%- endif %}
 {%- endmacro %}
 
