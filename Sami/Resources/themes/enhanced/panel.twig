@@ -23,7 +23,7 @@
                  var panel = new Searchdoc.Panel($('#panel'), search_data, tree, parent.frames[1]);
                  $('#search').focus();
 
-                 for (var i=0; i < {{ project.config('default_opened_level', 0) }}; i++) {
+                 for (var i = 0; i < {{ project.config('default_opened_level', 0) }}; i++) {
                      $('.level_' + i).each(function ($li) {
                          panel.tree.toggle($(this));
                      });
