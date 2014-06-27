@@ -12,8 +12,6 @@
 namespace Sami;
 
 use Pimple\Container;
-use Sami\Tree;
-use Sami\Indexer;
 use Sami\Parser\CodeParser;
 use Sami\Parser\Parser;
 use Sami\Parser\NodeVisitor;
@@ -41,7 +39,7 @@ class Sami extends Container
             $this['files'] = $iterator;
         }
 
-        $this['_versions'] = function () use ($sc) {
+        $this['_versions'] = function ($sc) {
             $versions = isset($sc['versions']) ? $sc['versions'] : $sc['version'];
 
             if (is_string($versions)) {
@@ -55,7 +53,7 @@ class Sami extends Container
             return $versions;
         };
 
-        $this['project'] = function () use ($sc) {
+        $this['project'] = function ($sc) {
             $project = new Project($sc['store'], $sc['_versions'], array(
                 'build_dir' => $sc['build_dir'],
                 'cache_dir' => $sc['cache_dir'],
@@ -71,23 +69,23 @@ class Sami extends Container
             return $project;
         };
 
-        $this['parser'] = function () use ($sc) {
+        $this['parser'] = function ($sc) {
             return new Parser($sc['files'], $sc['store'], $sc['code_parser'], $sc['traverser']);
         };
 
-        $this['indexer'] = function () use ($sc) {
+        $this['indexer'] = function () {
             return new Indexer();
         };
 
-        $this['tree'] = function () use ($sc) {
+        $this['tree'] = function () {
             return new Tree();
         };
 
-        $this['parser_context'] = function () use ($sc) {
+        $this['parser_context'] = function ($sc) {
             return new ParserContext($sc['filter'], $sc['docblock_parser'], $sc['pretty_printer']);
         };
 
-        $this['docblock_parser'] = function () use ($sc) {
+        $this['docblock_parser'] = function () {
             return new DocBlockParser();
         };
 
@@ -95,7 +93,7 @@ class Sami extends Container
             return new \PHPParser_Parser(new \PHPParser_Lexer());
         };
 
-        $this['php_traverser'] = function () use ($sc) {
+        $this['php_traverser'] = function ($sc) {
             $traverser = new \PHPParser_NodeTraverser();
             $traverser->addVisitor(new \PHPParser_NodeVisitor_NameResolver());
             $traverser->addVisitor(new NodeVisitor($sc['parser_context']));
@@ -103,27 +101,27 @@ class Sami extends Container
             return $traverser;
         };
 
-        $this['code_parser'] = function () use ($sc) {
+        $this['code_parser'] = function ($sc) {
             return new CodeParser($sc['parser_context'], $sc['php_parser'], $sc['php_traverser']);
         };
 
-        $this['pretty_printer'] = function () use ($sc) {
+        $this['pretty_printer'] = function () {
             return new \PHPParser_PrettyPrinter_Zend();
         };
 
-        $this['filter'] = function () use ($sc) {
+        $this['filter'] = function () {
             return new DefaultFilter();
         };
 
-        $this['store'] = function () use ($sc) {
+        $this['store'] = function () {
             return new JsonStore();
         };
 
-        $this['renderer'] = function () use ($sc) {
+        $this['renderer'] = function ($sc) {
             return new Renderer($sc['twig'], $sc['themes'], $sc['tree'], $sc['indexer']);
         };
 
-        $this['traverser'] = function () use ($sc) {
+        $this['traverser'] = function () {
             $visitors = array(
                 new ClassVisitor\InheritdocClassVisitor(),
                 new ClassVisitor\MethodClassVisitor(),
@@ -133,14 +131,14 @@ class Sami extends Container
             return new ClassTraverser($visitors);
         };
 
-        $this['themes'] = function () use ($sc) {
+        $this['themes'] = function ($sc) {
             $templates = $sc['template_dirs'];
             $templates[] = __DIR__.'/Resources/themes';
 
             return new ThemeSet($templates);
         };
 
-        $this['twig'] = function () use ($sc) {
+        $this['twig'] = function () {
             $twig = new \Twig_Environment(new \Twig_Loader_Filesystem(array('/')), array(
                 'strict_variables' => true,
                 'debug'            => true,
