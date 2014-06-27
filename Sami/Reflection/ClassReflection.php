@@ -19,7 +19,7 @@ class ClassReflection extends Reflection
     const CATEGORY_INTERFACE = 2;
     const CATEGORY_TRAIT = 3;
 
-    static private $categoryName = array(
+    private static $categoryName = array(
         1 => 'class',
         2 => 'interface',
         3 => 'trait',
@@ -448,7 +448,7 @@ class ClassReflection extends Reflection
         );
     }
 
-    static public function fromArray(Project $project, $array)
+    public static function fromArray(Project $project, $array)
     {
         $class = new self($array['name'], $array['line']);
         $class->shortDesc  = $array['short_desc'];
