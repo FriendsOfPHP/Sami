@@ -39,6 +39,8 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
             $this->addClass($node);
         } elseif ($node instanceof \PHPParser_Node_Stmt_Trait) {
             $this->addTrait($node);
+        } elseif ($node instanceof \PHPParser_Node_Stmt_TraitUse) {
+            $this->addTraitUse($node);
         } elseif ($this->context->getClass() && $node instanceof \PHPParser_Node_Stmt_Property) {
             $this->addProperty($node);
         } elseif ($this->context->getClass() && $node instanceof \PHPParser_Node_Stmt_ClassMethod) {
@@ -192,6 +194,13 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
                     $property->setTags($comment->getOtherTags());
                 }
             }
+        }
+    }
+
+    protected function addTraitUse(\PHPParser_Node_Stmt_TraitUse $node)
+    {
+        foreach ($node->traits as $trait) {
+            $this->context->getClass()->addTrait((string) $trait);
         }
     }
 
