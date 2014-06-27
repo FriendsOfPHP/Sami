@@ -33,6 +33,7 @@ class ClassReflection extends Reflection
     protected $methods = array();
     protected $interfaces = array();
     protected $constants = array();
+    protected $traits = array();
     protected $parent;
     protected $file;
     protected $category = self::CATEGORY_CLASS;
@@ -154,6 +155,12 @@ class ClassReflection extends Reflection
             }
         }
 
+        foreach ($this->getTraits(true) as $trait) {
+            foreach ($trait->getProperties(true) as $name => $property) {
+                $properties[$name] = $property;
+            }
+        }
+
         foreach ($this->properties as $name => $property) {
             $properties[$name] = $property;
         }
@@ -251,6 +258,12 @@ class ClassReflection extends Reflection
             }
         }
 
+        foreach ($this->getTraits(true) as $trait) {
+            foreach ($trait->getMethods(true) as $name => $method) {
+                $methods[$name] = $method;
+            }
+        }
+
         foreach ($this->methods as $name => $method) {
             $methods[$name] = $method;
         }
@@ -289,6 +302,39 @@ class ClassReflection extends Reflection
         }
 
         return $allInterfaces;
+    }
+
+    public function addTrait($trait)
+    {
+        $this->traits[$trait] = $trait;
+    }
+
+    public function getTraits($deep = false)
+    {
+        $traits = array();
+        foreach ($this->traits as $trait) {
+            $traits[] = $this->project->getClass($trait);
+        }
+
+        if (false === $deep) {
+            return $traits;
+        }
+
+        $allTraits = $traits;
+        foreach ($traits as $trait) {
+            $allTraits = array_merge($allTraits, $trait->getTraits(true));
+        }
+
+        if ($parent = $this->getParent()) {
+            $allTraits = array_merge($allTraits, $parent->getTraits(true));
+        }
+
+        return $allTraits;
+    }
+
+    public function setTraits($traits)
+    {
+        $this->traits = $traits;
     }
 
     public function setParent($parent)
@@ -395,6 +441,7 @@ class ClassReflection extends Reflection
             'aliases'      => $this->aliases,
             'errors'       => $this->errors,
             'interfaces'   => $this->interfaces,
+            'traits'       => $this->traits,
             'properties'   => array_map(function ($property) { return $property->toArray(); }, $this->properties),
             'methods'      => array_map(function ($method) { return $method->toArray(); }, $this->methods),
             'constants'    => array_map(function ($constant) { return $constant->toArray(); }, $this->constants),
@@ -423,6 +470,7 @@ class ClassReflection extends Reflection
         $class->parent     = $array['parent'];
         $class->interfaces = $array['interfaces'];
         $class->constants  = $array['constants'];
+        $class->traits     = $array['traits'];
 
         $class->setProject($project);
 

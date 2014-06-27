@@ -157,6 +157,7 @@ class Renderer
                 'properties' => $class->getProperties($project->getConfig('include_parent_data')),
                 'methods'    => $class->getMethods($project->getConfig('include_parent_data')),
                 'constants'  => $class->getConstants($project->getConfig('include_parent_data')),
+                'traits'     => $class->getTraits($project->getConfig('include_parent_data')),
             );
             foreach ($this->theme->getTemplates('class') as $template => $target) {
                 $this->save($project, sprintf($target, str_replace('\\', '/', $class->getName())), $template, $variables);

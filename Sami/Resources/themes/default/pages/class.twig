@@ -21,6 +21,12 @@
         </div>
     {% endif %}
 
+    {% if traits %}
+        <h2>Traits</h2>
+
+        {{ block('traits') }}
+    {% endif %}
+
     {% if constants %}
         <h2>Constants</h2>
 
@@ -130,6 +136,16 @@
             </tr>
         {% endfor %}
     </table>
+{% endblock %}
+
+{% block traits %}
+    <ul>
+        {% for trait in traits %}
+            <li>
+                {{ class_link(trait) }}
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block properties %}
