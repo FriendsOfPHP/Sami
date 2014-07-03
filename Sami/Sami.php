@@ -33,6 +33,8 @@ class Sami extends Container
 
     public function __construct($iterator = null, array $config = array())
     {
+        parent::__construct();
+
         $sc = $this;
 
         if (null !== $iterator) {
