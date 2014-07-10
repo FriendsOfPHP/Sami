@@ -1,0 +1,29 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-10T13:51:06Z
+
+Typo error, but 10x for mentioning my change in PR
+
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2014-07-10T13:58:50Z
+
+What typo?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-10T14:03:07Z
+
+Do you see that `fabbot` build failed? If you click on it the detail report will show with all stuff that needs to be fixed. It even gives you patches that you can apply to fix it.
+
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2014-07-10T14:18:32Z
+
+@aik099 That wasn't from my pull request. That is an existing typo. I'll make another pull request to deal with that...
+
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2014-07-10T14:20:24Z
+
+@aik099 Done: #95.
