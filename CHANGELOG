@@ -22,7 +22,7 @@ CHANGELOG
   * fixed deep inheritance
   * added forwarding of default_opened_level configuration parameter from Pimple to Project
   * updated the Markdown library used internally
-  * added a check for non-clean repositories to avoid loosing changes
+  * added a check for non-clean repositories to avoid losing changes
   * added trait support
 
 * 1.2 (2013-09-27)
