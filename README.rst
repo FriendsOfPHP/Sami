@@ -115,7 +115,7 @@ the default configured ``filter`` to change this behavior::
 
     $sami = new Sami(...);
     // document all methods and properties
-    $this['filter'] = function () {
+    $sami['filter'] = function () {
         return new TrueFilter();
     };
 
