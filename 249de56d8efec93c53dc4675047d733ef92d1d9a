@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-18T10:38:19Z
+
+The Travis CI build failed due network problems with Composer servers (you can verify in log files).
