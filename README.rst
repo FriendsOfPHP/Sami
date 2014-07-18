@@ -109,13 +109,17 @@ You can find more configuration examples under the ``examples/`` directory of
 the source code.
 
 Sami only documents the public API (public properties and methods); override
-the default configured ``filter`` to change this behavior::
+the default configured ``filter`` to change this behavior:
+
+.. code-block:: php
+
+    <?php
 
     use Sami\Parser\Filter\TrueFilter;
 
     $sami = new Sami(...);
     // document all methods and properties
-    $this['filter'] = function () {
+    $sami['filter'] = function () {
         return new TrueFilter();
     };
 
