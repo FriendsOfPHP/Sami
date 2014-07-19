@@ -77,10 +77,10 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
             ),
             array('
                 /**
-                 * The short desc with a @tag embedded. And the long desc with a @tag embedded too.
+                 * The short desc with a @tag embedded. And the short desc continues after dot on same line.
                  */
                 ',
-                array('shortdesc' => 'The short desc with a @tag embedded.', 'longdesc' => 'And the long desc with a @tag embedded too.'),
+                array('shortdesc' => 'The short desc with a @tag embedded. And the short desc continues after dot on same line.'),
             ),
             array('
                 /**

@@ -71,8 +71,8 @@ class DocBlockParser
             $short = trim($match[1]);
             $long = '';
 
-            // short desc ends at the first dot or when \n\n occurs
-            if (preg_match('/(.*?)(\.\s|\n\n|$)/s', $short, $match)) {
+            // short desc ends at the first dot with \n after it or when \n\n occurs
+            if (preg_match('/(.*?)(\.\n|\n\n|$)/s', $short, $match)) {
                 $long = trim(substr($short, strlen($match[0])));
                 $short = trim($match[0]);
             }
