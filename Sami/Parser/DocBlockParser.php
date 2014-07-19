@@ -62,6 +62,9 @@ class DocBlockParser
 
     protected function parseDesc()
     {
+        $short = '';
+        $long = '';
+
         if (preg_match('/(.*?)(\n[ \t]*'.self::TAG_REGEX.'|$)/As', $this->comment, $match, null, $this->cursor)) {
             $this->move($match[1]);
 
@@ -81,7 +84,9 @@ class DocBlockParser
 
         $this->position = 'tag';
 
-        return array(str_replace("\n", '', $short), $long);
+        $shortParts = array_map('trim', explode("\n", $short));
+
+        return array(implode("\n", $shortParts), $long);
     }
 
     protected function parseTag()
