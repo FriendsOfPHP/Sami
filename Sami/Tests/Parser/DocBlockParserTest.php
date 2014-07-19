@@ -51,7 +51,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                  * lines.
                  */
                 ',
-                array('shortdesc' => 'The short desc on two lines.'),
+                array('shortdesc' => "The short desc on two\nlines."),
             ),
             array('
                 /**
@@ -73,7 +73,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                  * With another paragraph.
                  */
                 ',
-                array('shortdesc' => 'The short desc on two lines.', 'longdesc' => "And a long desc on\nseveral lines too.\n\nWith another paragraph."),
+                array('shortdesc' => "The short desc on two\nlines.", 'longdesc' => "And a long desc on\nseveral lines too.\n\nWith another paragraph."),
             ),
             array('
                 /**
