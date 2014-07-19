@@ -29,6 +29,10 @@ class CodeParser
         $m = new \ReflectionMethod($this->parser, 'parse');
         $parameters = $m->getParameters();
         $this->passCode = null === $parameters[0]->getClass();
+
+        // with big fluent interfaces it can happen that PHP-Parser's Traverser
+        // exceeds the 100 recursions limit; we set it to 10000 to be sure.
+        ini_set('xdebug.max_nesting_level', 10000);
     }
 
     public function getContext()
