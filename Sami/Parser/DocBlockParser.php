@@ -48,14 +48,20 @@ class DocBlockParser
 
     protected function parseTag(DocBlock\Tag $tag)
     {
-        if ($tag instanceof DocBlock\Tag\VarTag) {
+        $tagClass = get_class($tag);
+
+        if ('phpDocumentor\Reflection\DocBlock\Tag\VarTag' === $tagClass) {
+            /** @var DocBlock\Tag\VarTag $tag */
+
             return array(
                 $this->parseHint($tag->getTypes()),
                 $tag->getDescription(),
             );
         }
 
-        if ($tag instanceof DocBlock\Tag\ParamTag) {
+        if ('phpDocumentor\Reflection\DocBlock\Tag\ParamTag' === $tagClass) {
+            /** @var DocBlock\Tag\ParamTag $tag */
+
             return array(
                 $this->parseHint($tag->getTypes()),
                 ltrim($tag->getVariableName(), '$'),
@@ -63,14 +69,18 @@ class DocBlockParser
             );
         }
 
-        if ($tag instanceof DocBlock\Tag\ThrowsTag) {
+        if ('phpDocumentor\Reflection\DocBlock\Tag\ThrowsTag' === $tagClass) {
+            /** @var DocBlock\Tag\ThrowsTag $tag */
+
             return array(
                 $tag->getType(),
                 $tag->getDescription(),
             );
         }
 
-        if ($tag instanceof DocBlock\Tag\ReturnTag) {
+        if ('phpDocumentor\Reflection\DocBlock\Tag\ReturnTag' === $tagClass) {
+            /** @var DocBlock\Tag\ReturnTag $tag */
+
             return array(
                 $this->parseHint($tag->getTypes()),
                 $tag->getDescription(),
