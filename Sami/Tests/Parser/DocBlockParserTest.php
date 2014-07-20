@@ -23,7 +23,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
     {
         $parser = new DocBlockParser();
 
-        $this->assertEquals($this->createDocblock($expected), $parser->parse($comment));
+        $this->assertEquals($this->createDocblock($expected), $parser->parse($comment, $this->getContextMock()));
     }
 
     public function getParseTests()
@@ -129,5 +129,14 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
         }
 
         return $docblock;
+    }
+
+    private function getContextMock()
+    {
+        $contextMock = $this->getMockBuilder('Sami\Parser\ParserContext')->disableOriginalConstructor()->getMock();
+        $contextMock->expects($this->once())->method('getNamespace')->will($this->returnValue(''));
+        $contextMock->expects($this->once())->method('getAliases')->will($this->returnValue(array()));
+
+        return $contextMock;
     }
 }

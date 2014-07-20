@@ -13,7 +13,6 @@ namespace Sami\Parser;
 
 use Sami\Reflection\ClassReflection;
 use Sami\Parser\Filter\FilterInterface;
-use Sami\Parser\DocBlockParser;
 
 class ParserContext
 {

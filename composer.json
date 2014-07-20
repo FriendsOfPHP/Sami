@@ -21,7 +21,8 @@
         "symfony/finder": "~2.1",
         "symfony/filesystem": "~2.1",
         "symfony/yaml": "~2.1",
-        "symfony/process": "~2.1"
+        "symfony/process": "~2.1",
+        "phpdocumentor/reflection-docblock": "~2.0"
     },
     "autoload": {
         "psr-0": { "Sami": "." }
