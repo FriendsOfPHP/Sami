@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-20T08:56:53Z
+
+Build passes, but Travis fails to do `composer self-update` for unknown reason at random times.
