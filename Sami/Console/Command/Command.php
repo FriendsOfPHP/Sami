@@ -48,13 +48,22 @@ abstract class Command extends BaseCommand
         $this->input = $input;
         $this->output = $output;
 
-        $config = $input->getArgument('config');
         $filesystem = new Filesystem();
-
-        if (!$filesystem->isAbsolutePath($config)) {
-            $config = getcwd().'/'.$config;
+        
+        $config = $input->getArgument('config');
+        if (null !== $config) {
+            if (!$filesystem->isAbsolutePath($config)) {
+                $config = realpath($config);
+            }
         }
-
+        else {
+            if (file_exists('sami.php')) {
+                $config = realpath('sami.php');
+            } elseif (file_exists('sami.php.dist')) {
+                $config = realpath('sami.php.dist');
+            }
+        }
+        
         if (!is_file($config)) {
             throw new \InvalidArgumentException(sprintf('Configuration file "%s" does not exist.', $config));
         }
