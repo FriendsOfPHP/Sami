@@ -7,10 +7,11 @@ use Symfony\Component\Finder\Finder;
 $iterator = Finder::create()
     ->files()
     ->name('*.php')
+    ->exclude('vendor')
+    ->exclude('build')
     ->in($dir = '.');
 
 $versions = GitVersionCollection::create($dir)
-    ->addFromTags('v1.*')
     ->add('master', 'master branch');
 
 return new Sami($iterator, array(
