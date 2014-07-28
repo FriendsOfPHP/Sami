@@ -1,0 +1,53 @@
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2014-07-21T10:13:36Z
+
+:-1:
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-21T10:15:01Z
+
+@GrahamCampbell , why not?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-21T10:15:43Z
+
+This looks more like a Travis CI bug that it can't properly update Composer, but we don't want to have failed builds just because of Travis bug?
+
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2014-07-21T10:16:05Z
+
+Travis will be fixing that issue at some point. We have no reason to remove it on the assumption they will never fix this.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-21T10:19:37Z
+
+> Travis will be fixing that issue at some point. We have no reason to remove it on the assumption they will never fix this.
+
+Currently additional action is required for me (and I bet for @fabpot as well) to exclude false positives from Travis side when detecting if build have passed or not.
+
+It's up to Travis to keep their Composer installation up to date and they update it once in 2-3 weeks. Sometimes they fail to do so.
+
+Really, where benefits can we have of using latest version of composer? It's pretty stable. If unstable version of Composer gets installed to Travis, then it's up to them to fix, not us.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-07-21T10:41:52Z
+
+@aik099 I do agree with you.
+
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2014-07-21T10:42:41Z
+
+I guess this can be reverted after travis fix the issue, so why not. :)
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-28T13:25:28Z
+
+@fabpot if you agree, then many merging is the next right action to take?
