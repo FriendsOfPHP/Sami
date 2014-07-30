@@ -39,7 +39,7 @@ abstract class Command extends BaseCommand
      */
     protected function configure()
     {
-        $this->getDefinition()->addArgument(new InputArgument('config', InputArgument::REQUIRED, 'The configuration'));
+        $this->getDefinition()->addOption(new InputOption('config-file', '', InputOption::VALUE_OPTIONAL, 'The path to a sami.php configuration file', null));
         $this->getDefinition()->addOption(new InputOption('only-version', '', InputOption::VALUE_REQUIRED, 'The version to build'));
     }
 
@@ -48,25 +48,34 @@ abstract class Command extends BaseCommand
         $this->input = $input;
         $this->output = $output;
 
-        $config = $input->getArgument('config');
         $filesystem = new Filesystem();
-
-        if (!$filesystem->isAbsolutePath($config)) {
-            $config = getcwd().'/'.$config;
+        
+        $configFile = $input->getOption('config-file');
+        if (null !== $configFile) {
+            if (!$filesystem->isAbsolutePath($configFile)) {
+                $configFile = realpath($configFile);
+            }
+        }
+        else {
+            if (file_exists('sami.php')) {
+                $configFile = realpath('sami.php');
+            } elseif (file_exists('sami.php.dist')) {
+                $configFile = realpath('sami.php.dist');
+            }
+        }
+        
+        if (!is_file($configFile)) {
+            throw new \InvalidArgumentException(sprintf('Configuration file "%s" does not exist.', $configFile));
         }
 
-        if (!is_file($config)) {
-            throw new \InvalidArgumentException(sprintf('Configuration file "%s" does not exist.', $config));
-        }
-
-        $this->sami = require $config;
+        $this->sami = require $configFile;
 
         if ($input->getOption('only-version')) {
             $this->sami['versions'] = $input->getOption('only-version');
         }
 
         if (!$this->sami instanceof Sami) {
-            throw new \RuntimeException(sprintf('Configuration file "%s" must return a Sami instance.', $config));
+            throw new \RuntimeException(sprintf('Configuration file "%s" must return a Sami instance.', $configFile));
         }
     }
 
