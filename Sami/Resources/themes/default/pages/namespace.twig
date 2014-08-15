@@ -1,6 +1,6 @@
 {% extends page_layout %}
 
-{% from "macros.twig" import class_link %}
+{% from "macros.twig" import class_link, namespace_link %}
 
 {% block title %}{{ namespace }} | {{ parent() }}{% endblock %}
 
@@ -12,7 +12,20 @@
 {% endblock %}
 
 {% block content %}
+    {% if namespaces %}
+        <h2>Namespaces</h2>
+        <table>
+            {% for subnamespace in namespaces %}
+                <tr>
+                    <td>{{ namespace_link(subnamespace, {'target': 'main' }) }}</td>
+                    <td class="last">&nbsp;</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
     {% if classes %}
+        <h2>Classes</h2>
         <table>
             {% for class in classes %}
                 <tr>
@@ -22,7 +35,7 @@
             {% endfor %}
         </table>
     {% endif %}
-
+    
     {% if interfaces %}
         <h2>Interfaces</h2>
         <table>

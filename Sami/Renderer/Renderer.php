@@ -135,6 +135,7 @@ class Renderer
 
             $variables = array(
                 'namespace'  => $namespace,
+                'namespaces' => $project->getNamespaceSubNamespaces($namespace),
                 'classes'    => $project->getNamespaceClasses($namespace),
                 'interfaces' => $project->getNamespaceInterfaces($namespace),
                 'exceptions' => $project->getNamespaceExceptions($namespace),
