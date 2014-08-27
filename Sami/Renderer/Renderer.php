@@ -134,10 +134,11 @@ class Renderer
             }
 
             $variables = array(
-                'namespace'  => $namespace,
-                'classes'    => $project->getNamespaceClasses($namespace),
-                'interfaces' => $project->getNamespaceInterfaces($namespace),
-                'exceptions' => $project->getNamespaceExceptions($namespace),
+                'namespace'     => $namespace,
+                'subnamespaces' => $project->getNamespaceSubNamespaces($namespace),
+                'classes'       => $project->getNamespaceClasses($namespace),
+                'interfaces'    => $project->getNamespaceInterfaces($namespace),
+                'exceptions'    => $project->getNamespaceExceptions($namespace),
             );
             foreach ($this->theme->getTemplates('namespace') as $template => $target) {
                 $this->save($project, sprintf($target, str_replace('\\', '/', $namespace)), $template, $variables);
