@@ -20,7 +20,16 @@
 {% block content %}
     <h1>{{ namespace_link(namespace, {'target': 'main'}) }}</h1>
 
+    {% if subnamespaces %}
+        <h2>Namespaces</h2>
+        {% for ns in subnamespaces %}
+            {{ namespace_link(ns, {'target': 'main'}) }}
+            {%- if not loop.last -%}, {%- endif -%}
+        {% endfor %}
+    {% endif %}
+
     {% if classes %}
+        <h2>Classes</h2>
         <ul>
             {% for class in classes %}
                 <li>{{ class_link(class, {'target': 'main'}) }}</li>
