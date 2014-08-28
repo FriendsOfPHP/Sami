@@ -118,12 +118,15 @@
                 // Open the currently selected node and its parents.
                 var container = $('#left-column');
                 var node = $('#api-tree li[data-name="' + expected + '"]');
-                node.addClass('active').addClass('opened');
-                node.parents('li').addClass('opened');
-                var scrollPos = node.offset().top - container.offset().top + container.scrollTop();
-                // Position the item nearer to the top of the screen.
-                scrollPos -= 200;
-                container.scrollTop(scrollPos);
+                // Node might not be found when simulating namespaces
+                if (node) {
+                    node.addClass('active').addClass('opened');
+                    node.parents('li').addClass('opened');
+                    var scrollPos = node.offset().top - container.offset().top + container.scrollTop();
+                    // Position the item nearer to the top of the screen.
+                    scrollPos -= 200;
+                    container.scrollTop(scrollPos);
+                }
             }
         });
     </script>
