@@ -29,7 +29,7 @@
 </head>
 
 {% block html %}
-    <body id="{% block body_class '' %}" data-name="{% block page_id '' %}">
+    <body id="{% block body_class '' %}" data-name="{% block page_id '' %}" data-root-path="{{ root_path }}">
         {% block content '' %}
     </body>
 {% endblock %}

@@ -1,5 +1,6 @@
 Sami = {
     searchIndex: [],
+    leftNavHtml: '',
     searchTypeClasses: {
         'Namespace': 'label-default',
         'Class': 'label-info',
@@ -76,3 +77,38 @@ Sami.searchIndex = [
         {% endfor %}
     {% endif %}
 {% endmacro %}
+
+$(function() {
+
+    // Enable the version switcher
+    $('#version-switcher').change(function() {
+        window.location = $(this).val()
+    });
+
+    {% block treejs %}
+
+        // Toggle left-nav divs on click
+        $('#api-tree .hd span').click(function() {
+            $(this).parent().parent().toggleClass('opened');
+        });
+
+        // Expand the parent namespaces of the current page.
+        var expected = $('body').attr('data-name');
+
+        if (expected) {
+            // Open the currently selected node and its parents.
+            var container = $('#left-column');
+            var node = $('#api-tree li[data-name="' + expected + '"]');
+            // Node might not be found when simulating namespaces
+            if (node) {
+                node.addClass('active').addClass('opened');
+                node.parents('li').addClass('opened');
+                var scrollPos = node.offset().top - container.offset().top + container.scrollTop();
+                // Position the item nearer to the top of the screen.
+                scrollPos -= 200;
+                container.scrollTop(scrollPos);
+            }
+        }
+
+    {% endblock %}
+});
