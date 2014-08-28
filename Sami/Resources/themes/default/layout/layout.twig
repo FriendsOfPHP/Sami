@@ -1,28 +1,5 @@
 {% extends "layout/base.twig" %}
 
-{% macro element(tree, opened, depth) %}
-    <ul>
-        {%- for element in tree -%}
-            {% if element[2] %}
-                <li data-name="namespace:{{ element[1]|replace({'\\': '_'}) }}" {% if depth < opened %}class="opened"{% endif %}>
-                    <div style="padding-left:{{ depth * 18 }}px" class="hd">
-                        <span class="glyphicon glyphicon-play"></span>{% if not project.config('simulate_namespaces') %}<a href="{{ namespace_path(element[1]) }}">{% endif %}{{ element[0] }}{% if not project.config('simulate_namespaces') %}</a>{% endif %}
-                    </div>
-                    <div class="bd">
-                        {{ _self.element(element[2], opened, depth + 1) -}}
-                    </div>
-                </li>
-            {% else %}
-                <li data-name="class:{{ (element[1].name)|replace({'\\': '_'}) }}" {% if depth < opened %}class="opened"{% endif %}>
-                    <div style="padding-left:{{ 8 + (depth * 18) }}px" class="hd leaf">
-                        <a href="{{ class_path(element[1]) }}">{{ element[0] }}</a>
-                    </div>
-                </li>
-            {% endif %}
-        {%- endfor %}
-    </ul>
-{% endmacro %}
-
 {% block content %}
     <div id="content">
         <div id="left-column">
@@ -68,9 +45,7 @@
 {% endblock %}
 
 {% block leftnav %}
-    <div id="api-tree">
-        {{ _self.element(tree, project.config('default_opened_level'), 0) }}
-    </div>
+    <div id="api-tree"></div>
 {% endblock %}
 
 {% block control_panel %}
