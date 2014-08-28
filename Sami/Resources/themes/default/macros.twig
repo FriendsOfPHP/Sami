@@ -1,7 +1,3 @@
-{% macro attributes(attributes) %}
-    {%- for key, value in attributes %} {{ key }}="{{ value }}"{% endfor -%}
-{% endmacro %}
-
 {% macro namespace_link(namespace) -%}
     <a href="{{ namespace_path(namespace) }}">{{ namespace }}</a>
 {%- endmacro %}
