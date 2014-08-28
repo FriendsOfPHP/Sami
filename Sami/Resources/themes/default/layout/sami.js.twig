@@ -1,0 +1,78 @@
+Sami = {
+    searchIndex: [],
+    searchTypeClasses: {
+        'Namespace': 'label-default',
+        'Class': 'label-info',
+        'Interface': 'label-primary',
+        'Trait': 'label-success',
+        'Method': 'label-danger',
+        '_': 'label-warning'
+    }
+};
+
+// Cleans the provided search term, or gets the term from the query string
+// if it is not provided.
+Sami.cleanSearchTerm = function(term) {
+    // Grab from the query string
+    if (typeof term === 'undefined') {
+        var name = 'search';
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+        var results = regex.exec(location.search);
+        if (results === null) {
+            return null;
+        }
+        term = decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    return term.replace(/<(?:.|\n)*?>/gm, '');
+};
+
+// Searches through the search index for matches
+Sami.search = function(term) {
+    var lterm = term.toLowerCase(), results = [];
+    for (var i = 0, len = Sami.searchIndex.length; i < len; i++) {
+        var ele = Sami.searchIndex[i];
+        if (ele.name && ele.name.toLowerCase().indexOf(lterm) > -1) {
+            results.push(ele);
+        }
+    }
+    return results;
+};
+
+// Get a search class for a specific type
+Sami.getSearchClass = function(type) {
+    return Sami.searchTypeClasses[type] || Sami.searchTypeClasses['_'];
+}
+
+Sami.searchIndex = [
+    {% block search_index %}
+        {% for ns in namespaces -%}
+            {"type": "Namespace", "link": "{{ namespace_path(ns) }}", "name": "{{ ns|replace({'\\': '\\\\'}) }}", "doc": "Namespace {{ ns|replace({'\\': '\\\\'}) }}"},
+        {%- endfor %}
+
+        {% for class in interfaces -%}
+            {"type": "Interface", {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
+            {{ _self.add_class_methods_index(class) }}
+        {% endfor %}
+
+        {% for class in classes -%}
+            {"type": {% if class.isTrait %}"Trait"{% else %}"Class"{% endif %}, {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
+            {{ _self.add_class_methods_index(class) }}
+        {% endfor %}
+
+        {# Override this block, search_index_extra, to add custom search entries! #}
+        {% block search_index_extra '' %}
+    {% endblock %}
+    // Fix trailing commas in the index
+    {}
+];
+
+{% macro add_class_methods_index(class) %}
+    {% if class.methods %}
+        {% set from_name = class.name|replace({'\\': '\\\\'}) %}
+        {% set from_link = class_path(class) %}
+        {% for meth in class.methods %}
+            {"type": "Method", "fromName": "{{ from_name }}", "fromLink": "{{ from_link }}", "link": "{{ method_path(meth) }}", "name": "{{ meth|replace({'\\': '\\\\'}) }}", "doc": "{{ meth.shortdesc|desc(class)|json_encode }}"},
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

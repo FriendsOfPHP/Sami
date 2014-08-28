@@ -14,14 +14,15 @@ static:
     'js/jquery-1.11.1.min.js': 'js/jquery-1.11.1.min.js'
 
 global:
-    'index.twig':       'index.html'
-    'doc-index.twig':   'doc-index.html'
-    'namespaces.twig':  'namespaces.html'
-    'classes.twig':     'classes.html'
-    'interfaces.twig':  'interfaces.html'
-    'traits.twig':      'traits.html'
-    'opensearch.twig':  'opensearch.xml'
-    'search.twig':      'search.html'
+    'index.twig':          'index.html'
+    'doc-index.twig':      'doc-index.html'
+    'namespaces.twig':     'namespaces.html'
+    'classes.twig':        'classes.html'
+    'interfaces.twig':     'interfaces.html'
+    'traits.twig':         'traits.html'
+    'opensearch.twig':     'opensearch.xml'
+    'search.twig':         'search.html'
+    'layout/sami.js.twig': 'js/sami.js'
 
 namespace:
     'namespace.twig':   '%s.html'
