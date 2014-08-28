@@ -160,10 +160,10 @@ theme (this is a YAML file):
 .. code-block:: yaml
 
     name:   symfony
-    parent: enhanced
+    parent: default
 
 The above configuration creates a new ``symfony`` theme based on the
-``enhanced`` built-in theme. To override a template, just create a file with
+``default`` built-in theme. To override a template, just create a file with
 the same name as the original one. For instance, here is how you can extend the
 default class template to prefix the class name with "Class " in the class page
 title:
@@ -188,24 +188,34 @@ the default theme:
     name: default
 
     static:
-        'stylesheet.css':        'stylesheet.css'
+        'css/sami.css': 'css/sami.css'
+        'css/bootstrap.min.css': 'css/bootstrap.min.css'
+        'css/bootstrap-theme.min.css': 'css/bootstrap-theme.min.css'
+        'css/bootstrap.css.map': 'css/bootstrap.css.map'
+        'css/bootstrap-theme.css.map': 'css/bootstrap-theme.css.map'
+        'fonts/glyphicons-halflings-regular.eot': 'fonts/glyphicons-halflings-regular.eot'
+        'fonts/glyphicons-halflings-regular.svg': 'fonts/glyphicons-halflings-regular.svg'
+        'fonts/glyphicons-halflings-regular.ttf': 'fonts/glyphicons-halflings-regular.ttf'
+        'fonts/glyphicons-halflings-regular.woff': 'fonts/glyphicons-halflings-regular.woff'
+        'js/bootstrap.min.js': 'js/bootstrap.min.js'
+        'js/jquery-1.11.1.min.js': 'js/jquery-1.11.1.min.js'
 
     global:
-        'index.twig':            'index.html'
-        'namespaces.twig':       'namespaces-frame.html'
-        'classes.twig':          'classes-frame.html'
-        'pages/opensearch.twig': 'opensearch.xml'
-        'pages/index.twig':      'doc-index.html'
-        'pages/namespaces.twig': 'namespaces.html'
-        'pages/interfaces.twig': 'interfaces.html'
-        'pages/classes.twig':    'classes.html'
+        'index.twig':       'index.html'
+        'doc-index.twig':   'doc-index.html'
+        'namespaces.twig':  'namespaces.html'
+        'classes.twig':     'classes.html'
+        'interfaces.twig':  'interfaces.html'
+        'traits.twig':      'traits.html'
+        'opensearch.twig':  'opensearch.xml'
+        'search.twig':      'search.html'
 
     namespace:
-        'namespace.twig':        '%s/namespace-frame.html'
-        'pages/namespace.twig':  '%s.html'
+        'namespace.twig':   '%s.html'
 
     class:
-        'pages/class.twig':      '%s.html'
+        'class.twig':       '%s.html'
+
 
 Files are contained into sections, depending on how Sami needs to treat them:
 
@@ -221,3 +231,65 @@ Files are contained into sections, depending on how Sami needs to treat them:
 .. _Symfony API: http://api.symfony.com/
 .. _phar file:   http://get.sensiolabs.org/sami.phar
 .. _Finder:      http://symfony.com/doc/current/components/finder.html
+
+Search Index
+~~~~~~~~~~~~
+
+The autocomplete and search functionality of Sami is provided through a
+search index that is generated based on the classes, namespaces, interfaces,
+and traits of a project. You can customize the search index by overriding the
+``search_index_extra`` block of ``sami.js.twig``.
+
+The ``search_index_extra`` allows you to extend the default theme and add more
+entries to the index. For example, some projects implement magic methods that
+are dynamically generated at runtime. You might wish to document these methods
+while generating API documentation and add them to the search index.
+
+Each entry in the search index is a JavaScript object that contains the
+following keys:
+
+type
+    The type associated with the entry. Built-in types are "Class",
+    "Namespace", "Interface", "Trait". You can add additional types specific
+    to an application, and the type information will appear next to the search
+    result.
+
+name
+    The name of the entry. This is the element in the index that is searchable
+    (e.g., class name, namespace name, etc).
+
+fromName
+    The parent of the element (if any). This can be used to provide context for
+    the entry. For example, the fromName of a class would be the namespace of
+    the class.
+
+fromLink
+    The link to the parent of the entry (if any). This is used to link a child
+    to a parent. For example, this would be a link from a class to the class
+    namespace.
+
+doc
+    A short text description of the entry.
+
+One such example of when overriding the index is useful could be documenting
+dynamically generated API operations of a web service client. Here's a simple
+example that adds dynamically generated API operations for a web service client
+to the search index:
+
+.. code-block:: jinja
+
+    {% extends "default/sami.js.twig" %}
+
+    {% block search_index_extra %}
+        {% for operation in operations -%}
+            {"type": "Operation", "link": "{{ operation.path }}", "name": "{{ operation.name }}", "doc": "{{ operation.doc }}"},
+        {%- endfor %}
+    {% endblock %}
+
+This example assumes that the template has a variable ``operations`` available
+which contains an array of operations.
+
+.. note::
+
+    Always include a trailing comma for each entry you add to the index. Sami
+    will take care of ensuring that trailing commas are handled properly.

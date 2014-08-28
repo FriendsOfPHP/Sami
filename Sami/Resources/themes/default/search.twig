@@ -1,0 +1,92 @@
+{% extends "layout/layout.twig" %}
+{% from "macros.twig" import class_link, namespace_link, method_link, property_link %}
+{% block title %}Search | {{ parent() }}{% endblock %}
+{% block body_class 'search-page' %}
+
+{% block page_content %}
+
+    <div class="page-header">
+        <h1>Search</h1>
+    </div>
+
+    <p>This page allows you to search through the API documentation for
+    specific terms. Enter your search words into the box below and click
+    "submit". The search will be performed on namespaces, clases, interfaces,
+    traits, functions, and methods.</p>
+
+    <form class="form-inline" role="form" action="{{ path('search.html') }}" method="GET">
+        <div class="form-group">
+            <label class="sr-only" for="search">Search</label>
+            <input type="search" class="form-control" name="search" id="search" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">submit</button>
+    </form>
+
+    <h2>Search Results</h2>
+
+    <div class="container-fluid">
+        <ul class="search-results"></ul>
+    </div>
+
+    {{ block('js_search') }}
+
+{% endblock %}
+
+{% block js_search %}
+    <script type="text/javascript">
+
+        (function() {
+            var term = Sami.cleanSearchTerm();
+
+            if (!term) {
+                $('h2').hide();
+                return;
+            }
+
+            $('#search').val(term);
+            var container = $('.search-results');
+
+            // create the search index
+            {{ block('search_index') }}
+
+            var results = Sami.search(term);
+            var len = results.length;
+
+            if (len == 0) {
+                container.html('No results were found');
+                return;
+            }
+
+            for (var i = 0, text_content = ''; i < len; i++) {
+
+                var ele = results[i];
+                var contents = '<li><h2 class="clearfix">';
+                var class_name = Sami.getSearchClass(ele.type);
+                contents += '<a href="' + ele.link + '">' + ele.name + '</a>';
+                contents += '<div class="search-type type-' + ele.type + '"><span class="pull-right label ' + class_name + '">' + ele.type + '</span></div>';
+                contents += '</h2>';
+
+                if (ele.fromName && ele.fromLink) {
+                    contents += '<div class="search-from">from <a href="' + ele.fromLink + '">' + ele.fromName + '</a></div>';
+                }
+
+                contents += '<div class="search-description">';
+
+                // Add description, decode entities, and strip wrapping quotes
+                if (ele.doc) {
+                    text_content = $('<p>' + ele.doc + '</p>').text();
+                    if (text_content[0] == '"') {
+                        text_content = text_content.substring(1);
+                    }
+                    if (text_content[text_content.length - 1] == '"') {
+                        text_content = text_content.substring(0, text_content.length - 1);
+                    }
+                    contents += text_content;
+                }
+
+                contents += '</div></li>';
+                container.append($(contents));
+            }
+        })();
+    </script>
+{% endblock %}

@@ -1,30 +1,44 @@
-{% extends page_layout %}
-
-{% from "macros.twig" import namespace_link, class_link, property_link, method_link, hint_link %}
-
+{% extends "layout/layout.twig" %}
+{% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link %}
 {% block title %}{{ class.name }} | {{ parent() }}{% endblock %}
-
 {% block body_class 'class' %}
+{% block page_id 'class:' ~ (class.name|replace({'\\': '_'})) %}
 
-{% block content_header %}
-    <div class="type">{{ class.categoryName|capitalize }}</div>
-    <h1>{{ namespace_link(class.namespace) }}{% if class.namespace %}\{% endif %}{{ class.shortname }}</h1>
+{% block below_menu %}
+    {% if class.namespace %}
+        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">{{ class.categoryName }}</span></li>
+                {{ breadcrumbs(class.namespace) }}
+                <li>{{ class.shortname }}</li>
+            </ol>
+        </div>
+    {% endif %}
 {% endblock %}
 
-{% block content %}
+{% block page_content %}
+
+    <div class="page-header">
+        <h1>{{ class.name|split('\\')|last }}</h1>
+    </div>
+
     <p>{{ block('class_signature') }}</p>
 
     {% if class.shortdesc or class.longdesc %}
         <div class="description">
-            <p>{{ class.shortdesc|desc(class) }}</p>
-            <p>{{ class.longdesc|desc(class) }}</p>
+            {% if class.shortdesc -%}
+                <p>{{ class.shortdesc|desc(class) }}</p>
+            {%- endif %}
+            {% if class.longdesc -%}
+                <p>{{ class.longdesc|desc(class) }}</p>
+            {%- endif %}
         </div>
     {% endif %}
 
     {% if traits %}
         <h2>Traits</h2>
 
-        {{ block('traits') }}
+        {{ render_classes(traits) }}
     {% endif %}
 
     {% if constants %}
@@ -48,6 +62,7 @@
 
         {{ block('methods_details') }}
     {% endif %}
+
 {% endblock %}
 
 {% block class_signature -%}
@@ -82,7 +97,7 @@
 {%- endblock %}
 
 {% block parameters %}
-    <table>
+    <table class="table table-condensed">
         {% for parameter in method.parameters %}
             <tr>
                 <td>{% if parameter.hint %}{{ hint_link(parameter.hint) }}{% endif %}</td>
@@ -94,7 +109,7 @@
 {% endblock %}
 
 {% block return %}
-    <table>
+    <table class="table table-condensed">
         <tr>
             <td>{{ hint_link(method.hint) }}</td>
             <td>{{ method.hintDesc|desc(class) }}</td>
@@ -103,7 +118,7 @@
 {% endblock %}
 
 {% block exceptions %}
-    <table>
+    <table class="table table-condensed">
         {% for exception in method.exceptions %}
             <tr>
                 <td>{{ class_link(exception[0]) }}</td>
@@ -114,7 +129,7 @@
 {% endblock %}
 
 {% block see %}
-    <table>
+    <table class="table table-condensed">
         {% for tag in method.tags('see') %}
             <tr>
                 <td>{{ tag[0] }}</td>
@@ -125,7 +140,7 @@
 {% endblock %}
 
 {% block constants %}
-    <table>
+    <table class="table table-condensed">
         {% for constant in constants %}
             <tr>
                 <td>{{ constant.name }}</td>
@@ -138,18 +153,8 @@
     </table>
 {% endblock %}
 
-{% block traits %}
-    <ul>
-        {% for trait in traits %}
-            <li>
-                {{ class_link(trait) }}
-            </li>
-        {% endfor %}
-    </ul>
-{% endblock %}
-
 {% block properties %}
-    <table>
+    <table class="table table-condensed">
         {% for property in properties %}
             <tr>
                 <td class="type" id="property_{{ property.name }}">
@@ -162,7 +167,7 @@
                 <td class="last">{{ property.shortdesc|desc(class) }}</td>
                 <td>
                     {%- if property.class is not sameas(class) -%}
-                        <small>from&nbsp;{{ property_link(property, {}, false, true) }}</small>
+                        <small>from&nbsp;{{ property_link(property, false, true) }}</small>
                     {%- endif -%}
                 </td>
             </tr>
@@ -171,40 +176,60 @@
 {% endblock %}
 
 {% block methods %}
-    <table>
+    <div class="container-fluid underlined">
         {% for method in methods %}
-            <tr>
-                <td class="type">
+            <div class="row">
+                <div class="col-md-2 type">
                     {% if method.static %}static&nbsp;{% endif %}{{ hint_link(method.hint) }}
-                </td>
-                <td class="last">
+                </div>
+                <div class="col-md-8 type">
                     <a href="#method_{{ method.name }}">{{ method.name }}</a>{{ block('method_parameters_signature') }}
-                    <p>{{ method.shortdesc|desc(class) }}</p>
-                </td>
-                <td>
+                    {% if not method.shortdesc %}
+                        <p class="no-description">No description</p>
+                    {% else %}
+                        <p>{{ method.shortdesc|desc(class) }}</p>
+                    {%- endif %}
+                </div>
+                <div class="col-md-2">
                     {%- if method.class is not sameas(class) -%}
-                        <small>from&nbsp;{{ method_link(method, {}, false, true) }}</small>
+                        <small>from&nbsp;{{ method_link(method, false, true) }}</small>
                     {%- endif -%}
-                </td>
-            </tr>
+                </div>
+            </div>
         {% endfor %}
-    </table>
+    </div>
 {% endblock %}
 
 {% block methods_details %}
-    {% for method in methods %}
-        {{ block('method') }}
-    {% endfor %}
+    <div id="method-details">
+        {% for method in methods %}
+            <div class="method-item">
+                {{ block('method') }}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block method %}
     <h3 id="method_{{ method.name }}">
-        <div class="location">{% if method.class is not sameas(class) %}in {{ method_link(method, {}, false, true) }} {% endif %}at line {{ method.line }}</div>
+        <div class="location">{% if method.class is not sameas(class) %}in {{ method_link(method, false, true) }} {% endif %}at line {{ method.line }}</div>
         <code>{{ block('method_signature') }}</code>
     </h3>
     <div class="details">
-        <p>{{ method.shortdesc|desc(class) }}</p>
-        <p>{{ method.longdesc|desc(class) }}</p>
+        {% if method.shortdesc or method.longdesc %}
+            <div class="method-description">
+                {% if not method.shortdesc and not method.longdesc %}
+                    <p class="no-description">No description</p>
+                {% else %}
+                    {% if method.shortdesc -%}
+                    <p>{{ method.shortdesc|desc(class) }}</p>
+                    {%- endif %}
+                    {% if method.longdesc -%}
+                    <p>{{ method.longdesc|desc(class) }}</p>
+                    {%- endif %}
+                {%- endif %}
+            </div>
+        {% endif %}
         <div class="tags">
             {% if method.parameters %}
                 <h4>Parameters</h4>

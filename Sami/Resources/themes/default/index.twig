@@ -1,3 +1,9 @@
-{% extends "layout/frame.twig" %}
+{% if has_namespaces %}
+    {% set extension = 'namespaces.twig' %}
+{% else %}
+    {% set extension = 'classes.twig' %}
+{% endif %}
 
-{% block frame_src 'classes-frame.html' %}
+{% extends extension %}
+
+{% block body_class 'index' %}
