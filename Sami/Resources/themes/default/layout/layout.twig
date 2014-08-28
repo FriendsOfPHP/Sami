@@ -84,7 +84,7 @@
             <form action="#" method="GET">
                 <select id="version-switcher" name="version">
                     {% for version in project.versions %}
-                        <option value="{{ path('/version/index.html') }}"{{ version == project.version ? ' selected' : '' }}>{{ version.longname }}</option>
+                        <option value="{{ path(version ~ '/index.html') }}"{{ version == project.version ? ' selected' : '' }}>{{ version.longname }}</option>
                     {% endfor %}
                 </select>
             </form>
@@ -112,6 +112,7 @@
             $('#api-tree .hd span').click(function() {
                 $(this).parent().parent().toggleClass('opened');
             });
+
             // Expand the parent namespaces of the current page.
             var expected = $('body').attr('data-name');
             if (expected) {
@@ -128,6 +129,10 @@
                     container.scrollTop(scrollPos);
                 }
             }
+
+            $('#version-switcher').change(function() {
+                window.location = $(this).val()
+            });
         });
     </script>
 {% endblock %}
