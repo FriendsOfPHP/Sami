@@ -70,7 +70,6 @@ class Renderer
         $this->twig->getLoader()->setPaths(array_unique($dirs));
 
         $this->twig->addGlobal('has_namespaces', $project->hasNamespaces());
-        $this->twig->addGlobal('page_layout', 'layout/page.twig');
         $this->twig->addGlobal('project', $project);
 
         $this->renderStaticTemplates($project, $callback);
