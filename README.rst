@@ -160,10 +160,10 @@ theme (this is a YAML file):
 .. code-block:: yaml
 
     name:   symfony
-    parent: enhanced
+    parent: default
 
 The above configuration creates a new ``symfony`` theme based on the
-``enhanced`` built-in theme. To override a template, just create a file with
+``default`` built-in theme. To override a template, just create a file with
 the same name as the original one. For instance, here is how you can extend the
 default class template to prefix the class name with "Class " in the class page
 title:
@@ -188,24 +188,34 @@ the default theme:
     name: default
 
     static:
-        'stylesheet.css':        'stylesheet.css'
+        'css/sami.css': 'css/sami.css'
+        'css/bootstrap.min.css': 'css/bootstrap.min.css'
+        'css/bootstrap-theme.min.css': 'css/bootstrap-theme.min.css'
+        'css/bootstrap.css.map': 'css/bootstrap.css.map'
+        'css/bootstrap-theme.css.map': 'css/bootstrap-theme.css.map'
+        'fonts/glyphicons-halflings-regular.eot': 'fonts/glyphicons-halflings-regular.eot'
+        'fonts/glyphicons-halflings-regular.svg': 'fonts/glyphicons-halflings-regular.svg'
+        'fonts/glyphicons-halflings-regular.ttf': 'fonts/glyphicons-halflings-regular.ttf'
+        'fonts/glyphicons-halflings-regular.woff': 'fonts/glyphicons-halflings-regular.woff'
+        'js/bootstrap.min.js': 'js/bootstrap.min.js'
+        'js/jquery-1.11.1.min.js': 'js/jquery-1.11.1.min.js'
 
     global:
-        'index.twig':            'index.html'
-        'namespaces.twig':       'namespaces-frame.html'
-        'classes.twig':          'classes-frame.html'
-        'pages/opensearch.twig': 'opensearch.xml'
-        'pages/index.twig':      'doc-index.html'
-        'pages/namespaces.twig': 'namespaces.html'
-        'pages/interfaces.twig': 'interfaces.html'
-        'pages/classes.twig':    'classes.html'
+        'index.twig':       'index.html'
+        'doc-index.twig':   'doc-index.html'
+        'namespaces.twig':  'namespaces.html'
+        'classes.twig':     'classes.html'
+        'interfaces.twig':  'interfaces.html'
+        'traits.twig':      'traits.html'
+        'opensearch.twig':  'opensearch.xml'
+        'search.twig':      'search.html'
 
     namespace:
-        'namespace.twig':        '%s/namespace-frame.html'
-        'pages/namespace.twig':  '%s.html'
+        'namespace.twig':   '%s.html'
 
     class:
-        'pages/class.twig':      '%s.html'
+        'class.twig':       '%s.html'
+
 
 Files are contained into sections, depending on how Sami needs to treat them:
 

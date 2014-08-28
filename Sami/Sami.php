@@ -152,7 +152,7 @@ class Sami extends Container
             return $twig;
         };
 
-        $this['theme'] = 'enhanced';
+        $this['theme'] = 'default';
         $this['title'] = 'API';
         $this['version'] = 'master';
         $this['template_dirs'] = array();

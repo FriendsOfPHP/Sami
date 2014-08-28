@@ -1,0 +1,144 @@
+{% extends "layout/layout.twig" %}
+{% from "macros.twig" import class_link, namespace_link, method_link, property_link %}
+{% block title %}Search | {{ parent() }}{% endblock %}
+{% block body_class 'search-page' %}
+
+{% block page_content %}
+
+    <div class="page-header">
+        <h1>Search</h1>
+    </div>
+
+    <p>This page allows you to search through the API documentation for
+    specific terms. Enter your search words into the box below and click
+    "submit". The search will be performed on namespaces, clases, interfaces,
+    traits, functions, and methods.</p>
+
+    <form class="form-inline" role="form" action="{{ path('search.html') }}" method="GET">
+        <div class="form-group">
+            <label class="sr-only" for="search">Search</label>
+            <input type="search" class="form-control" name="search" id="search" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">submit</button>
+    </form>
+
+    <h2>Search Results</h2>
+
+    <div class="container-fluid">
+        <ul class="search-results"></ul>
+    </div>
+
+    {{ block('js_search') }}
+
+{% endblock %}
+
+{% block js_search %}
+    <script type="text/javascript">
+
+        (function() {
+            var name = 'search';
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+            var results = regex.exec(location.search);
+            if (results === null) {
+                return;
+            }
+
+            // Get the search term
+            var term = decodeURIComponent(results[1].replace(/\+/g, " "));
+            // Attempt to sanitize the input
+            term = term.replace(/<(?:.|\n)*?>/gm, '');
+            // Use the unicode backslash character to match the index.
+            term = term.replace('\\', '\u005c');
+            var lterm = term.toLocaleLowerCase();
+
+            // Update the search box with the term
+            $('#search').val(term);
+            var container = $('.search-results');
+
+            // create the search index
+            {{ block('search_index') }}
+
+            var class_map = {
+                'Namespace': 'label-default',
+                'Class': 'label-info',
+                'Interface': 'label-primary',
+                'Trait': 'label-success',
+                'Method': 'label-danger',
+                '_': 'label-warning'
+            };
+
+            var text_content = '';
+
+            // Perform the search.
+            for (var i = 0, len = search_index.length; i < len; i++) {
+
+                var ele = search_index[i];
+
+                if (!ele.name || ele.name.toLowerCase().indexOf(lterm) == -1) {
+                    continue;
+                }
+
+                var contents = '<li><h2 class="clearfix">';
+                var class_name = class_map[ele.type] || class_map['_'];
+
+                contents += '<a href="' + ele.link + '">' + ele.name + '</a>';
+                contents += '<div class="search-type type-' + ele.type + '"><span class="pull-right label ' + class_name + '">' + ele.type + '</span></div>';
+                contents += '</h2>';
+
+                if (ele.fromName && ele.fromLink) {
+                    contents += '<div class="search-from">from <a href="' + ele.fromLink + '">' + ele.fromName + '</a></div>';
+                }
+
+                contents += '<div class="search-description">';
+
+                // Add description, decode entities, and strip wrapping quotes
+                if (ele.doc) {
+                    text_content = $('<p>' + ele.doc + '</p>').text();
+                    if (text_content[0] == '"') {
+                        text_content = text_content.substring(1);
+                    }
+                    if (text_content[text_content.length - 1] == '"') {
+                        text_content = text_content.substring(0, text_content.length - 1);
+                    }
+                    contents += text_content;
+                }
+
+                contents += '</div></li>';
+                container.append($(contents));
+            }
+        })();
+    </script>
+{% endblock %}
+
+{% macro add_class_methods_index(class) %}
+    {% if class.methods %}
+        {% set from_name = class.name|replace({'\\': '\\u005C'}) %}
+        {% set from_link = class_path(class) %}
+        {% for meth in class.methods %}
+            {"type": "Method", "fromName": "{{ from_name }}", "fromLink": "{{ from_link }}", "link": "{{ method_path(meth) }}", "name": "{{ meth|replace({'\\': '\\u005C'}) }}", "doc": "{{ meth.shortdesc|desc(class)|json_encode }}"},
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+{% block search_index %}
+    var search_index = [
+
+    {% for ns in namespaces -%}
+        {"type": "Namespace", "link": "{{ namespace_path(ns) }}", "name": "{{ ns|replace({'\\': '\\u005C'}) }}", "doc": "Namespace {{ ns|replace({'\\': '\\u005C'}) }}"},
+    {%- endfor %}
+
+    {% for class in interfaces -%}
+        {"type": "Interface", {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\u005C'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\u005C'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
+        {{ _self.add_class_methods_index(class) }}
+    {% endfor %}
+
+    {% for class in classes -%}
+        {"type": {% if class.isTrait %}"Trait"{% else %}"Class"{% endif %}, {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\u005C'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\u005C'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
+        {{ _self.add_class_methods_index(class) }}
+    {% endfor %}
+
+    {# Override search_index_extra to add custom search entries! #}
+    {% block search_index_extra '' %}
+
+    {}];
+{% endblock %}
