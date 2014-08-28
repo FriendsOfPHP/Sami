@@ -84,7 +84,7 @@
             <form action="#" method="GET">
                 <select id="version-switcher" name="version">
                     {% for version in project.versions %}
-                        <option value="{{ path(version ~ '/index.html') }}"{{ version == project.version ? ' selected' : '' }}>{{ version.longname }}</option>
+                        <option value="{{ path('../' ~ version ~ '/index.html') }}"{{ version == project.version ? ' selected' : '' }}>{{ version.longname }}</option>
                     {% endfor %}
                 </select>
             </form>
@@ -115,6 +115,7 @@
 
             // Expand the parent namespaces of the current page.
             var expected = $('body').attr('data-name');
+
             if (expected) {
                 // Open the currently selected node and its parents.
                 var container = $('#left-column');
