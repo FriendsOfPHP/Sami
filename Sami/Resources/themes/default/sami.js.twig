@@ -80,6 +80,10 @@ Sami.treeHtml = '{{ _self.element(tree, project.config('default_opened_level'), 
 
 $(function() {
 
+    // Modify the HTML to work correctly based on the current depth
+    var rootPath = $('body').attr('data-root-path');
+    Sami.treeHtml = Sami.treeHtml.replace(/href="/g, 'href="' + rootPath);
+
     // Add the left-nav tree to the page.
     $('#api-tree').html(Sami.treeHtml);
 
