@@ -1,4 +1,5 @@
 Sami = {
+    rootPath: '',
     searchTypeClasses: {
         'Namespace': 'label-default',
         'Class': 'label-info',
@@ -32,6 +33,11 @@ Sami.search = function(term) {
     for (var i = 0, len = Sami.searchIndex.length; i < len; i++) {
         var ele = Sami.searchIndex[i];
         if (ele.name && ele.name.toLowerCase().indexOf(lterm) > -1) {
+            // Fix the element links based on the current page depth.
+            if (Sami.rootPath) {
+                ele.link = ele.link.replace('href="', 'href="' + Sami.rootPath);
+                ele.fromLink = ele.fromLink.replace('href="', 'href="' + Sami.rootPath);
+            }
             results.push(ele);
         }
     }
@@ -81,8 +87,8 @@ Sami.treeHtml = '{{ _self.element(tree, project.config('default_opened_level'), 
 $(function() {
 
     // Modify the HTML to work correctly based on the current depth
-    var rootPath = $('body').attr('data-root-path');
-    Sami.treeHtml = Sami.treeHtml.replace(/href="/g, 'href="' + rootPath);
+    Sami.rootPath = $('body').attr('data-root-path');
+    Sami.treeHtml = Sami.treeHtml.replace(/href="/g, 'href="' + Sami.rootPath);
 
     // Add the left-nav tree to the page.
     $('#api-tree').html(Sami.treeHtml);
