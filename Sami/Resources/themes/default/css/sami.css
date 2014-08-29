@@ -85,6 +85,7 @@ html, body, #content {
     background-size: 100% 56px;
     overflow: auto;
     height: 100%;
+    background-attachment: local;
 }
 
 #api-tree ul {
