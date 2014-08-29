@@ -161,7 +161,7 @@ $(function() {
 
         if (expected) {
             // Open the currently selected node and its parents.
-            var container = $('#left-column');
+            var container = $('#api-tree');
             var node = $('#api-tree li[data-name="' + expected + '"]');
             // Node might not be found when simulating namespaces
             if (node) {
@@ -193,7 +193,6 @@ $(function() {
         // The selection is direct-linked when the user selects a suggestion.
         form.on('typeahead:selected', function(e, suggestion) {
             window.location = suggestion.link;
-            console.log('aaa');
         });
 
         // The form is submitted when the user hits enter.

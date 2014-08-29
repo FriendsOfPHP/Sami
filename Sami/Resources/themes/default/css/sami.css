@@ -84,6 +84,7 @@ html, body, #content {
     );
     background-size: 100% 56px;
     overflow: auto;
+    height: 100%;
 }
 
 #api-tree ul {
@@ -191,7 +192,7 @@ html, body, #content {
 
 .tt-dropdown-menu {
     overflow: auto;
-    max-height: 250px;
+    max-height: 260px;
     margin-top: 9px;
     background-color: #fff;
     border: 1px solid #ccc;
