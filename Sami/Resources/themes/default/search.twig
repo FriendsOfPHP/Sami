@@ -37,6 +37,12 @@
 
         (function() {
             var term = Sami.cleanSearchTerm();
+
+            if (!term) {
+                $('h2').hide();
+                return;
+            }
+
             $('#search').val(term);
             var container = $('.search-results');
 
