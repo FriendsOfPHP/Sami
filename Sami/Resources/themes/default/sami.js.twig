@@ -42,7 +42,7 @@
             return [];
         }
 
-        var tokens = [];
+        var tokens = [term];
         var meth = term.indexOf('::');
 
         // Split tokens into methods if "::" is found.
@@ -56,8 +56,6 @@
             tokens = tokens.concat(term.split('\\'));
         } else if (term.indexOf('_') > 0) {
             tokens = tokens.concat(term.split('_'));
-        } else {
-            tokens.push(term);
         }
 
         // Merge in splitting the string by case and return
