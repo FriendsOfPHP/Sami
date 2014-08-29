@@ -38,6 +38,7 @@
                     <li><a href="{{ path('interfaces.html') }}">Interfaces</a></li>
                     <li><a href="{{ path('traits.html') }}">Traits</a></li>
                     <li><a href="{{ path('doc-index.html') }}">Index</a></li>
+                    <li><a href="{{ path('search.html') }}">Search</a></li>
                 </ul>
             </div>
         </div>
@@ -61,10 +62,10 @@
         {% endif %}
         <form id="search-form" action="{{ path('search.html') }}" method="GET">
             <span class="glyphicon glyphicon-search"></span>
-            <input type="search"
-                   name="search"
-                   class="form-control"
-                   placeholder="Search" />
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
         </form>
     </div>
 {% endblock %}

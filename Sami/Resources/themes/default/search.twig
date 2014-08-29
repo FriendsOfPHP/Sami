@@ -44,14 +44,14 @@
             {{ block('search_index') }}
 
             var results = Sami.search(term);
+            var len = results.length;
 
-            if (results.length == 0) {
+            if (len == 0) {
+                container.html('No results were found');
                 return;
             }
 
-            var text_content = '';
-
-            for (var i = 0, len = results.length; i < len; i++) {
+            for (var i = 0, text_content = ''; i < len; i++) {
 
                 var ele = results[i];
                 var contents = '<li><h2 class="clearfix">';

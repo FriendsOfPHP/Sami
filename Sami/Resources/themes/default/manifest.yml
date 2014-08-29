@@ -12,6 +12,8 @@ static:
     'fonts/glyphicons-halflings-regular.woff': 'fonts/glyphicons-halflings-regular.woff'
     'js/bootstrap.min.js': 'js/bootstrap.min.js'
     'js/jquery-1.11.1.min.js': 'js/jquery-1.11.1.min.js'
+    'js/handlebars.min.js': 'js/handlebars.min.js'
+    'js/typeahead.min.js': 'js/typeahead.min.js'
 
 global:
     'index.twig':      'index.html'

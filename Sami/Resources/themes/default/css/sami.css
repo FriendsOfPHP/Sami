@@ -60,7 +60,6 @@ html, body, #content {
     border-right: 1px solid #ccc;
     line-height: 18px;
     font-size: 13px;
-    overflow: auto;
 }
 
 @media (max-width: 991px) {
@@ -84,6 +83,7 @@ html, body, #content {
         #EDF3FE
     );
     background-size: 100% 56px;
+    overflow: auto;
 }
 
 #api-tree ul {
@@ -162,7 +162,7 @@ html, body, #content {
 }
 
 #control-panel form {
-    margin: 4px;
+    margin: 4px 4px 5px 4px;
 }
 
 #search-form {
@@ -170,16 +170,50 @@ html, body, #content {
 }
 
 #search-form input {
-    padding: 2px 1px 1px 25px;
-    height: auto;
-    font-size: 12px;
+    width: 100%;
+    padding-left: 28px;
 }
 
-#search-form span {
+#search-form span.glyphicon-search {
     position: absolute;
-    left: 8px;
-    top: 5px;
-    font-size: 10px;
+    left: 9px;
+    top: 9px;
+    font-size: 14px;
+    z-index: 2;
+}
+
+/* Typeahead */
+
+.twitter-typeahead {
+    width: 100%;
+    z-index: 1;
+}
+
+.tt-dropdown-menu {
+    overflow: auto;
+    max-height: 250px;
+    margin-top: 9px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    padding: 8px;
+}
+
+.tt-dropdown-menu p {
+    margin: 0;
+    padding: 0;
+}
+
+.tt-suggestion {
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+    font-size: 1.1em;
+}
+
+.tt-cursor {
+    background-color: #3875D7;
+    color: #fff;
 }
 
 /** General typography **/

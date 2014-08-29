@@ -1,97 +1,148 @@
-Sami = {
-    rootPath: '',
-    searchTypeClasses: {
+(function(root) {
+
+    var bhIndex = null;
+    var rootPath = '';
+    var treeHtml = '{{ _self.element(tree, project.config('default_opened_level'), 0)|replace({"'": "\\'", "\n": ''})|raw }}';
+
+    var searchTypeClasses = {
         'Namespace': 'label-default',
         'Class': 'label-info',
         'Interface': 'label-primary',
         'Trait': 'label-success',
         'Method': 'label-danger',
         '_': 'label-warning'
-    }
-};
+    };
 
-// Cleans the provided search term, or gets the term from the query string
-// if it is not provided.
-Sami.cleanSearchTerm = function(term) {
-    // Grab from the query string
-    if (typeof term === 'undefined') {
-        var name = 'search';
-        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-        var results = regex.exec(location.search);
-        if (results === null) {
-            return null;
+    var searchIndex = [
+        {% block search_index %}
+            {% for ns in namespaces -%}
+                {"type": "Namespace", "link": "{{ namespace_path(ns) }}", "name": "{{ ns|replace({'\\': '\\\\'}) }}", "doc": "Namespace {{ ns|replace({'\\': '\\\\'}) }}"},
+            {%- endfor %}
+
+            {% for class in interfaces -%}
+                {"type": "Interface", {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
+                {{ _self.add_class_methods_index(class) }}
+            {% endfor %}
+
+            {% for class in classes -%}
+                {"type": {% if class.isTrait %}"Trait"{% else %}"Class"{% endif %}, {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
+                {{ _self.add_class_methods_index(class) }}
+            {% endfor %}
+
+            {# Override this block, search_index_extra, to add custom search entries! #}
+            {% block search_index_extra '' %}
+        {% endblock %}
+        // Fix trailing commas in the index
+        {}
+    ];
+
+    /** Tokenizes strings by namespaces and functions */
+    function tokenizer(term) {
+        if (!term) {
+            return [];
         }
-        term = decodeURIComponent(results[1].replace(/\+/g, " "));
-    }
 
-    return term.replace(/<(?:.|\n)*?>/gm, '');
-};
+        var tokens = [];
+        var meth = term.indexOf('::');
 
-// Searches through the search index for matches
-Sami.search = function(term) {
-    var lterm = term.toLowerCase(), results = [];
-    for (var i = 0, len = Sami.searchIndex.length; i < len; i++) {
-        var ele = Sami.searchIndex[i];
-        if (ele.name && ele.name.toLowerCase().indexOf(lterm) > -1) {
-            // Fix the element links based on the current page depth.
-            if (Sami.rootPath) {
-                ele.link = ele.link.replace('href="', 'href="' + Sami.rootPath);
-                ele.fromLink = ele.fromLink.replace('href="', 'href="' + Sami.rootPath);
+        // Split tokens into methods if "::" is found.
+        if (meth > -1) {
+            tokens.push(term.substr(meth + 2));
+            term = term.substr(0, meth - 2);
+        }
+
+        // Split by namespace or fake namespace.
+        if (term.indexOf('\\') > -1) {
+            tokens = tokens.concat(term.split('\\'));
+        } else if (term.indexOf('_') > 0) {
+            tokens = tokens.concat(term.split('_'));
+        } else {
+            tokens.push(term);
+        }
+
+        // Merge in splitting the string by case and return
+        return tokens.concat(term.match(/[A-Z][a-z]+/g));
+    };
+
+    root.Sami = {
+        /**
+         * Cleans the provided term. If no term is provided, then one is
+         * grabbed from the query string "search" parameter.
+         */
+        cleanSearchTerm: function(term) {
+            // Grab from the query string
+            if (typeof term === 'undefined') {
+                var name = 'search';
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+                var results = regex.exec(location.search);
+                if (results === null) {
+                    return null;
+                }
+                term = decodeURIComponent(results[1].replace(/\+/g, " "));
             }
-            results.push(ele);
+
+            return term.replace(/<(?:.|\n)*?>/gm, '');
+        },
+
+        /** Searches through the index for a given term */
+        search: function(term) {
+            // Create a new search index if needed
+            if (!bhIndex) {
+                bhIndex = new Bloodhound({
+                    limit: 500,
+                    local: searchIndex,
+                    datumTokenizer: function (d) {
+                        return tokenizer(d.name);
+                    },
+                    queryTokenizer: tokenizer
+                });
+                bhIndex.initialize();
+            }
+
+            results = [];
+            bhIndex.get(term, function(matches) {
+                results = matches;
+            });
+
+            if (!rootPath) {
+                return results;
+            }
+
+            // Fix the element links based on the current page depth.
+            return $.map(results, function(ele) {
+                if (ele.link.indexOf('..') > -1) {
+                    return ele;
+                }
+                ele.link = rootPath + ele.link;
+                if (ele.fromLink) {
+                    ele.fromLink = rootPath + ele.fromLink;
+                }
+                return ele;
+            });
+        },
+
+        /** Get a search class for a specific type */
+        getSearchClass: function(type) {
+            return searchTypeClasses[type] || searchTypeClasses['_'];
+        },
+
+        /** Add the left-nav tree to the site */
+        injectApiTree: function(ele) {
+            ele.html(treeHtml);
         }
-    }
-    return results;
-};
+    };
 
-// Get a search class for a specific type
-Sami.getSearchClass = function(type) {
-    return Sami.searchTypeClasses[type] || Sami.searchTypeClasses['_'];
-}
+    $(function() {
+        // Modify the HTML to work correctly based on the current depth
+        rootPath = $('body').attr('data-root-path');
+        treeHtml = treeHtml.replace(/href="/g, 'href="' + rootPath);
+        Sami.injectApiTree($('#api-tree'));
+    });
 
-Sami.searchIndex = [
-    {% block search_index %}
-        {% for ns in namespaces -%}
-            {"type": "Namespace", "link": "{{ namespace_path(ns) }}", "name": "{{ ns|replace({'\\': '\\\\'}) }}", "doc": "Namespace {{ ns|replace({'\\': '\\\\'}) }}"},
-        {%- endfor %}
-
-        {% for class in interfaces -%}
-            {"type": "Interface", {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
-            {{ _self.add_class_methods_index(class) }}
-        {% endfor %}
-
-        {% for class in classes -%}
-            {"type": {% if class.isTrait %}"Trait"{% else %}"Class"{% endif %}, {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
-            {{ _self.add_class_methods_index(class) }}
-        {% endfor %}
-
-        {# Override this block, search_index_extra, to add custom search entries! #}
-        {% block search_index_extra '' %}
-    {% endblock %}
-    // Fix trailing commas in the index
-    {}
-];
-
-{% macro add_class_methods_index(class) %}
-    {% if class.methods %}
-        {% set from_name = class.name|replace({'\\': '\\\\'}) %}
-        {% set from_link = class_path(class) %}
-        {% for meth in class.methods %}
-            {"type": "Method", "fromName": "{{ from_name }}", "fromLink": "{{ from_link }}", "link": "{{ method_path(meth) }}", "name": "{{ meth|replace({'\\': '\\\\'}) }}", "doc": "{{ meth.shortdesc|desc(class)|json_encode }}"},
-        {% endfor %}
-    {% endif %}
-{% endmacro %}
-
-Sami.treeHtml = '{{ _self.element(tree, project.config('default_opened_level'), 0)|replace({"'": "\\'", "\n": ''})|raw }}';
+    return root.Sami;
+})(window);
 
 $(function() {
-
-    // Modify the HTML to work correctly based on the current depth
-    Sami.rootPath = $('body').attr('data-root-path');
-    Sami.treeHtml = Sami.treeHtml.replace(/href="/g, 'href="' + Sami.rootPath);
-
-    // Add the left-nav tree to the page.
-    $('#api-tree').html(Sami.treeHtml);
 
     // Enable the version switcher
     $('#version-switcher').change(function() {
@@ -124,7 +175,47 @@ $(function() {
         }
 
     {% endblock %}
+
+    {% verbatim %}
+        var form = $('#search-form .typeahead');
+        form.typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        }, {
+            name: 'search',
+            displayKey: 'name',
+            source: function (q, cb) {
+                cb(Sami.search(q));
+            }
+        });
+
+        // The selection is direct-linked when the user selects a suggestion.
+        form.on('typeahead:selected', function(e, suggestion) {
+            window.location = suggestion.link;
+            console.log('aaa');
+        });
+
+        // The form is submitted when the user hits enter.
+        form.keypress(function (e) {
+            if (e.which == 13) {
+                $('#search-form').submit();
+                return true;
+            }
+        });
+
+    {% endverbatim %}
 });
+
+{% macro add_class_methods_index(class) %}
+    {% if class.methods %}
+        {% set from_name = class.name|replace({'\\': '\\\\'}) %}
+        {% set from_link = class_path(class) %}
+        {% for meth in class.methods %}
+            {"type": "Method", "fromName": "{{ from_name }}", "fromLink": "{{ from_link }}", "link": "{{ method_path(meth) }}", "name": "{{ meth|replace({'\\': '\\\\'}) }}", "doc": "{{ meth.shortdesc|desc(class)|json_encode }}"},
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
 
 {% macro element(tree, opened, depth) %}
     <ul>
