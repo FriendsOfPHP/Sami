@@ -61,7 +61,9 @@
         }
 
         // Merge in splitting the string by case and return
-        return tokens.concat(term.match(/[A-Z][a-z]+/g));
+        tokens = tokens.concat(term.match(/(([A-Z]?[^A-Z]*)|([a-z]?[^a-z]*))/g).slice(0,-1));
+
+        return tokens;
     };
 
     root.Sami = {
@@ -94,7 +96,7 @@
                     datumTokenizer: function (d) {
                         return tokenizer(d.name);
                     },
-                    queryTokenizer: tokenizer
+                    queryTokenizer: Bloodhound.tokenizers.whitespace
                 });
                 bhIndex.initialize();
             }
