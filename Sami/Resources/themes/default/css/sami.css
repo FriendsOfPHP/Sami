@@ -145,8 +145,8 @@ html, body, #content {
     color: #222;
 }
 
-#api-tree div.leaf {
-    /* padding: 0 0 0 34px; */
+#api-tree div.leaf a {
+    margin-left: 20px;
 }
 
 #api-tree .hd span {
