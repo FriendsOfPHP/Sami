@@ -231,3 +231,65 @@ Files are contained into sections, depending on how Sami needs to treat them:
 .. _Symfony API: http://api.symfony.com/
 .. _phar file:   http://get.sensiolabs.org/sami.phar
 .. _Finder:      http://symfony.com/doc/current/components/finder.html
+
+Search Index
+~~~~~~~~~~~~
+
+The autocomplete and search functionality of Sami is provided through a
+search index that is generated based on the classes, namespaces, interfaces,
+and traits of a project. You can customize the search index by overriding the
+``search_index_extra`` block of ``sami.js.twig``.
+
+The ``search_index_extra`` allows you to extend the default theme and add more
+entries to the index. For example, some projects implement magic methods that
+are dynamically generated at runtime. You might wish to document these methods
+while generating API documentation and add them to the search index.
+
+Each entry in the search index is a JavaScript object that contains the
+following keys:
+
+type
+    The type associated with the entry. Built-in types are "Class",
+    "Namespace", "Interface", "Trait". You can add additional types specific
+    to an application, and the type information will appear next to the search
+    result.
+
+name
+    The name of the entry. This is the element in the index that is searchable
+    (e.g., class name, namespace name, etc).
+
+fromName
+    The parent of the element (if any). This can be used to provide context for
+    the entry. For example, the fromName of a class would be the namespace of
+    the class.
+
+fromLink
+    The link to the parent of the entry (if any). This is used to link a child
+    to a parent. For example, this would be a link from a class to the class
+    namespace.
+
+doc
+    A short text description of the entry.
+
+One such example of when overriding the index is useful could be documenting
+dynamically generated API operations of a web service client. Here's a simple
+example that adds dynamically generated API operations for a web service client
+to the search index:
+
+.. code-block:: jinja
+
+    {% extends "default/sami.js.twig" %}
+
+    {% block search_index_extra %}
+        {% for operation in operations -%}
+            {"type": "Operation", "link": "{{ operation.path }}", "name": "{{ operation.name }}", "doc": "{{ operation.doc }}"},
+        {%- endfor %}
+    {% endblock %}
+
+This example assumes that the template has a variable ``operations`` available
+which contains an array of operations.
+
+.. note::
+
+    Always include a trailing comma for each entry you add to the index. Sami
+    will take care of ensuring that trailing commas are handled properly.
