@@ -164,7 +164,7 @@ $(function() {
             var container = $('#api-tree');
             var node = $('#api-tree li[data-name="' + expected + '"]');
             // Node might not be found when simulating namespaces
-            if (node) {
+            if (node.length > 0) {
                 node.addClass('active').addClass('opened');
                 node.parents('li').addClass('opened');
                 var scrollPos = node.offset().top - container.offset().top + container.scrollTop();
