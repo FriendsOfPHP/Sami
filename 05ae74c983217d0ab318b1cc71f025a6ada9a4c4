@@ -1,0 +1,355 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T04:50:36Z
+
+First of all, thank you so much for working on this, this is really much appreciated and I like it very much.
+
+I'm going to try on on some of my projects but I agree with you that the current themes (default and enhanced) should be removed in favor of this one which would become the "default" and only bundled theme. As the default theme is going to be different, people who inherited from it will have a BC break. So, we also need to bump the version to a major new one.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T04:53:51Z
+
+Really glad to hear that! Let me know if you have any suggestions or feedback. I'm not 100% sure on the multi-version support, so that would be great to test out if you could.
+
+Should I go ahead and update this PR to remove the default and enhanced themes or would you prefer to do that after this is merged?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T04:54:44Z
+
+@mtdowling Go ahead, remove the "old" themes (that could also help the code review a bit.)
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T04:55:56Z
+
+Will do.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T05:10:22Z
+
+Just tested the new theme and it looks great.
+
+Some early comments (some can probably be taken into account after merging a first version of the code):
+
+* The version switcher does not work (I've not investigated the reasons yet);
+* I have a JS error: `Uncaught TypeError: Cannot read property 'top' of undefined` coming from this line in the code `var scrollPos = node.offset().top - container.offset().top + container.scrollTop()` -- apparently, it happens after I clicked on a sub-namespace;
+* The menu on the left should not have links on "namespaces" when the project uses `simulate_namespaces`;
+* The title for classes should probably not mention the namespace as it makes for very long title sometimes and makes things less readable;
+* On a more general note, the whole interface fonts are bigger than before, not sure if this is intentional or not.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T05:13:08Z
+
+The new search engine is indeed much simpler but really less powerful. The old one has two features in one: a search engine but also a filtering system. As you type characters in the search bar, the left menu was updated with suggestions; it made looking for something really fast.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T05:21:54Z
+
+The `page_layout` global variable can be remove IIUC (it's defined here: https://github.com/fabpot/Sami/blob/master/Sami/Renderer/Renderer.php#L71.)
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T05:23:27Z
+
+I've pushed an updated and rebased PR that replaces the default and enhanced theme. I also noticed that the bootstrap drop-down menu on phones was still floating the menu elements to the rights, so I've fixed that.
+
+> The version switcher does not work (I've not investigated the reasons yet);
+
+I think that has to do with this giving the wrong path maybe: https://github.com/mtdowling/Sami/blob/bootstrap/Sami/Resources/themes/default/layout/layout.twig#L87
+
+> The title for classes should probably not mention the namespace as it makes for very long title sometimes and makes things less readable;
+
+Makes sense considering the breadcrumbs give that information anyways.
+
+> On a more general note, the whole interface fonts are bigger than before, not sure if this is intentional or not.
+
+This is mostly just a side effect of using Bootstrap. Do you want them smaller?
+
+> search engine but also a filtering system
+
+Yeah, the new search engine doesn't provide the filtering. I don't know if I'll be able to implement that anytime soon though. Maybe this is something added back in later? Potentially if we add support for partial caching (building up the index on each page would be pretty expensive when building a project).
+
+> The page_layout global variable can be remove IIUC (it's defined here: https://github.com/fabpot/Sami/blob/master/Sami/Renderer/Renderer.php#L71.)
+
+Ok, I'll remove it.
+
+I'll take a look at your feedback and see if I can make some progress.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T05:30:59Z
+
+> This is mostly just a side effect of using Bootstrap. Do you want them smaller?
+
+If this is easy enough, yes; if not, nevermind.
+
+> Yeah, the new search engine doesn't provide the filtering. I don't know if I'll be able to implement that anytime soon though. Maybe this is something added back in later? Potentially if we add support for partial caching (building up the index on each page would be pretty expensive when building a project).
+
+Ok let's create an issue to see if it makes sense to reimplement it later on.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T05:32:39Z
+
+I've fixed the following issues:
+
+* The menu on the left should not have links on "namespaces" when the project uses simulate_namespaces;
+* Removed page_layout
+* Removed namespaces from class titles
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T05:39:01Z
+
+The JS error should be fixed now as well.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T05:51:49Z
+
+Can you change the version to 3.0 in `composer.json` and `Sami/Sami.php`?
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T05:58:16Z
+
+I've updated the version number and added a fix for the drop down menu based on your feedback (I used `window.location` instead because we removed the frames).
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T06:04:14Z
+
+Weird, I can't reproduce the JS error. Which project are you building and which browser are you using?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T06:14:15Z
+
+In the index, if you have methods starting with `_`, they are listed correctly but the bar at the top does not contain `_`, only letters.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T06:15:17Z
+
+I noticed the "_" thing too. I saw the same behavior using the "enhanced" theme though, so I don't know why that's happening.
+
+It's present on the current symfony docs: http://api.symfony.com/2.5/doc-index.html#letter_
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T06:42:28Z
+
+Brain dump:
+
+As we are not using frames anymore (which is a good thing), we cannot cache pages from one version to the next as we did before; if a class did not change from one version to the next one, we did not render it again as the HTML would be similar. Now, that's not true anymore as the menu can be different and the selected version is going to be different as well.
+
+So, I'm afraid that we need to remove the cache layer altogether.
+
+Two consequences:
+
+* The rendering is going to be slower than before;
+
+* The HTML size for project is going to be significantly higher (14M vs 3.1M for Twig master for example).
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T06:48:51Z
+
+Yeah, that is unfortunate. The rendering time is much slower and the size of the docs as a whole is bigger because the left-nav is re-rendered for each page. We can't solve the size problem easily (or probably at all), but the time spent rendering could potentially improve with the addition of a partial cache for the left nav (e.g., https://github.com/asm89/twig-cache-extension). Maybe we could do something similar that stores the left-nav in memory after the first render without the need of this extension?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T06:52:06Z
+
+A simple way to cache the mean is to render it once and pass the rendered HTML as a variable to the other templates.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-08-28T07:15:21Z
+
+Why don't load left navigation via ajax on each page? Then each page will just instruct navigation to scroll down/expand needed element.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T07:34:06Z
+
+I tried implementing a cache that would use the same rendered menu for each page. I implemented it in a generic way, calling it "static_templates". It works pretty well and cuts the build time down to about 1/3 of what it currently is. The problem is that the URLs in the left-nav are all relative, so the links get off once you've descended into a path (e.g., you get stuff like ns/foo/ns/foo). Since it doesn't really solve the problem, I'm not pushing it, but here's the patch: https://gist.github.com/mtdowling/19ed3b9d233609c9a3ed
+
+@fabpot Would using an ajax loaded nav as @aik099 make caching work again?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T07:35:21Z
+
+Would Ajax loading work when viewing the HTML files offline?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-08-28T07:39:07Z
+
+> Would Ajax loading work when viewing the HTML files offline?
+
+Sure, if browser supports this. If however you use `file://` protocol to access the documentation then in Firefox at least some of JavaScript can be blocked. But I guess Sami themes don't have support for such `file://` protocol anyway.
+
+Or maybe I misunderstood `offline` viewing? How is that possible to view docs posted on web server without i-net connection?
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T07:42:24Z
+
+Just checked, and no, it would not work with the file protocol due to the fact the JavaScript will not allow access  to the local filesystem. You'd need to run a web server locally in order to view the docs correctly. This doesn't seem like a good option to me. I'd rather have longer build times and larger files than not be able to view docs locally from disk.
+
+My static_templates idea could work, but I'd need to use absolute paths rather than relative paths. I'm not sure if this is possible without asking the user for a base_url.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T07:43:10Z
+
+@aik099 The current themes works perfectly well on Firefox with the file:// protocol. On Chrome, it does not work because of security restriction (so the left menu is not displayed).
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-28T07:44:24Z
+
+@mtdowling Using relative URLs everywhere is nice as this is portable; you can host the files anywhere on your website and move things around without any specific configuration.
+
+Well, I think longer build times and larger files is the way to go then.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-08-28T07:44:47Z
+
+> I'm not sure if this is possible without asking the user for a base_url.
+
+That might not be a bad idea, because you always know where generated documentation will be deployed. Base url in fact can be just `/` to indicate that docs are deployed in the root of DocumentRoot of web server.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T07:51:15Z
+
+> Using relative URLs everywhere is nice as this is portable; you can host the files anywhere on your website and move things around without any specific configuration.
+
+Agreed. Longer builds and larger files seems like a reasonable tradeoff for getting rid of frames.
+
+We talked about font size eariler. I think this would take a non-trivial amount of time to make them smaller, so I'd prefer to leave it as is for now.
+
+So I guess the remaining items I know about so far are:
+
+1. The JS error: I'm not sure which browser and project reproduces this
+2. Caching: Should this be removed?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-08-28T07:55:56Z
+
+> Agreed. Longer builds and larger files seems like a reasonable tradeoff for getting rid of frames.
+
+Why you don't like frames so much. The only problem I have with currently used theme is that url of a page doesn't change. I've suggested somewhere that we can use `pushState` to make URL change when browser supports HTML5, but this was ignored.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T08:58:05Z
+
+I'm going to add some updates to the search functionality tomorrow morning. I'll move the search index to a JavaScript file that's included on each page. This script will contain the search index and provide relative urls based on the current page (this can be achieved by tracking the path segments of each file in a twig template and using that data in JavaScript via an attribute stored on the body).
+
+A similar approach could be used for generating the left nav on each page load if the tree was stored in JS and the relative paths were tracked in the same way. This would reduce the size and build time, and could potentially allow the cache to still work.
+
+I'll do more digging tomorrow.
+
+> On Aug 28, 2014, at 12:55 AM, Alexander Obuhovich <notifications@github.com> wrote:
+>
+> Agreed. Longer builds and larger files seems like a reasonable tradeoff for getting rid of frames.
+>
+> Why you don't like frames so much. The only problem I have with currently used theme is that url of a page doesn't change. I've suggested somewhere that we can use pushState to make URL change when browser supports HTML5, but this was ignored.
+>
+> —
+> Reply to this email directly or view it on GitHub.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-08-28T09:28:03Z
+
+Great.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-28T23:52:52Z
+
+I've updated the template to use javascript to dynamically inject the left nav on each page load. This significantly reduces the file size of the build and reduces the time to build docs. For the AWS SDK (with Guzzle and JMESPath), this reduced the file size from 67M to 9.6M, and the render time from 1.11m to 27s. I think this also allows the cache stuff to still work similarly to how it did before because the left-nav and search index is not rendered on each page, but only in sami.js.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-08-29T04:45:25Z
+
+I just pushed a commit that now implements a similar autocomplete mechanism found in the "enhanced" sami template.
+
+The search engine now uses Twitter's typeahead and Bloodhound plugins. When entering search terms, suggested links are provided below the search box. Selecting an auto-completed term will take you directly to the page, while hitting enter on the form will take you to the search page. Both the search page and auto-complete searches use bloodhound for the search engine.
+
+I've also added a "Search" link was added to the menu so that mobile users will have a search function when the left-nav disappears.
+
+Ok, so now to sum up the improvements:
+
+1. Building the docs for this theme should be about the same size as the "enhanced" theme even though we aren't using frames.
+2. Building docs for this theme should take about the same amount of time as the "enhanced" theme.
+3. There is now an auto-complete widget for the search form.
+4. There is a search page which didn't exist in the previous theme.
+5. The search index allows users to add custom search terms and types by extending the `search_index_extra` block. I plan on using this in several projects to document dynamically generated content (e.g., web service operations).
+
+![screen shot 2014-08-28 at 9 51 11 pm](https://cloud.githubusercontent.com/assets/190930/4086526/4eed4bee-2f38-11e4-8254-c12b20571bf2.png)
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-08-29T06:51:48Z
+
+The `search_index_extra` sounds interesting. Can you provide any usage example? Maybe update to `README.md` is also required to let users know that such config option exists.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-09-03T17:38:52Z
+
+The `search_index_extra` allows people to extend the default theme and add more entries to the index. Each entry in the search index is a javascript object that contains the following keys:
+
+- type: The type associated with the entry. Built-in types are "Class", "Namespace", "Interface", "Trait". You can add additional types specific to an application, and the type information will appear next to the search result.
+- name: The name of the entry. This is the element in the index that is searchable (e.g., class name, namespace name, etc)
+- fromName: The parent of the element (if any). This can be used to provide context for the entry. For example, the fromName of a class would be the namespace of the class.
+- fromLink: The link to the parent of the entry (if any). This is used to link a child to a parent. For example, this would be a link from a class to the class namespace.
+- doc: Short text description of the entry.
+
+If you made a custom theme, you could override the `search_index_extra` block and add more elements. This could be done using a twig template, or in my case, through generating a twig template dynamically based on some external source of data.
+
+Edit: I've updated the readme to include this information and an example.
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-09-08T16:03:38Z
+
+Anything left to do here, @fabpot? I'm not sure about the JS error you found. If it's still there, can you give me information on how to reproduce it?
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-09-17T06:38:54Z
+
+The JS error should be fixed now. It was caused by having pages where the page does not have a corresponding element in the left-nav tree.
+
+---------------------------------------------------------------------------
+
+by kyleferguson at 2014-09-23T16:51:04Z
+
++1 This is awesome
+
+---------------------------------------------------------------------------
+
+by mtdowling at 2014-10-13T01:52:19Z
+
+Bump. We would love to have this so that we can start publishing the AWS SDK for PHP docs using Sami without requiring a fork.
+
+---------------------------------------------------------------------------
+
+by troyharvey at 2014-10-16T02:31:57Z
+
+:+1:
