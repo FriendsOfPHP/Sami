@@ -1,48 +1,44 @@
-{% extends "layout/base.twig" %}
-
-{% from "macros.twig" import class_link, namespace_link %}
-
+{% extends "layout/layout.twig" %}
+{% from "macros.twig" import breadcrumbs, render_classes, class_link, namespace_link %}
 {% block title %}{{ namespace }} | {{ parent() }}{% endblock %}
+{% block body_class 'namespace' %}
+{% block page_id 'namespace:' ~ (namespace|replace({'\\': '_'})) %}
 
-{% block body_class 'frame' %}
-
-{% block header %}
-    <div class="header">
-        <h1>{{ project.config('title') }}</h1>
-
-        <ul>
-            <li><a href="{{ path('classes-frame.html') }}">Classes</a></li>
-            <li><a href="{{ path('namespaces-frame.html') }}">Namespaces</a></li>
-        </ul>
+{% block below_menu %}
+    <div class="namespace-breadcrumbs">
+        <ol class="breadcrumb">
+            <li><span class="label label-default">Namespace</span></li>
+            {{ breadcrumbs(namespace) }}
+        </ol>
     </div>
 {% endblock %}
 
-{% block content %}
-    <h1>{{ namespace_link(namespace, {'target': 'main'}) }}</h1>
+{% block page_content %}
+
+    <div class="page-header">
+        <h1>{{ namespace }}</h1>
+    </div>
+
+    {% if subnamespaces %}
+        <h2>Namespaces</h2>
+        <div class="namespace-list">
+            {% for ns in subnamespaces %}{{ namespace_link(ns) }}{% endfor %}
+        </div>
+    {% endif %}
 
     {% if classes %}
-        <ul>
-            {% for class in classes %}
-                <li>{{ class_link(class, {'target': 'main'}) }}</li>
-            {% endfor %}
-        </ul>
+        <h2>Classes</h2>
+        {{ render_classes(classes) }}
     {% endif %}
 
     {% if interfaces %}
         <h2>Interfaces</h2>
-        <ul>
-            {% for class in interfaces %}
-                <li>{{ class_link(class, {'target': 'main'}) }}</li>
-            {% endfor %}
-        </ul>
+        {{ render_classes(interfaces) }}
     {% endif %}
 
     {% if exceptions %}
         <h2>Exceptions</h2>
-        <ul>
-            {% for class in exceptions %}
-                <li>{{ class_link(class, {'target': 'main'}) }}</li>
-            {% endfor %}
-        </ul>
+        {{ render_classes(exceptions) }}
     {% endif %}
+
 {% endblock %}

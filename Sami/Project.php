@@ -54,7 +54,7 @@ class Project
             'cache_dir' => sys_get_temp_dir().'sami/cache',
             'simulate_namespaces' => false,
             'include_parent_data' => true,
-            'theme' => 'enhanced',
+            'theme' => 'default',
         ), $config);
         $this->filesystem = new Filesystem();
 
@@ -223,6 +223,23 @@ class Project
         ksort($this->namespaceInterfaces[$namespace]);
 
         return $this->namespaceInterfaces[$namespace];
+    }
+
+    public function getNamespaceSubNamespaces($parent)
+    {
+        $prefix = strlen($parent) ? ($parent . '\\') : '';
+        $len = strlen($prefix);
+        $namespaces = array();
+
+        foreach ($this->namespaces as $sub) {
+            if (substr($sub, 0, $len) == $prefix
+                && strpos(substr($sub, $len), '\\') === false
+            ) {
+                $namespaces[] = $sub;
+            }
+        }
+
+        return $namespaces;
     }
 
     public function addClass(ClassReflection $class)

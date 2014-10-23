@@ -1,34 +1,30 @@
-{% macro attributes(attributes) %}
-    {%- for key, value in attributes %} {{ key }}="{{ value }}"{% endfor -%}
-{% endmacro %}
-
-{% macro namespace_link(namespace, attributes) -%}
-    <a href="{{ namespace_path(namespace) }}"{{ _self.attributes(attributes) }}>{{ namespace }}</a>
+{% macro namespace_link(namespace) -%}
+    <a href="{{ namespace_path(namespace) }}">{{ namespace }}</a>
 {%- endmacro %}
 
-{% macro class_link(class, attributes, absolute) -%}
+{% macro class_link(class, absolute) -%}
     {%- if class.projectclass -%}
-        <a href="{{ class_path(class) }}"{{ _self.attributes(attributes) }}>
+        <a href="{{ class_path(class) }}">
     {%- elseif class.phpclass -%}
-        <a href="http://php.net/{{ class }}"{{ _self.attributes(attributes) }}>
+        <a href="http://php.net/{{ class }}">
     {%- endif %}
-        {{- _self.abbr_class(class, absolute|default(false)) }}
+    {{- _self.abbr_class(class, absolute|default(false)) }}
     {%- if class.projectclass or class.phpclass %}</a>{% endif %}
 {%- endmacro %}
 
-{% macro method_link(method, attributes, absolute, classonly) -%}
-    <a href="{{ method_path(method) }}"{{ _self.attributes(attributes) }}>
+{% macro method_link(method, absolute, classonly) -%}
+    <a href="{{ method_path(method) }}">
         {{- _self.abbr_class(method.class) }}{% if not classonly|default(false) %}::{{ method.name }}{% endif -%}
     </a>
 {%- endmacro %}
 
-{% macro property_link(property, attributes, absolute, classonly) -%}
-    <a href="{{ property_path(property) }}"{{ _self.attributes(attributes) }}>
+{% macro property_link(property, absolute, classonly) -%}
+    <a href="{{ property_path(property) }}">
         {{- _self.abbr_class(property.class) }}{% if not classonly|default(true) %}#{{ property.name }}{% endif -%}
     </a>
 {%- endmacro %}
 
-{% macro hint_link(hints, attributes) -%}
+{% macro hint_link(hints) -%}
     {% if hints %}
         {%- for hint in hints %}
             {%- if hint.class %}
@@ -57,3 +53,34 @@
         {%- endfor -%}
     )
 {%- endmacro %}
+
+{% macro render_classes(classes) -%}
+    <div class="container-fluid underlined">
+        {% for class in classes %}
+            <div class="row">
+                <div class="col-md-6">
+                    {% if class.isInterface %}
+                        <em>{{ _self.class_link(class, true) }}</em>
+                    {% else %}
+                        {{ _self.class_link(class, true) }}
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    {{ class.shortdesc|desc(class) }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{%- endmacro %}
+
+{% macro breadcrumbs(namespace) %}
+    {% set current_ns = '' %}
+    {% for ns in namespace|split('\\') %}
+        {% if current_ns %}
+            {% set current_ns = current_ns ~ '\\' ~ ns %}
+        {% else %}
+            {% set current_ns = ns %}
+        {% endif %}
+        <li><a href="{{ namespace_path(current_ns) }}">{{ ns }}</a></li>
+    {% endfor %}
+{% endmacro %}

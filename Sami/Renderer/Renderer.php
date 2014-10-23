@@ -28,12 +28,14 @@ class Renderer
     protected $step;
     protected $tree;
     protected $indexer;
+    protected $cachedTree;
 
     public function __construct(\Twig_Environment $twig, ThemeSet $themes, Tree $tree, Indexer $indexer)
     {
         $this->twig = $twig;
         $this->themes = $themes;
         $this->tree = $tree;
+        $this->cachedTree = new \SplObjectStorage();
         $this->indexer = $indexer;
         $this->filesystem = new Filesystem();
     }
@@ -68,7 +70,6 @@ class Renderer
         $this->twig->getLoader()->setPaths(array_unique($dirs));
 
         $this->twig->addGlobal('has_namespaces', $project->hasNamespaces());
-        $this->twig->addGlobal('page_layout', 'layout/page.twig');
         $this->twig->addGlobal('project', $project);
 
         $this->renderStaticTemplates($project, $callback);
@@ -114,7 +115,7 @@ class Renderer
             'classes'    => $project->getProjectClasses(),
             'items'      => $this->getIndex($project),
             'index'      => $this->indexer->getIndex($project),
-            'tree'       => $this->tree->getTree($project),
+            'tree'       => $this->getTree($project),
         );
 
         foreach ($this->theme->getTemplates('global') as $template => $target) {
@@ -134,11 +135,14 @@ class Renderer
             }
 
             $variables = array(
-                'namespace'  => $namespace,
-                'classes'    => $project->getNamespaceClasses($namespace),
-                'interfaces' => $project->getNamespaceInterfaces($namespace),
-                'exceptions' => $project->getNamespaceExceptions($namespace),
+                'namespace'     => $namespace,
+                'subnamespaces' => $project->getNamespaceSubNamespaces($namespace),
+                'classes'       => $project->getNamespaceClasses($namespace),
+                'interfaces'    => $project->getNamespaceInterfaces($namespace),
+                'exceptions'    => $project->getNamespaceExceptions($namespace),
+                'tree'          => $this->getTree($project),
             );
+
             foreach ($this->theme->getTemplates('namespace') as $template => $target) {
                 $this->save($project, sprintf($target, str_replace('\\', '/', $namespace)), $template, $variables);
             }
@@ -158,7 +162,9 @@ class Renderer
                 'methods'    => $class->getMethods($project->getConfig('include_parent_data')),
                 'constants'  => $class->getConstants($project->getConfig('include_parent_data')),
                 'traits'     => $class->getTraits($project->getConfig('include_parent_data')),
+                'tree'       => $this->getTree($project),
             );
+
             foreach ($this->theme->getTemplates('class') as $template => $target) {
                 $this->save($project, sprintf($target, str_replace('\\', '/', $class->getName())), $template, $variables);
             }
@@ -167,7 +173,9 @@ class Renderer
 
     protected function save(Project $project, $uri, $template, $variables)
     {
-        $this->twig->getExtension('sami')->setCurrentDepth(substr_count($uri, '/'));
+        $depth = substr_count($uri, '/');
+        $this->twig->getExtension('sami')->setCurrentDepth($depth);
+        $this->twig->addGlobal('root_path', str_repeat('../', $depth));
 
         $file = $project->getBuildDir().'/'.$uri;
 
@@ -213,5 +221,14 @@ class Renderer
     protected function getProgression()
     {
         return floor((++$this->step / $this->steps) * 100);
+    }
+
+    private function getTree(Project $project)
+    {
+        if (!isset($this->cachedTree[$project])) {
+            $this->cachedTree[$project] = $this->tree->getTree($project);
+        }
+
+        return $this->cachedTree[$project];
     }
 }

@@ -29,7 +29,7 @@ use Sami\Version\SingleVersionCollection;
 
 class Sami extends Container
 {
-    const VERSION = '2.0.1-DEV';
+    const VERSION = '3.0.0-DEV';
 
     public function __construct($iterator = null, array $config = array())
     {
@@ -152,7 +152,7 @@ class Sami extends Container
             return $twig;
         };
 
-        $this['theme'] = 'enhanced';
+        $this['theme'] = 'default';
         $this['title'] = 'API';
         $this['version'] = 'master';
         $this['template_dirs'] = array();

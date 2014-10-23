@@ -16,7 +16,7 @@ $versions = GitVersionCollection::create($dir)
 ;
 
 return new Sami($iterator, array(
-    'theme'                => 'enhanced',
+    'theme'                => 'default',
     'versions'             => $versions,
     'title'                => 'Swiftmailer API',
     'build_dir'            => __DIR__.'/../build/swiftmailer/%version%',

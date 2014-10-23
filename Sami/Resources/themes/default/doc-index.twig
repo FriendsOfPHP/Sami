@@ -1,24 +1,24 @@
-{% extends page_layout %}
-
+{% extends "layout/layout.twig" %}
 {% from "macros.twig" import class_link, namespace_link, method_link, property_link %}
-
 {% block title %}Index | {{ parent() }}{% endblock %}
+{% block body_class 'doc-index' %}
 
-{% block body_class 'overview' %}
+{% block page_content %}
 
-{% block content_header %}
-    <div class="type">Index</div>
+    <div class="page-header">
+        <h1>Index</h1>
+    </div>
 
-    {% for letter in 'A'..'Z' %}
-        {% if items[letter] is defined and items[letter]|length > 1 %}
-            <a href="#letter{{ letter }}">{{ letter }}</a>
-        {% else %}
-            {{ letter }}
-        {% endif %}
-    {% endfor %}
-{% endblock %}
+    <ul class="pagination">
+        {% for letter in 'A'..'Z' %}
+            {% if items[letter] is defined and items[letter]|length > 1 %}
+                <li><a href="#letter{{ letter }}">{{ letter }}</a></li>
+            {% else %}
+                <li class="disabled"><a href="#letter{{ letter }}">{{ letter }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 
-{% block content %}
     {% for letter, elements in items -%}
         <h2 id="letter{{ letter }}">{{ letter }}</h2>
         <dl id="index">
