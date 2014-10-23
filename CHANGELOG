@@ -1,8 +1,9 @@
 CHANGELOG
 =========
 
-* 2.0.1 (2014-XX-XX)
+* 3.0.0 (2014-XX-XX)
 
+  * changed the default theme to use Twitter bootstrap
   * added trait properties/methods to the class detail page
 
 * 2.0.0 (2014-06-25)
