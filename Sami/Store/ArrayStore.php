@@ -11,10 +11,8 @@
 
 namespace Sami\Store;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Project;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Filesystem\Filesystem;
+use Sami\Reflection\ClassReflection;
 
 /**
  * Stores classes in-memory.

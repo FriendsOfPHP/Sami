@@ -11,12 +11,12 @@
 
 namespace Sami\Console;
 
-use Symfony\Component\Console\Application as BaseApplication;
-use Sami\Console\Command\UpdateCommand;
 use Sami\Console\Command\ParseCommand;
 use Sami\Console\Command\RenderCommand;
-use Sami\Sami;
+use Sami\Console\Command\UpdateCommand;
 use Sami\ErrorHandler;
+use Sami\Sami;
+use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication
 {

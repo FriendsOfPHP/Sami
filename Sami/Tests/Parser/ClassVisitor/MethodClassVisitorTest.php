@@ -19,7 +19,7 @@ class MethodClassVisitorTest extends \PHPUnit_Framework_TestCase
     {
         $class = $this->getMock('Sami\Reflection\ClassReflection', array('getTags'), array('Mock', 1));
         $property = array(
-            explode(' ', 'string askQuestion() Ask 3 questions')
+            explode(' ', 'string askQuestion() Ask 3 questions'),
         );
         $class->expects($this->any())
                 ->method('getTags')

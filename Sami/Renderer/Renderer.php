@@ -11,11 +11,11 @@
 
 namespace Sami\Renderer;
 
-use Symfony\Component\Filesystem\Filesystem;
-use Sami\Project;
-use Sami\Message;
-use Sami\Tree;
 use Sami\Indexer;
+use Sami\Message;
+use Sami\Project;
+use Sami\Tree;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Renderer
 {

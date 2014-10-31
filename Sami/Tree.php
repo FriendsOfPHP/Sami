@@ -11,8 +11,6 @@
 
 namespace Sami;
 
-use Sami\Project;
-
 class Tree
 {
     public function getTree(Project $project)

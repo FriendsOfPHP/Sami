@@ -11,10 +11,9 @@
 
 namespace Sami\Parser\ClassVisitor;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Parser\ClassVisitorInterface;
+use Sami\Reflection\ClassReflection;
 use Sami\Reflection\PropertyReflection;
-use Sami\Reflection\ParameterReflection;
 
 /**
  * Looks for @property tags on classes in the format of:
@@ -43,7 +42,7 @@ class PropertyClassVisitor implements ClassVisitorInterface
      * @param ClassReflection $class       Class reflection
      * @param string          $propertyTag Property tag contents
      *
-     * @return Boolean
+     * @return bool
      */
     protected function injectProperty(ClassReflection $class, $propertyTag)
     {
@@ -56,7 +55,7 @@ class PropertyClassVisitor implements ClassVisitorInterface
         $property->setShortDesc($data['description']);
 
         if (isset($data['hint'])) {
-           $property->setHint(array(array($data['hint'], null)));
+            $property->setHint(array(array($data['hint'], null)));
         }
 
         $class->addProperty($property);

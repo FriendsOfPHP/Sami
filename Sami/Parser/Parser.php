@@ -11,11 +11,10 @@
 
 namespace Sami\Parser;
 
-use Sami\Store\StoreInterface;
-use Sami\Reflection\LazyClassReflection;
-use Sami\Parser\Transaction;
-use Sami\Project;
 use Sami\Message;
+use Sami\Project;
+use Sami\Reflection\LazyClassReflection;
+use Sami\Store\StoreInterface;
 use Symfony\Component\Finder\Finder;
 
 class Parser
