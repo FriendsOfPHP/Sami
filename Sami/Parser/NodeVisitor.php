@@ -101,7 +101,7 @@ class NodeVisitor extends NodeVisitorAbstract
         }
     }
 
-   protected function addTrait(TraitNode $node)
+    protected function addTrait(TraitNode $node)
     {
         $class = $this->addClassOrInterface($node);
 

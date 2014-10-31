@@ -79,7 +79,7 @@ class MethodClassVisitor implements ClassVisitorInterface
                     $args[$parts['name']] = array(
                         'hint'    => $parts['hint'],
                         'name'    => $parts['name'],
-                        'default' => $parts['default']
+                        'default' => $parts['default'],
                     );
                 }
             }
@@ -89,7 +89,7 @@ class MethodClassVisitor implements ClassVisitorInterface
             'hint'        => trim($matches['hint']),
             'name'        => $matches['method'],
             'args'        => $args,
-            'description' => $matches['description']
+            'description' => $matches['description'],
         );
     }
 

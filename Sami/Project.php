@@ -227,7 +227,7 @@ class Project
 
     public function getNamespaceSubNamespaces($parent)
     {
-        $prefix = strlen($parent) ? ($parent . '\\') : '';
+        $prefix = strlen($parent) ? ($parent.'\\') : '';
         $len = strlen($prefix);
         $namespaces = array();
 
@@ -310,7 +310,7 @@ class Project
                 $this->addClass($this->store->readClass($this, $name));
             } catch (\InvalidArgumentException $e) {
                 // probably a PHP built-in class
-                return null;
+                return;
             }
         }
 
@@ -362,7 +362,7 @@ class Project
         $this->read();
     }
 
-    static public function isPhpTypeHint($hint)
+    public static function isPhpTypeHint($hint)
     {
         return in_array(strtolower($hint), array('', 'scalar', 'object', 'boolean', 'bool', 'int', 'integer', 'array', 'string', 'mixed', 'void', 'null', 'resource', 'double', 'float', 'callable'));
     }

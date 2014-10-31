@@ -115,9 +115,9 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                             array( // First found tag.
                                 array(array('\SingleClass', false), array('\MultipleClass', true)), // Array from data types.
                                 'Property Description',
-                            )
-                        )
-                    )
+                            ),
+                        ),
+                    ),
                 ),
             ),
             array('
@@ -132,9 +132,9 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                                 array(array('\SingleClass', false), array('\MultipleClass', true)), // Array from data types.
                                 'paramName',
                                 'Param Description',
-                            )
-                        )
-                    )
+                            ),
+                        ),
+                    ),
                 ),
             ),
             array('
@@ -149,15 +149,15 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                             array( // First found tag.
                                 '\SingleClass1',
                                 'Exception Description One',
-                            )
+                            ),
                         ),
                         'throws' => array( // Array from found tags.
                             array( // Second found tag.
                                 '\SingleClass2',
                                 'Exception Description Two',
-                            )
+                            ),
                         ),
-                    )
+                    ),
                 ),
             ),
             array('
@@ -171,9 +171,9 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                             array( // First found tag.
                                 array(array('\SingleClass', false), array('\MultipleClass', true)), // Array from data types.
                                 'Return Description',
-                            )
-                        )
-                    )
+                            ),
+                        ),
+                    ),
                 ),
             ),
             array('
@@ -212,7 +212,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                         'uses' => array('MyClass::$items to retrieve the count from.'),
                         'version' => array('1.0.1'),
                         'unknown' => array('any text'),
-                    )
+                    ),
                 ),
            ),
         );
