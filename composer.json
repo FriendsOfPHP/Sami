@@ -25,7 +25,14 @@
         "phpdocumentor/reflection-docblock": "~2.0"
     },
     "autoload": {
-        "psr-0": { "Sami": "." }
+        "psr-4": {
+            "Sami\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sami\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "branch-alias": {

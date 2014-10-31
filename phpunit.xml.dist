@@ -13,7 +13,7 @@
 >
     <testsuites>
         <testsuite name="Sami Test Suite">
-            <directory>./Sami/Tests</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
