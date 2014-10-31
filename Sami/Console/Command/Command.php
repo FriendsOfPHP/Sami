@@ -11,17 +11,17 @@
 
 namespace Sami\Console\Command;
 
+use Sami\Message;
+use Sami\Parser\Transaction;
+use Sami\Project;
+use Sami\Renderer\Diff;
+use Sami\Sami;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Sami\Sami;
-use Sami\Project;
-use Sami\Parser\Transaction;
-use Sami\Renderer\Diff;
-use Sami\Message;
 
 abstract class Command extends BaseCommand
 {

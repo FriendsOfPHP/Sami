@@ -11,8 +11,8 @@
 
 namespace Sami\Parser;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Parser\Filter\FilterInterface;
+use Sami\Reflection\ClassReflection;
 
 class ParserContext
 {

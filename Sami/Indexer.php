@@ -11,8 +11,6 @@
 
 namespace Sami;
 
-use Sami\Project;
-
 class Indexer
 {
     const TYPE_CLASS     = 1;

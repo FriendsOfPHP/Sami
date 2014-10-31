@@ -11,8 +11,8 @@
 
 namespace Sami\Parser;
 
-use phpDocumentor\Reflection\DocBlock;
 use Sami\Parser\Node\DocBlockNode;
+use phpDocumentor\Reflection\DocBlock;
 
 class DocBlockParser
 {

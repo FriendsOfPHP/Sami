@@ -11,10 +11,10 @@
 
 namespace Sami\Store;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Project;
-use Symfony\Component\Finder\Finder;
+use Sami\Reflection\ClassReflection;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 class JsonStore implements StoreInterface
 {

@@ -11,18 +11,18 @@
 
 namespace Sami\Store;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Project;
+use Sami\Reflection\ClassReflection;
 
 interface StoreInterface
 {
-    function readClass(Project $project, $name);
+    public function readClass(Project $project, $name);
 
-    function writeClass(Project $project, ClassReflection $class);
+    public function writeClass(Project $project, ClassReflection $class);
 
-    function removeClass(Project $project, $name);
+    public function removeClass(Project $project, $name);
 
-    function readProject(Project $project);
+    public function readProject(Project $project);
 
-    function flushProject(Project $project);
+    public function flushProject(Project $project);
 }

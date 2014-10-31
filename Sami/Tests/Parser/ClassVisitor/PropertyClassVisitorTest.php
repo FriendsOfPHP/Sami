@@ -11,26 +11,26 @@
 
 namespace Sami\Tests\Parser\ClassVisitor;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Parser\ClassVisitor\PropertyClassVisitor;
+use Sami\Reflection\ClassReflection;
 
 class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddsProperties()
     {
-      $class = $this->getMock( 'Sami\Reflection\ClassReflection', array('getTags'), array('Mock', 1));
-      $property = array(
-        explode(' ', '$animal Your favorite animal'),
-        explode(' ', 'string $color Your favorite color'),
-        explode(' ', '$enigma'),
-      );
-      $class->expects($this->any())->method('getTags')->with($this->equalTo('property'))->will($this->returnValue($property));
+        $class = $this->getMock( 'Sami\Reflection\ClassReflection', array('getTags'), array('Mock', 1));
+        $property = array(
+            explode(' ', '$animal Your favorite animal'),
+            explode(' ', 'string $color Your favorite color'),
+            explode(' ', '$enigma'),
+        );
+        $class->expects($this->any())->method('getTags')->with($this->equalTo('property'))->will($this->returnValue($property));
 
-      $visitor = new PropertyClassVisitor();
-      $visitor->visit($class);
+        $visitor = new PropertyClassVisitor();
+        $visitor->visit($class);
 
-      $this->assertTrue(array_key_exists('color', $class->getProperties()));
-      $this->assertTrue(array_key_exists('animal', $class->getProperties()));
-      $this->assertTrue(array_key_exists('enigma', $class->getProperties()));
+        $this->assertTrue(array_key_exists('color', $class->getProperties()));
+        $this->assertTrue(array_key_exists('animal', $class->getProperties()));
+        $this->assertTrue(array_key_exists('enigma', $class->getProperties()));
     }
 }

@@ -12,9 +12,9 @@
 namespace Sami\Tests\Parser;
 
 use Sami\Parser\ClassTraverser;
+use Sami\Project;
 use Sami\Reflection\ClassReflection;
 use Sami\Store\ArrayStore;
-use Sami\Project;
 
 class ClassTraverserTest extends \PHPUnit_Framework_TestCase
 {
