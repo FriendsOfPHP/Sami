@@ -11,8 +11,8 @@
 
 namespace Sami\Tests\Parser\ClassVisitor;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Parser\ClassVisitor\PropertyClassVisitor;
+use Sami\Reflection\ClassReflection;
 
 class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
 {

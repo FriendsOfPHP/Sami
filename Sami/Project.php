@@ -11,14 +11,14 @@
 
 namespace Sami;
 
-use Sami\Store\StoreInterface;
+use Sami\Parser\Parser;
 use Sami\Reflection\ClassReflection;
 use Sami\Reflection\LazyClassReflection;
-use Sami\Parser\Parser;
 use Sami\Renderer\Renderer;
+use Sami\Store\StoreInterface;
+use Sami\Version\SingleVersionCollection;
 use Sami\Version\Version;
 use Sami\Version\VersionCollection;
-use Sami\Version\SingleVersionCollection;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

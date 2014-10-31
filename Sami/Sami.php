@@ -11,21 +11,26 @@
 
 namespace Sami;
 
+use PhpParser\Lexer;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
+use PhpParser\Parser as PhpParser;
+use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
 use Pimple\Container;
-use Sami\Parser\CodeParser;
-use Sami\Parser\Parser;
-use Sami\Parser\NodeVisitor;
-use Sami\Parser\ParserContext;
-use Sami\Parser\DocBlockParser;
-use Sami\Parser\Filter\DefaultFilter;
 use Sami\Parser\ClassTraverser;
 use Sami\Parser\ClassVisitor;
-use Sami\Store\JsonStore;
+use Sami\Parser\CodeParser;
+use Sami\Parser\DocBlockParser;
+use Sami\Parser\Filter\DefaultFilter;
+use Sami\Parser\NodeVisitor;
+use Sami\Parser\Parser;
+use Sami\Parser\ParserContext;
 use Sami\Renderer\Renderer;
 use Sami\Renderer\ThemeSet;
 use Sami\Renderer\TwigExtension;
-use Sami\Version\Version;
+use Sami\Store\JsonStore;
 use Sami\Version\SingleVersionCollection;
+use Sami\Version\Version;
 
 class Sami extends Container
 {
@@ -92,12 +97,12 @@ class Sami extends Container
         };
 
         $this['php_parser'] = function () {
-            return new \PHPParser_Parser(new \PHPParser_Lexer());
+            return new PhpParser(new Lexer());
         };
 
         $this['php_traverser'] = function ($sc) {
-            $traverser = new \PHPParser_NodeTraverser();
-            $traverser->addVisitor(new \PHPParser_NodeVisitor_NameResolver());
+            $traverser = new NodeTraverser();
+            $traverser->addVisitor(new NameResolver());
             $traverser->addVisitor(new NodeVisitor($sc['parser_context']));
 
             return $traverser;
@@ -108,7 +113,7 @@ class Sami extends Container
         };
 
         $this['pretty_printer'] = function () {
-            return new \PHPParser_PrettyPrinter_Zend();
+            return new PrettyPrinter();
         };
 
         $this['filter'] = function () {

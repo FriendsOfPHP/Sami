@@ -11,9 +11,9 @@
 
 namespace Sami\Version;
 
-use Symfony\Component\Process\ProcessBuilder;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Finder\Glob;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 
 class GitVersionCollection extends VersionCollection
 {

@@ -5,6 +5,8 @@ CHANGELOG
 
   * changed the default theme to use Twitter bootstrap
   * added trait properties/methods to the class detail page
+  * upgraded to Pimple 3.0
+  * upgraded to PHP Parser 1.0
 
 * 2.0.0 (2014-06-25)
 

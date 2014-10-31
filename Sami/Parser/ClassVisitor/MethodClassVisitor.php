@@ -11,8 +11,8 @@
 
 namespace Sami\Parser\ClassVisitor;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Parser\ClassVisitorInterface;
+use Sami\Reflection\ClassReflection;
 use Sami\Reflection\MethodReflection;
 use Sami\Reflection\ParameterReflection;
 

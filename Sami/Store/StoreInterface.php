@@ -11,8 +11,8 @@
 
 namespace Sami\Store;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Project;
+use Sami\Reflection\ClassReflection;
 
 interface StoreInterface
 {

@@ -11,14 +11,26 @@
 
 namespace Sami\Parser;
 
+use PhpParser\Node as AbstractNode;
+use PhpParser\NodeVisitorAbstract;
+use PhpParser\Node\Stmt as StmtNode;
+use PhpParser\Node\Stmt\ClassConst as ClassConstNode;
+use PhpParser\Node\Stmt\ClassMethod as ClassMethodNode;
+use PhpParser\Node\Stmt\Class_ as ClassNode;
+use PhpParser\Node\Stmt\Interface_ as InterfaceNode;
+use PhpParser\Node\Stmt\Namespace_ as NamespaceNode;
+use PhpParser\Node\Stmt\Property as PropertyNode;
+use PhpParser\Node\Stmt\TraitUse as TraitUseNode;
+use PhpParser\Node\Stmt\Trait_ as TraitNode;
+use PhpParser\Node\Stmt\Use_ as UseNode;
+use Sami\Project;
 use Sami\Reflection\ClassReflection;
+use Sami\Reflection\ConstantReflection;
 use Sami\Reflection\MethodReflection;
 use Sami\Reflection\ParameterReflection;
 use Sami\Reflection\PropertyReflection;
-use Sami\Reflection\ConstantReflection;
-use Sami\Project;
 
-class NodeVisitor extends \PHPParser_NodeVisitorAbstract
+class NodeVisitor extends NodeVisitorAbstract
 {
     protected $context;
 
@@ -27,46 +39,46 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         $this->context = $context;
     }
 
-    public function enterNode(\PHPParser_Node $node)
+    public function enterNode(AbstractNode $node)
     {
-        if ($node instanceof \PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof NamespaceNode) {
             $this->context->enterNamespace((string) $node->name);
-        } elseif ($node instanceof \PHPParser_Node_Stmt_Use) {
+        } elseif ($node instanceof UseNode) {
             $this->addAliases($node);
-        } elseif ($node instanceof \PHPParser_Node_Stmt_Interface) {
+        } elseif ($node instanceof InterfaceNode) {
             $this->addInterface($node);
-        } elseif ($node instanceof \PHPParser_Node_Stmt_Class) {
+        } elseif ($node instanceof ClassNode) {
             $this->addClass($node);
-        } elseif ($node instanceof \PHPParser_Node_Stmt_Trait) {
+        } elseif ($node instanceof TraitNode) {
             $this->addTrait($node);
-        } elseif ($node instanceof \PHPParser_Node_Stmt_TraitUse) {
+        } elseif ($node instanceof TraitUseNode) {
             $this->addTraitUse($node);
-        } elseif ($this->context->getClass() && $node instanceof \PHPParser_Node_Stmt_Property) {
+        } elseif ($this->context->getClass() && $node instanceof PropertyNode) {
             $this->addProperty($node);
-        } elseif ($this->context->getClass() && $node instanceof \PHPParser_Node_Stmt_ClassMethod) {
+        } elseif ($this->context->getClass() && $node instanceof ClassMethodNode) {
             $this->addMethod($node);
-        } elseif ($this->context->getClass() && $node instanceof \PHPParser_Node_Stmt_ClassConst) {
+        } elseif ($this->context->getClass() && $node instanceof ClassConstNode) {
             $this->addConstant($node);
         }
     }
 
-    public function leaveNode(\PHPParser_Node $node)
+    public function leaveNode(AbstractNode $node)
     {
-        if ($node instanceof \PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof NamespaceNode) {
             $this->context->leaveNamespace();
-        } elseif ($node instanceof \PHPParser_Node_Stmt_Class || $node instanceof \PHPParser_Node_Stmt_Interface || $node instanceof \PHPParser_Node_Stmt_Trait) {
+        } elseif ($node instanceof ClassNode || $node instanceof InterfaceNode || $node instanceof TraitNode) {
             $this->context->leaveClass();
         }
     }
 
-    protected function addAliases(\PHPParser_Node_Stmt_Use $node)
+    protected function addAliases(UseNode $node)
     {
         foreach ($node->uses as $use) {
             $this->context->addAlias($use->alias, (string) $use->name);
         }
     }
 
-    protected function addInterface(\PHPParser_Node_Stmt_Interface $node)
+    protected function addInterface(InterfaceNode $node)
     {
         $class = $this->addClassOrInterface($node);
 
@@ -76,7 +88,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         }
     }
 
-    protected function addClass(\PHPParser_Node_Stmt_Class $node)
+    protected function addClass(ClassNode $node)
     {
         $class = $this->addClassOrInterface($node);
 
@@ -89,14 +101,14 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         }
     }
 
-   protected function addTrait(\PHPParser_Node_Stmt_Trait $node)
+   protected function addTrait(TraitNode $node)
     {
         $class = $this->addClassOrInterface($node);
 
         $class->setTrait(true);
     }
 
-    protected function addClassOrInterface(\PHPParser_Node_Stmt $node)
+    protected function addClassOrInterface(StmtNode $node)
     {
         $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
         $class->setModifiers($node->type);
@@ -123,7 +135,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         return $class;
     }
 
-    protected function addMethod(\PHPParser_Node_Stmt_ClassMethod $node)
+    protected function addMethod(ClassNodeMethod $node)
     {
         $method = new MethodReflection($node->name, $node->getLine());
         $method->setModifiers((string) $node->type);
@@ -167,7 +179,7 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         }
     }
 
-    protected function addProperty(\PHPParser_Node_Stmt_Property $node)
+    protected function addProperty(PropertyNode $node)
     {
         foreach ($node->props as $prop) {
             $property = new PropertyReflection($prop->name, $prop->getLine());
@@ -197,14 +209,14 @@ class NodeVisitor extends \PHPParser_NodeVisitorAbstract
         }
     }
 
-    protected function addTraitUse(\PHPParser_Node_Stmt_TraitUse $node)
+    protected function addTraitUse(TraitNodeUse $node)
     {
         foreach ($node->traits as $trait) {
             $this->context->getClass()->addTrait((string) $trait);
         }
     }
 
-    protected function addConstant(\PHPParser_Node_Stmt_ClassConst $node)
+    protected function addConstant(ClassNodeConst $node)
     {
         foreach ($node->consts as $const) {
             $constant = new ConstantReflection($const->name, $const->getLine());

@@ -11,10 +11,9 @@
 
 namespace Sami\Parser\ClassVisitor;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Parser\ClassVisitorInterface;
+use Sami\Reflection\ClassReflection;
 use Sami\Reflection\PropertyReflection;
-use Sami\Reflection\ParameterReflection;
 
 /**
  * Looks for @property tags on classes in the format of:
