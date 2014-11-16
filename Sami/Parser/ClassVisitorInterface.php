@@ -15,5 +15,5 @@ use Sami\Reflection\ClassReflection;
 
 interface ClassVisitorInterface
 {
-    function visit(ClassReflection $class);
+    public function visit(ClassReflection $class);
 }

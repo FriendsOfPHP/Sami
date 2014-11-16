@@ -28,7 +28,7 @@ class ErrorHandler
      *
      * @return The registered error handler
      */
-    static public function register()
+    public static function register()
     {
         set_error_handler(array(new static(), 'handle'));
     }

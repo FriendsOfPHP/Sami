@@ -18,7 +18,7 @@ class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddsProperties()
     {
-        $class = $this->getMock( 'Sami\Reflection\ClassReflection', array('getTags'), array('Mock', 1));
+        $class = $this->getMock('Sami\Reflection\ClassReflection', array('getTags'), array('Mock', 1));
         $property = array(
             explode(' ', '$animal Your favorite animal'),
             explode(' ', 'string $color Your favorite color'),

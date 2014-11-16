@@ -17,9 +17,9 @@ use Sami\Reflection\PropertyReflection;
 
 interface FilterInterface
 {
-    function acceptClass(ClassReflection $class);
+    public function acceptClass(ClassReflection $class);
 
-    function acceptMethod(MethodReflection $method);
+    public function acceptMethod(MethodReflection $method);
 
-    function acceptProperty(PropertyReflection $property);
+    public function acceptProperty(PropertyReflection $property);
 }

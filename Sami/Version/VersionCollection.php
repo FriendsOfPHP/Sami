@@ -26,7 +26,7 @@ abstract class VersionCollection implements \Iterator, \Countable
 
     abstract protected function switchVersion(Version $version);
 
-    static public function create()
+    public static function create()
     {
         $r = new \ReflectionClass(get_called_class());
 
