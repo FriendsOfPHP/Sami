@@ -125,7 +125,7 @@ abstract class Command extends BaseCommand
                 $this->started = false;
                 break;
             case Message::RENDER_PROGRESS:
-                list ($section, $message, $progression) = $data;
+                list($section, $message, $progression) = $data;
                 $this->displayRenderProgress($section, $message, $progression);
                 break;
         }

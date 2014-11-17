@@ -101,7 +101,7 @@ class PropertyReflection extends Reflection
         );
     }
 
-    static public function fromArray(Project $project, $array)
+    public static function fromArray(Project $project, $array)
     {
         $property = new self($array['name'], $array['line']);
         $property->shortDesc = $array['short_desc'];
