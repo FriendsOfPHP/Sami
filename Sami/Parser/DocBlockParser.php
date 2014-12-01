@@ -22,7 +22,7 @@ class DocBlockParser
         $errorMessage = '';
 
         try {
-            $docBlockContext = new DocBlock\Context($context->getNamespace(), $context->getAliases());
+            $docBlockContext = new DocBlock\Context($context->getNamespace(), $context->getAliases() ?: array());
             $docBlock = new DocBlock((string) $comment, $docBlockContext);
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
