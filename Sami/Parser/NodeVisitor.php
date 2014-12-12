@@ -135,7 +135,7 @@ class NodeVisitor extends NodeVisitorAbstract
         return $class;
     }
 
-    protected function addMethod(ClassNodeMethod $node)
+    protected function addMethod(ClassMethodNode $node)
     {
         $method = new MethodReflection($node->name, $node->getLine());
         $method->setModifiers((string) $node->type);
@@ -216,7 +216,7 @@ class NodeVisitor extends NodeVisitorAbstract
         }
     }
 
-    protected function addConstant(ClassNodeConst $node)
+    protected function addConstant(ClassConstNode $node)
     {
         foreach ($node->consts as $const) {
             $constant = new ConstantReflection($const->name, $const->getLine());
