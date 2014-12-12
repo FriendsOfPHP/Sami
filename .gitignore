@@ -1,4 +1,5 @@
-vendor
+composer.lock
 composer.phar
-build
 cache
+build
+vendor
