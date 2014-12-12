@@ -48,46 +48,27 @@ class DocBlockParser
 
     protected function parseTag(DocBlock\Tag $tag)
     {
-        $tagClass = get_class($tag);
-
-        if ('phpDocumentor\Reflection\DocBlock\Tag\VarTag' === $tagClass) {
-            /** @var DocBlock\Tag\VarTag $tag */
-
-            return array(
-                $this->parseHint($tag->getTypes()),
-                $tag->getDescription(),
-            );
+        switch (substr(get_class($tag), 38)) {
+            case 'VarTag':
+            case 'ReturnTag':
+                return array(
+                    $this->parseHint($tag->getTypes()),
+                    $tag->getDescription(),
+                );
+            case 'ParamTag':
+                return array(
+                    $this->parseHint($tag->getTypes()),
+                    ltrim($tag->getVariableName(), '$'),
+                    $tag->getDescription(),
+                );
+            case 'ThrowsTag':
+                return array(
+                    $tag->getType(),
+                    $tag->getDescription(),
+                );
+            default:
+                return $tag->getContent();
         }
-
-        if ('phpDocumentor\Reflection\DocBlock\Tag\ParamTag' === $tagClass) {
-            /** @var DocBlock\Tag\ParamTag $tag */
-
-            return array(
-                $this->parseHint($tag->getTypes()),
-                ltrim($tag->getVariableName(), '$'),
-                $tag->getDescription(),
-            );
-        }
-
-        if ('phpDocumentor\Reflection\DocBlock\Tag\ThrowsTag' === $tagClass) {
-            /** @var DocBlock\Tag\ThrowsTag $tag */
-
-            return array(
-                $tag->getType(),
-                $tag->getDescription(),
-            );
-        }
-
-        if ('phpDocumentor\Reflection\DocBlock\Tag\ReturnTag' === $tagClass) {
-            /** @var DocBlock\Tag\ReturnTag $tag */
-
-            return array(
-                $this->parseHint($tag->getTypes()),
-                $tag->getDescription(),
-            );
-        }
-
-        return $tag->getContent();
     }
 
     protected function parseHint($rawHints)
