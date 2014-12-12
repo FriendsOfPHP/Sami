@@ -4,8 +4,6 @@ static:
     'css/sami.css': 'css/sami.css'
     'css/bootstrap.min.css': 'css/bootstrap.min.css'
     'css/bootstrap-theme.min.css': 'css/bootstrap-theme.min.css'
-    'css/bootstrap.css.map': 'css/bootstrap.css.map'
-    'css/bootstrap-theme.css.map': 'css/bootstrap-theme.css.map'
     'fonts/glyphicons-halflings-regular.eot': 'fonts/glyphicons-halflings-regular.eot'
     'fonts/glyphicons-halflings-regular.svg': 'fonts/glyphicons-halflings-regular.svg'
     'fonts/glyphicons-halflings-regular.ttf': 'fonts/glyphicons-halflings-regular.ttf'
@@ -27,7 +25,7 @@ global:
     'sami.js.twig':    'sami.js'
 
 namespace:
-    'namespace.twig':   '%s.html'
+    'namespace.twig': '%s.html'
 
 class:
-    'class.twig':       '%s.html'
+    'class.twig': '%s.html'

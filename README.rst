@@ -191,30 +191,31 @@ the default theme:
         'css/sami.css': 'css/sami.css'
         'css/bootstrap.min.css': 'css/bootstrap.min.css'
         'css/bootstrap-theme.min.css': 'css/bootstrap-theme.min.css'
-        'css/bootstrap.css.map': 'css/bootstrap.css.map'
-        'css/bootstrap-theme.css.map': 'css/bootstrap-theme.css.map'
         'fonts/glyphicons-halflings-regular.eot': 'fonts/glyphicons-halflings-regular.eot'
         'fonts/glyphicons-halflings-regular.svg': 'fonts/glyphicons-halflings-regular.svg'
         'fonts/glyphicons-halflings-regular.ttf': 'fonts/glyphicons-halflings-regular.ttf'
         'fonts/glyphicons-halflings-regular.woff': 'fonts/glyphicons-halflings-regular.woff'
         'js/bootstrap.min.js': 'js/bootstrap.min.js'
         'js/jquery-1.11.1.min.js': 'js/jquery-1.11.1.min.js'
+        'js/handlebars.min.js': 'js/handlebars.min.js'
+        'js/typeahead.min.js': 'js/typeahead.min.js'
 
     global:
-        'index.twig':       'index.html'
-        'doc-index.twig':   'doc-index.html'
-        'namespaces.twig':  'namespaces.html'
-        'classes.twig':     'classes.html'
-        'interfaces.twig':  'interfaces.html'
-        'traits.twig':      'traits.html'
-        'opensearch.twig':  'opensearch.xml'
-        'search.twig':      'search.html'
+        'index.twig':      'index.html'
+        'doc-index.twig':  'doc-index.html'
+        'namespaces.twig': 'namespaces.html'
+        'classes.twig':    'classes.html'
+        'interfaces.twig': 'interfaces.html'
+        'traits.twig':     'traits.html'
+        'opensearch.twig': 'opensearch.xml'
+        'search.twig':     'search.html'
+        'sami.js.twig':    'sami.js'
 
     namespace:
-        'namespace.twig':   '%s.html'
+        'namespace.twig': '%s.html'
 
     class:
-        'class.twig':       '%s.html'
+        'class.twig': '%s.html'
 
 
 Files are contained into sections, depending on how Sami needs to treat them:
