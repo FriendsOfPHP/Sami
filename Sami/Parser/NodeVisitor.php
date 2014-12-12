@@ -209,7 +209,7 @@ class NodeVisitor extends NodeVisitorAbstract
         }
     }
 
-    protected function addTraitUse(TraitNodeUse $node)
+    protected function addTraitUse(TraitUseNode $node)
     {
         foreach ($node->traits as $trait) {
             $this->context->getClass()->addTrait((string) $trait);
