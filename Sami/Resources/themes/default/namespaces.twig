@@ -19,7 +19,7 @@
                         <ul>
                     {% set last_name = top_level %}
                 {% endif %}
-                <li><a href="{{ namespace }}.html">{{ namespace }}</a></li>
+                <li><a href="{{ namespace_path(namespace) }}">{{ namespace }}</a></li>
             {% endfor %}
                 </ul>
             </div>
