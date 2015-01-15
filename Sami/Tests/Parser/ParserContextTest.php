@@ -30,9 +30,6 @@ class ParserContextTest extends \PHPUnit_Framework_TestCase
 
         $classes = $context->leaveFile();
 
-        $this->assertContainsOnlyInstancesOf(
-            'Sami\Reflection\ClassReflection',
-            $classes
-        );
+        $this->assertContainsOnlyInstancesOf('Sami\Reflection\ClassReflection', $classes);
     }
 }

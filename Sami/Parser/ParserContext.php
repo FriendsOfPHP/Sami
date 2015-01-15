@@ -113,6 +113,7 @@ class ParserContext
         if (!isset($this->class)) {
             return;
         }
+
         $this->classes[] = $this->class;
         $this->class = null;
     }
