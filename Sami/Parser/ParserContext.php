@@ -110,6 +110,9 @@ class ParserContext
 
     public function leaveClass()
     {
+        if (!isset($this->class)) {
+            return;
+        }
         $this->classes[] = $this->class;
         $this->class = null;
     }
