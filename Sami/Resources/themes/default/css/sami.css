@@ -60,6 +60,8 @@ html, body, #content {
     border-right: 1px solid #ccc;
     line-height: 18px;
     font-size: 13px;
+    display: flex;
+    flex-flow: column;
 }
 
 @media (max-width: 991px) {
