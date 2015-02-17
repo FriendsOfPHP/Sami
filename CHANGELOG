@@ -3,6 +3,7 @@ CHANGELOG
 
 * 3.0.0 (2014-XX-XX)
 
+  * made phpdocs available when deciding to process classes/methods/...
   * changed the default theme to use Twitter bootstrap
   * added trait properties/methods to the class detail page
   * upgraded to Pimple 3.0
