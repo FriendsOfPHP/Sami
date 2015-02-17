@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2015-01-16T07:55:13Z
+
+> This doesn't fix the root cause, but it does allow for filtering out classes (ie. if SymfonyFilter is used).
+
+I'd prefer a fix for a root cause considering that it's unlikely that PHP file was tokenized wrong.
+
+---------------------------------------------------------------------------
+
+by erikwiffin at 2015-01-16T14:28:14Z
+
+I looked into it a bit more, and this might actually be the best possible fix. The problem stems from https://github.com/nikic/PHP-Parser/blob/v1.0.2/lib/PhpParser/NodeTraverser.php and the `traverseArray` function. First, it loops through each node and calls `$visitor->enterNode($node)` on them. That makes it's way to `Sami/Parser/NodeVisitor.php` and the `addClassOrInterface` function. If a class is to be filtered out, `$this->context->enterClass($class);` (line 132) is never called. Since PhpParser doesn't care that you want to filter out the class, it happily continues on to call `$visitor->leaveNode($node);`.
+
+It looks to me like unless you're willing to completely change how filtering classes works, `isset($this->class)` is going to need to be called somewhere, and `leaveClass` makes the most sense to me.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-01-16T14:47:43Z
+
+@erikwiffin , I've looked at current code I now agree with you that check you've made is the right one. So if nobody entered class, then leaving non-entered class should be ignored as well.
