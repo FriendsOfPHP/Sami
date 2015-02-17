@@ -117,18 +117,20 @@ class NodeVisitor extends NodeVisitorAbstract
         $class->setHash($this->context->getHash());
         $class->setFile($this->context->getFile());
 
-        if ($this->context->getFilter()->acceptClass($class)) {
-            $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $class);
-            $class->setDocComment($node->getDocComment());
-            $class->setShortDesc($comment->getShortDesc());
-            $class->setLongDesc($comment->getLongDesc());
-            if ($errors = $comment->getErrors()) {
-                $this->context->addErrors((string) $class, $node->getLine(), $errors);
-                $class->setErrors($errors);
-            } else {
-                $class->setTags($comment->getOtherTags());
-            }
+        $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $class);
+        $class->setDocComment($node->getDocComment());
+        $class->setShortDesc($comment->getShortDesc());
+        $class->setLongDesc($comment->getLongDesc());
+        if ($errors = $comment->getErrors()) {
+            $class->setErrors($errors);
+        } else {
+            $class->setTags($comment->getOtherTags());
+        }
 
+        if ($this->context->getFilter()->acceptClass($class)) {
+            if ($errors) {
+                $this->context->addErrors((string) $class, $node->getLine(), $errors);
+            }
             $this->context->enterClass($class);
         }
 
@@ -140,42 +142,44 @@ class NodeVisitor extends NodeVisitorAbstract
         $method = new MethodReflection($node->name, $node->getLine());
         $method->setModifiers((string) $node->type);
 
+        $method->setByRef((string) $node->byRef);
+
+        foreach ($node->params as $param) {
+            $parameter = new ParameterReflection($param->name, $param->getLine());
+            $parameter->setModifiers((string) $param->type);
+            $parameter->setByRef($param->byRef);
+            if ($param->default) {
+                $parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
+            }
+            if ((string) $param->type) {
+                $parameter->setHint($this->resolveHint(array(array((string) $param->type, false))));
+            }
+            $method->addParameter($parameter);
+        }
+
+        $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $method);
+        $method->setDocComment($node->getDocComment());
+        $method->setShortDesc($comment->getShortDesc());
+        $method->setLongDesc($comment->getLongDesc());
+        if (!$errors = $comment->getErrors()) {
+            $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'));
+
+            if ($tag = $comment->getTag('return')) {
+                $method->setHint($this->resolveHint($tag[0][0]));
+                $method->setHintDesc($tag[0][1]);
+            }
+
+            $method->setExceptions($comment->getTag('throws'));
+            $method->setTags($comment->getOtherTags());
+        }
+
+        $method->setErrors($errors);
+
         if ($this->context->getFilter()->acceptMethod($method)) {
+            if ($errors) {
+                $this->context->addErrors((string) $method, $node->getLine(), $errors);
+            }
             $this->context->getClass()->addMethod($method);
-
-            $method->setByRef((string) $node->byRef);
-
-            foreach ($node->params as $param) {
-                $parameter = new ParameterReflection($param->name, $param->getLine());
-                $parameter->setModifiers((string) $param->type);
-                $parameter->setByRef($param->byRef);
-                if ($param->default) {
-                    $parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
-                }
-                if ((string) $param->type) {
-                    $parameter->setHint($this->resolveHint(array(array((string) $param->type, false))));
-                }
-                $method->addParameter($parameter);
-            }
-
-            $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $method);
-            $method->setDocComment($node->getDocComment());
-            $method->setShortDesc($comment->getShortDesc());
-            $method->setLongDesc($comment->getLongDesc());
-            if (!$errors = $comment->getErrors()) {
-                $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'));
-
-                if ($tag = $comment->getTag('return')) {
-                    $method->setHint($this->resolveHint($tag[0][0]));
-                    $method->setHintDesc($tag[0][1]);
-                }
-
-                $method->setExceptions($comment->getTag('throws'));
-                $method->setTags($comment->getOtherTags());
-            }
-
-            $this->context->addErrors((string) $method, $node->getLine(), $errors);
-            $method->setErrors($errors);
         }
     }
 
@@ -185,26 +189,28 @@ class NodeVisitor extends NodeVisitorAbstract
             $property = new PropertyReflection($prop->name, $prop->getLine());
             $property->setModifiers($node->type);
 
-            if ($this->context->getFilter()->acceptProperty($property)) {
-                $this->context->getClass()->addProperty($property);
+            $property->setDefault($prop->default);
 
-                $property->setDefault($prop->default);
-
-                $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $property);
-                $property->setDocComment($node->getDocComment());
-                $property->setShortDesc($comment->getShortDesc());
-                $property->setLongDesc($comment->getLongDesc());
-                if ($errors = $comment->getErrors()) {
-                    $this->context->addErrors((string) $property, $prop->getLine(), $errors);
-                    $property->setErrors($errors);
-                } else {
-                    if ($tag = $comment->getTag('var')) {
-                        $property->setHint($this->resolveHint($tag[0][0]));
-                        $property->setHintDesc($tag[0][1]);
-                    }
-
-                    $property->setTags($comment->getOtherTags());
+            $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $property);
+            $property->setDocComment($node->getDocComment());
+            $property->setShortDesc($comment->getShortDesc());
+            $property->setLongDesc($comment->getLongDesc());
+            if ($errors = $comment->getErrors()) {
+                $property->setErrors($errors);
+            } else {
+                if ($tag = $comment->getTag('var')) {
+                    $property->setHint($this->resolveHint($tag[0][0]));
+                    $property->setHintDesc($tag[0][1]);
                 }
+
+                $property->setTags($comment->getOtherTags());
+            }
+
+            if ($this->context->getFilter()->acceptProperty($property)) {
+                if ($errors) {
+                    $this->context->addErrors((string) $property, $prop->getLine(), $errors);
+                }
+                $this->context->getClass()->addProperty($property);
             }
         }
     }
