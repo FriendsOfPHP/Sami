@@ -25,6 +25,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class Command extends BaseCommand
 {
+    const PARSE_ERROR = 64;
+
     protected $sami;
     protected $version;
     protected $started;
@@ -78,6 +80,8 @@ abstract class Command extends BaseCommand
 
         $this->displayParseSummary();
         $this->displayRenderSummary();
+
+        return count($this->errors) ? self::PARSE_ERROR : 0;
     }
 
     public function parse(Project $project)
@@ -87,6 +91,8 @@ abstract class Command extends BaseCommand
         $project->parse($callback, $this->input->getOption('force'));
 
         $this->displayParseSummary();
+
+        return count($this->errors) ? self::PARSE_ERROR : 0;
     }
 
     public function render(Project $project)
@@ -96,6 +102,8 @@ abstract class Command extends BaseCommand
         $project->render($callback, $this->input->getOption('force'));
 
         $this->displayRenderSummary();
+
+        return count($this->errors) ? self::PARSE_ERROR : 0;
     }
 
     public function messageCallback($message, $data)

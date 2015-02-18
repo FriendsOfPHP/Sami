@@ -3,6 +3,7 @@ CHANGELOG
 
 * 3.0.1 (2015-XX-XX)
 
+  * fixed command exit code when some parsing error occur to 64
   * fixed tag parsing when the value is already an array
 
 * 3.0.0 (2015-02-17)

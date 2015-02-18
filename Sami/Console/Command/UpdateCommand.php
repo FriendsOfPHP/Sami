@@ -49,6 +49,6 @@ EOF
     {
         $output->writeln('<bg=cyan;fg=white> Updating project </>');
 
-        $this->update($this->sami['project']);
+        return $this->update($this->sami['project']);
     }
 }
