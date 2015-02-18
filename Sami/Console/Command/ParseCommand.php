@@ -57,6 +57,6 @@ EOF
     {
         $output->writeln('<bg=cyan;fg=white> Parsing project </>');
 
-        $this->parse($this->sami['project']);
+        return $this->parse($this->sami['project']);
     }
 }
