@@ -82,18 +82,14 @@ abstract class Command extends BaseCommand
 
     public function parse(Project $project)
     {
-        $callback = $this->output->isDecorated() ? array($this, 'messageCallback') : null;
-
-        $project->parse($callback, $this->input->getOption('force'));
+        $project->parse(array($this, 'messageCallback'), $this->input->getOption('force'));
 
         $this->displayParseSummary();
     }
 
     public function render(Project $project)
     {
-        $callback = $this->output->isDecorated() ? array($this, 'messageCallback') : null;
-
-        $project->render($callback, $this->input->getOption('force'));
+        $project->render(array($this, 'messageCallback'), $this->input->getOption('force'));
 
         $this->displayRenderSummary();
     }
@@ -143,11 +139,11 @@ abstract class Command extends BaseCommand
     public function displayParseProgress($progress, $class)
     {
         if ($this->started) {
-            $this->output->write("\033[2A");
+            $this->output->isDecorated() and $this->output->write("\033[2A");
         }
         $this->started = true;
 
-        $this->output->write(sprintf(
+        $this->output->isDecorated() and $this->output->write(sprintf(
             "  Parsing <comment>%s</comment>%s\033[K\n          %s\033[K\n",
             $this->renderProgressBar($progress, 50), count($this->errors) ? ' <fg=red>'.count($this->errors).' error'.(1 == count($this->errors) ? '' : 's').'</>' : '', $class->getName())
         );
@@ -156,11 +152,11 @@ abstract class Command extends BaseCommand
     public function displayRenderProgress($section, $message, $progression)
     {
         if ($this->started) {
-            $this->output->write("\033[2A");
+            $this->output->isDecorated() and $this->output->write("\033[2A");
         }
         $this->started = true;
 
-        $this->output->write(sprintf(
+        $this->output->isDecorated() and $this->output->write(sprintf(
             "  Rendering <comment>%s</comment>\033[K\n            <info>%s</info> %s\033[K\n",
             $this->renderProgressBar($progression, 50), $section, $message
         ));
@@ -172,7 +168,7 @@ abstract class Command extends BaseCommand
             return;
         }
 
-        $this->output->write(sprintf("\033[2A<info>  Parsing   done</info>\033[K\n\033[K\n\033[1A", count($this->errors) ? ' <fg=red>'.count($this->errors).' errors</>' : ''));
+        $this->output->isDecorated() and $this->output->write(sprintf("\033[2A<info>  Parsing   done</info>\033[K\n\033[K\n\033[1A", count($this->errors) ? ' <fg=red>'.count($this->errors).' errors</>' : ''));
 
         if ($this->input->getOption('verbose') && count($this->errors)) {
             foreach ($this->errors as $error) {
@@ -189,7 +185,7 @@ abstract class Command extends BaseCommand
             return;
         }
 
-        $this->output->write("\033[2A<info>  Rendering done</info>\033[K\n\033[K\n\033[1A");
+        $this->output->isDecorated() and $this->output->write("\033[2A<info>  Rendering done</info>\033[K\n\033[K\n\033[1A");
     }
 
     public function displayParseSummary()
