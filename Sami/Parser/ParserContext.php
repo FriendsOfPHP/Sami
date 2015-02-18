@@ -95,7 +95,7 @@ class ParserContext
 
     public function addError($name, $line, $error)
     {
-        $this->errors[] = sprintf('An error occurred while parsing "%s" line "%d": %s', $name, $line, $error);
+        $this->errors[] = sprintf('%s on "%s" in %s:%d', $error, $name, $this->file, $line);
     }
 
     public function getErrors()
