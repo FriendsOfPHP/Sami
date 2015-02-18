@@ -35,7 +35,7 @@ class DocBlockNode
 
         foreach ($tags as $name => $values) {
             foreach ($values as $i => $value) {
-                $tags[$name][$i] = explode(' ', $value);
+                $tags[$name][$i] = is_string($value) ? explode(' ', $value) : $value;
             }
         }
 
