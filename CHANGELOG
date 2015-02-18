@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+* 3.0.2 (2015-XX-XX)
+
+ * n/a
+
 * 3.0.1 (2015-02-18)
 
   * fixed command exit code when some parsing error occur to 64
