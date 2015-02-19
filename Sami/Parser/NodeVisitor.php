@@ -56,7 +56,7 @@ class NodeVisitor extends NodeVisitorAbstract
         } elseif ($this->context->getClass() && $node instanceof PropertyNode) {
             $this->addProperty($node);
         } elseif ($this->context->getClass() && $node instanceof ClassMethodNode) {
-            $this->addMethod($node, $this->context->getClass());
+            $this->addMethod($node);
         } elseif ($this->context->getClass() && $node instanceof ClassConstNode) {
             $this->addConstant($node);
         }
@@ -137,10 +137,10 @@ class NodeVisitor extends NodeVisitorAbstract
         return $class;
     }
 
-    protected function addMethod(ClassMethodNode $node, ClassReflection $class)
+    protected function addMethod(ClassMethodNode $node)
     {
         $method = new MethodReflection($node->name, $node->getLine());
-        $method->setClass($class);
+        $method->setClass($this->context->getClass());
         $method->setModifiers((string) $node->type);
 
         $method->setByRef((string) $node->byRef);
