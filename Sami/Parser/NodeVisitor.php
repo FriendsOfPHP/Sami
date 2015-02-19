@@ -176,10 +176,11 @@ class NodeVisitor extends NodeVisitorAbstract
         $method->setErrors($errors);
 
         if ($this->context->getFilter()->acceptMethod($method)) {
+            $this->context->getClass()->addMethod($method);
+
             if ($errors) {
                 $this->context->addErrors((string) $method, $node->getLine(), $errors);
             }
-            $this->context->getClass()->addMethod($method);
         }
     }
 
@@ -207,10 +208,11 @@ class NodeVisitor extends NodeVisitorAbstract
             }
 
             if ($this->context->getFilter()->acceptProperty($property)) {
+                $this->context->getClass()->addProperty($property);
+
                 if ($errors) {
                     $this->context->addErrors((string) $property, $prop->getLine(), $errors);
                 }
-                $this->context->getClass()->addProperty($property);
             }
         }
     }
