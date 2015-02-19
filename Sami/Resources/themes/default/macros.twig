@@ -6,7 +6,7 @@
     {%- if class.projectclass -%}
         <a href="{{ class_path(class) }}">
     {%- elseif class.phpclass -%}
-        <a href="http://php.net/{{ class }}">
+        <a target="_blank" href="http://php.net/{{ class }}">
     {%- endif %}
     {{- _self.abbr_class(class, absolute|default(false)) }}
     {%- if class.projectclass or class.phpclass %}</a>{% endif %}
