@@ -130,7 +130,7 @@ Now that we have a configuration file, let's generate the API documentation:
 
 .. code-block:: bash
 
-    $ php sami.php update /path/to/config.php
+    $ php sami.phar update /path/to/config.php
 
 The generated documentation can be found under the configured ``build/``
 directory (note that the client side search engine does not work on Chrome due
@@ -146,7 +146,7 @@ if you add the ``-v`` option:
 
 .. code-block:: bash
 
-    $ php sami.php update /path/to/config.php -v
+    $ php sami.phar update /path/to/config.php -v
 
 Creating a Theme
 ----------------
