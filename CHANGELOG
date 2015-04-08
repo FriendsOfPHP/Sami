@@ -3,7 +3,8 @@ CHANGELOG
 
 * 3.0.3 (2015-XX-XX)
 
- * n/a
+ * removed deprecated usage of Symfony Yaml
+ * fixed links to php.net (to get the correct redirection)
 
 * 3.0.2 (2015-02-21)
 
