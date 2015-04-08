@@ -1,0 +1,45 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2015-03-05T15:08:36Z
+
+We have `sami.php` file too.
+
+---------------------------------------------------------------------------
+
+by NightFox7 at 2015-03-05T16:00:14Z
+
+I only included the sami.phar file to my project as it was described in the installation part. So when I use
+```
+$ php sami.php
+````
+I get the following error message: Could not open input file: sami.php
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-03-05T16:02:23Z
+
+I guess, when Sami installed globally via Composer or as vendor in a project, then sami.php works.
+
+---------------------------------------------------------------------------
+
+by NightFox7 at 2015-03-05T16:27:53Z
+
+Yes I think so as well. But to follow the installation foot steps I suggest that you change the command to php sami.phar instead.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-03-05T16:42:19Z
+
+Maybe we should document both ways of running.
+
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2015-03-05T21:58:26Z
+
+:-1: for this as is.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-03-06T07:14:18Z
+
+I think this change makes sense as the README starts by recommending the user to download the phar archive. So, the first of the README uses `sami.phar` and then we are using `sami.php`. So, this PR is really a bug fix for this inconsistency.
