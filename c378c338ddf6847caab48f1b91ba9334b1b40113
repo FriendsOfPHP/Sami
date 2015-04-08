@@ -1,0 +1,40 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2015-02-19T14:44:02Z
+
+Wasn't existing implementation working. I thought php.net has some clever redirect from these urls.
+
+---------------------------------------------------------------------------
+
+by mickaelandrieu at 2015-02-19T14:54:32Z
+
+@aik099: It actualy does (I've patched it for our proprietary docs). What did you suggest ?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-02-19T14:56:47Z
+
+Like this http://www.php.net/SplFileInfo . No need to explicitly specify anything, because locale comes from cookies and needed page is shown automatically.
+
+---------------------------------------------------------------------------
+
+by mickaelandrieu at 2015-02-19T15:06:54Z
+
+This url have no extension, so I suppose this is why you can't be redirect to it.
+
+We have 2 strategies here:
+
+* Add a ``target="_blank"`` into the link, to enforce open a new tab
+* Use an url with php/html extension (I don't see why this is not "clever")
+
+The both ways your bug is fixed, but I prefer your way to do :+1:
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-02-19T15:11:24Z
+
+Ah that target=_blank. I've also reported this somewhere that links to PHP documentation just doesn't work because there catchall click handler to redirect inside the generated documentation.
+
+> Use my patch (I don't see why this is not "clever")
+
+I haven't said, that it's not clever. I just said that class documentation is shown anyway with currently implement link building. Problem was in missing target attribute.
