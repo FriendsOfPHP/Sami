@@ -111,7 +111,7 @@ class NodeVisitor extends NodeVisitorAbstract
     protected function addClassOrInterface(StmtNode $node)
     {
         $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
-        $class->setModifiers($node->type);
+        $class->setModifiers(@$node->type);
         $class->setNamespace($this->context->getNamespace());
         $class->setAliases($this->context->getAliases());
         $class->setHash($this->context->getHash());
@@ -146,6 +146,7 @@ class NodeVisitor extends NodeVisitorAbstract
 
         foreach ($node->params as $param) {
             $parameter = new ParameterReflection($param->name, $param->getLine());
+
             $parameter->setModifiers((string) $param->type);
             $parameter->setByRef($param->byRef);
             if ($param->default) {
@@ -154,6 +155,7 @@ class NodeVisitor extends NodeVisitorAbstract
             if ((string) $param->type) {
                 $parameter->setHint($this->resolveHint(array(array((string) $param->type, false))));
             }
+
             $method->addParameter($parameter);
         }
 
@@ -162,7 +164,7 @@ class NodeVisitor extends NodeVisitorAbstract
         $method->setShortDesc($comment->getShortDesc());
         $method->setLongDesc($comment->getLongDesc());
         if (!$errors = $comment->getErrors()) {
-            $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'));
+            $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'), $node);
 
             if ($tag = $comment->getTag('return')) {
                 $method->setHint($this->resolveHint($tag[0][0]));
@@ -261,7 +263,19 @@ class NodeVisitor extends NodeVisitorAbstract
 
         foreach ($tags as $i => $tag) {
             $parameter = $method->getParameter($tag[1] ? $tag[1] : $i);
+
+            $shortDesc = $tag[2];
+
+            $matches = [];
+            if (preg_match('#{@see ([\w|\\\]+)::(\w+)}#', $shortDesc, $matches)) {
+                if (class_exists($matches[1])) {
+                    $subParams = (new $matches[1]())->{$matches[2]}()['params'];
+                    $parameter->setSubParams($subParams);
+                }
+            }
+
             $parameter->setShortDesc($tag[2]);
+
             if (!$parameter->hasHint()) {
                 $parameter->setHint($this->resolveHint($tag[0]));
             }

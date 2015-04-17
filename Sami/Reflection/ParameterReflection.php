@@ -19,6 +19,7 @@ class ParameterReflection extends Reflection
     protected $byRef;
     protected $modifiers;
     protected $default;
+    protected $subParams = [];
 
     public function __toString()
     {
@@ -65,6 +66,18 @@ class ParameterReflection extends Reflection
         $this->method = $method;
     }
 
+    public function setSubParams(array $params)
+    {
+        foreach ($params as $name => $param) {
+            $this->subParams[$name] = new SubParamReflection($param, $name);
+        }
+    }
+
+    public function getSubParams()
+    {
+        return $this->subParams;
+    }
+
     public function toArray()
     {
         return array(
@@ -77,6 +90,7 @@ class ParameterReflection extends Reflection
             'modifiers'  => $this->modifiers,
             'default'    => $this->default,
             'is_by_ref'  => $this->byRef,
+            'sub_params' => $this->subParams,
         );
     }
 

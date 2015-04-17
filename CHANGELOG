@@ -1,11 +1,7 @@
 CHANGELOG
 =========
 
-* 3.0.4 (2015-XX-XX)
-
- * n/a
-
-* 3.0.3 (2015-04-08)
+* 3.0.3 (2015-XX-XX)
 
  * removed deprecated usage of Symfony Yaml
  * fixed links to php.net (to get the correct redirection)
