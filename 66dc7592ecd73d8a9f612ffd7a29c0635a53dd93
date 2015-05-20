@@ -1,0 +1,29 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2015-04-29T15:04:22Z
+
+Related to #159 . No side effects? Were you able to generate Symfony documentation after this change? Does it look the same?
+
+---------------------------------------------------------------------------
+
+by kdocki at 2015-05-14T17:59:42Z
+
+I was seeing this same error... I tried out Rask's steps and things appear to be back in order. Here is what I did...
+
+```
+git clone https://github.com/mpingo/Sami/tree/master
+cd Sami
+composer install
+box
+mv sami.phar ~/.bin/phars/
+cd /my/project/dir
+sami update sami.config.php
+```
+
+It works now instead of giving me an error about $type on NodeVisitor.php line 114. Just wanted to throw this in there since we are having to use this fork to generate docs on our project until this is resolved. Btw thanks @mpingo
+
+---------------------------------------------------------------------------
+
+by mpingo at 2015-05-19T13:23:55Z
+
+@aik099  I was able to generate the documentation well as per my note.
