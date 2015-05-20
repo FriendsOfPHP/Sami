@@ -111,7 +111,7 @@ class NodeVisitor extends NodeVisitorAbstract
     protected function addClassOrInterface(StmtNode $node)
     {
         $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
-        $class->setModifiers($node->type);
+        $class->setModifiers($node->getType());
         $class->setNamespace($this->context->getNamespace());
         $class->setAliases($this->context->getAliases());
         $class->setHash($this->context->getHash());
