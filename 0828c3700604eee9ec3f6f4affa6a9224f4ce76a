@@ -1,0 +1,58 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2014-06-27T15:31:33Z
+
+@fabpot , the code style check is reporting issues that existed in changed files, but not in the code changed in this PR. For example Scrutinizer CI remembers what issues exists in `master` and only reports changes in the PR branch.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-06-27T16:28:53Z
+
+I've rebased on master so now it can be merged from GitHub website.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-06-27T20:50:47Z
+
+I've fixed CS issues reported by status.fabpot.io. I've kept is a separate commit, because CS violations weren't introduced by my changes.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-20T10:26:19Z
+
+@fabpot , any opinion on this PR. Is it needed. If so, then what should I adjust for it to be merged?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2014-07-29T13:34:54Z
+
+@fabpot , ping. Please see https://github.com/fabpot/Sami/pull/91#issuecomment-49542718 .
+
+---------------------------------------------------------------------------
+
+by robfrawley at 2015-05-27T01:14:54Z
+
+Was anything like this PR ever integrated into Sami?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-05-27T01:43:21Z
+
+@fabpot , another ping. If you need anything fixed, then I can do that. Otherwise if nobody has any objections, then please merge.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-05-28T03:32:40Z
+
+This PR looks good to me.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-05-30T13:13:36Z
+
+I've squashed and rebased PR so now it can be merged.
+
+The failure of `fabbot.io` is:
+
+* not on the lines I've changed
+* probably caused by standard change, that isn't now allowing aligning of array key/value pairs
