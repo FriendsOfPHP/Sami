@@ -15,6 +15,7 @@ use Sami\Parser\Parser;
 use Sami\Reflection\ClassReflection;
 use Sami\Reflection\LazyClassReflection;
 use Sami\Renderer\Renderer;
+use Sami\RemoteRepository\AbstractRemoteRepository;
 use Sami\Store\StoreInterface;
 use Sami\Version\SingleVersionCollection;
 use Sami\Version\Version;
@@ -30,9 +31,16 @@ class Project
 {
     protected $versions;
     protected $store;
+
+    /** @var Parser */
     protected $parser;
+
+    /** @var Renderer */
     protected $renderer;
+
+    /** @var ClassReflection[] */
     protected $classes;
+
     protected $namespaceClasses;
     protected $namespaceInterfaces;
     protected $namespaceExceptions;
@@ -473,5 +481,27 @@ class Project
         if (null !== $callback) {
             call_user_func($callback, Message::RENDER_VERSION_FINISHED, $diff);
         }
+    }
+
+    public function getSourceRoot()
+    {
+        if (!$root = $this->getConfig('source_url')) {
+            return;
+        }
+
+        if (strpos($root, 'github') !== false) {
+            return $root.'/tree/'.$this->version;
+        }
+    }
+
+    public function getViewSourceUrl($relativePath, $line)
+    {
+        $remoteRepository = $this->getConfig('remote_repository');
+
+        if ($remoteRepository instanceof AbstractRemoteRepository) {
+            return $remoteRepository->getFileUrl($this->version, $relativePath, $line);
+        }
+
+        return '';
     }
 }

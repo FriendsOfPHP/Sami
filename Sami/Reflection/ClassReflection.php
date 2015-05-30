@@ -25,7 +25,9 @@ class ClassReflection extends Reflection
         3 => 'trait',
     );
 
+    /** @var Project */
     protected $project;
+
     protected $hash;
     protected $namespace;
     protected $modifiers;
@@ -36,6 +38,7 @@ class ClassReflection extends Reflection
     protected $traits = array();
     protected $parent;
     protected $file;
+    protected $relativeFilePath;
     protected $category = self::CATEGORY_CLASS;
     protected $projectClass = true;
     protected $aliases = array();
@@ -109,6 +112,25 @@ class ClassReflection extends Reflection
     public function setFile($file)
     {
         $this->file = $file;
+    }
+
+    public function setRelativeFilePath($relativeFilePath)
+    {
+        $this->relativeFilePath = $relativeFilePath;
+    }
+
+    public function getRelativeFilePath()
+    {
+        return $this->relativeFilePath;
+    }
+
+    public function getSourcePath($line = null)
+    {
+        if (null === $this->relativeFilePath) {
+            return '';
+        }
+
+        return $this->project->getViewSourceUrl($this->relativeFilePath, $line);
     }
 
     public function getProject()
@@ -433,6 +455,7 @@ class ClassReflection extends Reflection
             'tags'         => $this->tags,
             'namespace'    => $this->namespace,
             'file'         => $this->file,
+            'relative_file'=> $this->relativeFilePath,
             'hash'         => $this->hash,
             'parent'       => $this->parent,
             'modifiers'    => $this->modifiers,
@@ -451,14 +474,15 @@ class ClassReflection extends Reflection
     public static function fromArray(Project $project, $array)
     {
         $class = new self($array['name'], $array['line']);
-        $class->shortDesc  = $array['short_desc'];
-        $class->longDesc   = $array['long_desc'];
-        $class->hint       = $array['hint'];
-        $class->tags       = $array['tags'];
-        $class->namespace  = $array['namespace'];
-        $class->hash       = $array['hash'];
-        $class->file       = $array['file'];
-        $class->modifiers  = $array['modifiers'];
+        $class->shortDesc        = $array['short_desc'];
+        $class->longDesc         = $array['long_desc'];
+        $class->hint             = $array['hint'];
+        $class->tags             = $array['tags'];
+        $class->namespace        = $array['namespace'];
+        $class->hash             = $array['hash'];
+        $class->file             = $array['file'];
+        $class->relativeFilePath = $array['relative_file'];
+        $class->modifiers        = $array['modifiers'];
         if ($array['is_interface']) {
             $class->setInterface(true);
         }

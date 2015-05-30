@@ -25,6 +25,7 @@ use Sami\Parser\Filter\DefaultFilter;
 use Sami\Parser\NodeVisitor;
 use Sami\Parser\Parser;
 use Sami\Parser\ParserContext;
+use Sami\RemoteRepository\AbstractRemoteRepository;
 use Sami\Renderer\Renderer;
 use Sami\Renderer\ThemeSet;
 use Sami\Renderer\TwigExtension;
@@ -64,11 +65,14 @@ class Sami extends Container
             $project = new Project($sc['store'], $sc['_versions'], array(
                 'build_dir' => $sc['build_dir'],
                 'cache_dir' => $sc['cache_dir'],
+                'remote_repository' => $sc['remote_repository'],
                 'simulate_namespaces' => $sc['simulate_namespaces'],
                 'include_parent_data' => $sc['include_parent_data'],
                 'default_opened_level' => $sc['default_opened_level'],
                 'theme' => $sc['theme'],
                 'title' => $sc['title'],
+                'source_url' => $sc['source_url'],
+                'source_dir' => $sc['source_dir'],
             ));
             $project->setRenderer($sc['renderer']);
             $project->setParser($sc['parser']);
@@ -128,12 +132,16 @@ class Sami extends Container
             return new Renderer($sc['twig'], $sc['themes'], $sc['tree'], $sc['indexer']);
         };
 
-        $this['traverser'] = function () {
+        $this['traverser'] = function ($sc) {
             $visitors = array(
                 new ClassVisitor\InheritdocClassVisitor(),
                 new ClassVisitor\MethodClassVisitor(),
                 new ClassVisitor\PropertyClassVisitor(),
             );
+
+            if ($sc['remote_repository'] instanceof AbstractRemoteRepository) {
+                $visitors[] = new ClassVisitor\ViewSourceClassVisitor($sc['remote_repository']);
+            }
 
             return new ClassTraverser($visitors);
         };
@@ -163,6 +171,9 @@ class Sami extends Container
         $this['template_dirs'] = array();
         $this['build_dir'] = getcwd().'/build';
         $this['cache_dir'] = getcwd().'/cache';
+        $this['remote_repository'] = null;
+        $this['source_dir'] = '';
+        $this['source_url'] = '';
         $this['default_opened_level'] = 2;
 
         // simulate namespaces for projects based on the PEAR naming conventions
