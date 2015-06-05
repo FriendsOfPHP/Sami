@@ -1,9 +1,17 @@
 CHANGELOG
 =========
 
-* 1.4 (2013-XX-XX)
+* 1.4.1 (2015-06-04)
 
-  * n/a
+  * fixed compatibility with Symfony 2.7
+
+* 1.4 (2014-06-25)
+
+  * allowed permalinks in the frames interface via the URI fragment
+  * fixed --version option of console commands (renamed to --only-version)
+  * fixed CLI when passing a directory as a config file
+  * clarified error message when count of @param tags != count method params
+  * fixed project title is missing in generated documentation
 
 * 1.3 (2013-11-30)
 
