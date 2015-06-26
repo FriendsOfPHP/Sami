@@ -15,7 +15,7 @@ class GitHubRemoteRepository extends AbstractRemoteRepository
 {
     public function getFileUrl($projectVersion, $relativePath, $line)
     {
-        $url = 'https://github.com/'.$this->name.'/blob/'.str_replace('\\', '/',$projectVersion.$relativePath);
+        $url = 'https://github.com/'.$this->name.'/blob/'.str_replace('\\', '/', $projectVersion.$relativePath);
 
         if (null !== $line) {
             $url .= '#L'.(int) $line;
