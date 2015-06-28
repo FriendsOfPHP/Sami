@@ -1,9 +1,11 @@
 CHANGELOG
 =========
 
-* 3.0.4 (2015-XX-XX)
+* 3.0.6 (2015-06-28)
 
- * n/a
+ * fixed Windows \ vs / issue
+ * added "View source" link
+ * fixed compatibility with PHPParser
 
 * 3.0.3 (2015-04-08)
 
