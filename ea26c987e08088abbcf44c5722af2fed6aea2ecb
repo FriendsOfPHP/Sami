@@ -1,0 +1,40 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2015-07-09T16:28:09Z
+
+I'm not really able to "validate" this change. Anyone else?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-07-09T17:21:37Z
+
+We can use BrowserStack/SauceLabs to see generated documentation on mobile phone, but I really don't know what to look at (I do have both mentioned services accounts).
+
+@benjy , can you please attach screenshots:
+
+* from desktop and mobile before your change
+* from desktop and mobile after your change
+
+---------------------------------------------------------------------------
+
+by benjy at 2015-07-11T01:44:36Z
+
+I don't have the ability to test this to take screenshots, when I found the issue it was my live docs tested from a phone.
+
+The viewport tag is the key part of making this work, a screenshot of what you'd be expecting is here: https://developers.google.com/web/fundamentals/layouts/rwd-fundamentals/set-the-viewport?hl=en
+
+Without the tags, you'll have the full desktop site, scaled down to the mobile width. With the viewport tag, you'll have the correct responsive site.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2015-07-11T08:40:59Z
+
+I've created 2 screenshots using iOS Simulator:
+
+Before:
+![iphone5s_before](https://cloud.githubusercontent.com/assets/1277526/8633076/8f698e12-27c1-11e5-8af2-090461aa5777.png)
+
+After:
+![iphone5s_after](https://cloud.githubusercontent.com/assets/1277526/8633078/949d46f8-27c1-11e5-8883-0c3ae2440896.png)
+
+So the benefits are pretty obvious. Without this PR we've got same large website that isn't scaled at all on mobile device (especially on Retina ones).
