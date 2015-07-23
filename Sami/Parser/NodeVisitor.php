@@ -110,12 +110,14 @@ class NodeVisitor extends NodeVisitorAbstract
 
     protected function addClassOrInterface(StmtNode $node)
     {
-        $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
+        $file = $this->context->getFile();
+
+        $class = new ClassReflection((string) $node->namespacedName, $node->getLine(), $file);
         $class->setModifiers(@$node->type);
         $class->setNamespace($this->context->getNamespace());
         $class->setAliases($this->context->getAliases());
         $class->setHash($this->context->getHash());
-        $class->setFile($this->context->getFile());
+        $class->setFile($file);
 
         $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $class);
         $class->setDocComment($node->getDocComment());
@@ -139,13 +141,15 @@ class NodeVisitor extends NodeVisitorAbstract
 
     protected function addMethod(ClassMethodNode $node)
     {
-        $method = new MethodReflection($node->name, $node->getLine());
+        $file = $this->context->getFile();
+
+        $method = new MethodReflection($node->name, $node->getLine(), $file);
         $method->setModifiers((string) $node->type);
 
         $method->setByRef((string) $node->byRef);
 
         foreach ($node->params as $param) {
-            $parameter = new ParameterReflection($param->name, $param->getLine());
+            $parameter = new ParameterReflection($param->name, $param->getLine(), $file);
 
             $parameter->setModifiers((string) $param->type);
             $parameter->setByRef($param->byRef);
@@ -164,7 +168,7 @@ class NodeVisitor extends NodeVisitorAbstract
         $method->setShortDesc($comment->getShortDesc());
         $method->setLongDesc($comment->getLongDesc());
         if (!$errors = $comment->getErrors()) {
-            $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'), $node);
+            $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'));
 
             if ($tag = $comment->getTag('return')) {
                 $method->setHint($this->resolveHint($tag[0][0]));
@@ -189,7 +193,7 @@ class NodeVisitor extends NodeVisitorAbstract
     protected function addProperty(PropertyNode $node)
     {
         foreach ($node->props as $prop) {
-            $property = new PropertyReflection($prop->name, $prop->getLine());
+            $property = new PropertyReflection($prop->name, $prop->getLine(), $this->context->getFile());
             $property->setModifiers($node->type);
 
             $property->setDefault($prop->default);
@@ -229,7 +233,7 @@ class NodeVisitor extends NodeVisitorAbstract
     protected function addConstant(ClassConstNode $node)
     {
         foreach ($node->consts as $const) {
-            $constant = new ConstantReflection($const->name, $const->getLine());
+            $constant = new ConstantReflection($const->name, $const->getLine(), $this->context->getFile());
             $comment = $this->context->getDocBlockParser()->parse($node->getDocComment(), $this->context, $constant);
             $constant->setDocComment($node->getDocComment());
             $constant->setShortDesc($comment->getShortDesc());

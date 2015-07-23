@@ -96,7 +96,7 @@ class ParameterReflection extends Reflection
 
     public static function fromArray(Project $project, $array)
     {
-        $parameter = new self($array['name'], $array['line']);
+        $parameter = new self($array['name'], $array['line'], $array['file']);
         $parameter->shortDesc = $array['short_desc'];
         $parameter->longDesc  = $array['long_desc'];
         $parameter->hint      = $array['hint'];

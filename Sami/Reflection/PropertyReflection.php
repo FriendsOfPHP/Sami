@@ -103,7 +103,7 @@ class PropertyReflection extends Reflection
 
     public static function fromArray(Project $project, $array)
     {
-        $property = new self($array['name'], $array['line']);
+        $property = new self($array['name'], $array['line'], $array['file']);
         $property->shortDesc = $array['short_desc'];
         $property->longDesc  = $array['long_desc'];
         $property->hint      = $array['hint'];

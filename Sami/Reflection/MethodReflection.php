@@ -163,7 +163,7 @@ class MethodReflection extends Reflection
 
     public static function fromArray(Project $project, $array)
     {
-        $method = new self($array['name'], $array['line']);
+        $method = new self($array['name'], $array['line'], $array['file']);
         $method->shortDesc  = $array['short_desc'];
         $method->longDesc   = $array['long_desc'];
         $method->hint       = $array['hint'];
@@ -175,7 +175,7 @@ class MethodReflection extends Reflection
         $method->errors = $array['errors'];
 
         foreach ($array['parameters'] as $parameter) {
-            $parameter = ParameterReflection::fromArray($project, $parameter);
+            $parameter = ParameterReflection::fromArray($project, $parameter + ['file' => $array['file']]);
             $method->addParameter($parameter);
         }
 

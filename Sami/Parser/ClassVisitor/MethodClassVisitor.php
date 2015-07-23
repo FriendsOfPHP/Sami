@@ -110,7 +110,7 @@ class MethodClassVisitor implements ClassVisitorInterface
             return false;
         }
 
-        $method = new MethodReflection($data['name'], $class->getLine());
+        $method = new MethodReflection($data['name'], $class->getLine(), $class->getFile());
         $method->setDocComment($data['description']);
         $method->setShortDesc($data['description']);
 

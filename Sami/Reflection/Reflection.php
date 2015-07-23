@@ -24,6 +24,7 @@ abstract class Reflection
 
     protected $name;
     protected $line;
+    protected $file;
     protected $shortDesc;
     protected $longDesc;
     protected $hint;
@@ -31,10 +32,11 @@ abstract class Reflection
     protected $tags;
     protected $docComment;
 
-    public function __construct($name, $line)
+    public function __construct($name, $line, $file)
     {
         $this->name = $name;
         $this->line = $line;
+        $this->file = $file;
         $this->tags = array();
     }
 
@@ -58,6 +60,16 @@ abstract class Reflection
     public function setLine($line)
     {
         $this->line = $line;
+    }
+
+    public function getFile()
+    {
+        return substr($this->file, strpos($this->file, 'src'));
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
     }
 
     public function getShortDesc()

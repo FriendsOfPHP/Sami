@@ -450,7 +450,7 @@ class ClassReflection extends Reflection
 
     public static function fromArray(Project $project, $array)
     {
-        $class = new self($array['name'], $array['line']);
+        $class = new self($array['name'], $array['line'], $array['file']);
         $class->shortDesc  = $array['short_desc'];
         $class->longDesc   = $array['long_desc'];
         $class->hint       = $array['hint'];
@@ -475,19 +475,19 @@ class ClassReflection extends Reflection
         $class->setProject($project);
 
         foreach ($array['methods'] as $method) {
-            $method = MethodReflection::fromArray($project, $method);
+            $method = MethodReflection::fromArray($project, $method + ['file' => $array['file']]);
             $method->setClass($class);
             $class->addMethod($method);
         }
 
         foreach ($array['properties'] as $property) {
-            $property = PropertyReflection::fromArray($project, $property);
+            $property = PropertyReflection::fromArray($project, $property + ['file' => $array['file']]);
             $property->setClass($class);
             $class->addProperty($property);
         }
 
         foreach ($array['constants'] as $constant) {
-            $constant = ConstantReflection::fromArray($project, $constant);
+            $constant = ConstantReflection::fromArray($project, $constant + ['file' => $array['file']]);
             $constant->setClass($class);
             $class->addConstant($constant);
         }

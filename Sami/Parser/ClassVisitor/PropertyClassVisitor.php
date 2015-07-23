@@ -50,7 +50,7 @@ class PropertyClassVisitor implements ClassVisitorInterface
             return false;
         }
 
-        $property = new PropertyReflection($data['name'], $class->getLine());
+        $property = new PropertyReflection($data['name'], $class->getLine(), $class->getFile());
         $property->setDocComment($data['description']);
         $property->setShortDesc($data['description']);
 
