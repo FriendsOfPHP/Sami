@@ -30,8 +30,8 @@ class TwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'desc' => new \Twig_Filter_Method($this, 'parseDesc', array('needs_context' => true, 'is_safe' => array('html'))),
-            'snippet' => new \Twig_Filter_Method($this, 'getSnippet'),
+            new \Twig_SimpleFilter('desc', array($this, 'parseDesc'), array('needs_context' => true, 'is_safe' => array('html'))),
+            new \Twig_SimpleFilter('snippet', array($this, 'getSnippet')),
         );
     }
 
@@ -43,12 +43,12 @@ class TwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'namespace_path' => new \Twig_Function_Method($this, 'pathForNamespace', array('needs_context' => true)),
-            'class_path' => new \Twig_Function_Method($this, 'pathForClass', array('needs_context' => true)),
-            'method_path' => new \Twig_Function_Method($this, 'pathForMethod', array('needs_context' => true)),
-            'property_path' => new \Twig_Function_Method($this, 'pathForProperty', array('needs_context' => true)),
-            'path' => new \Twig_Function_Method($this, 'pathForStaticFile', array('needs_context' => true)),
-            'abbr_class' => new \Twig_Function_Method($this, 'abbrClass', array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('namespace_path', array($this, 'pathForNamespace'), array('needs_context' => true)),
+            new \Twig_SimpleFunction('class_path', array($this, 'pathForClass'), array('needs_context' => true)),
+            new \Twig_SimpleFunction('method_path', array($this, 'pathForMethod'), array('needs_context' => true)),
+            new \Twig_SimpleFunction('property_path', array($this, 'pathForProperty'), array('needs_context' => true)),
+            new \Twig_SimpleFunction('path', array($this, 'pathForStaticFile'), array('needs_context' => true)),
+            new \Twig_SimpleFunction('abbr_class', array($this, 'abbrClass'), array('is_safe' => array('html'))),
         );
     }
 

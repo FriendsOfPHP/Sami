@@ -167,7 +167,7 @@
                 <td>${{ property.name }}</td>
                 <td class="last">{{ property.shortdesc|desc(class) }}</td>
                 <td>
-                    {%- if property.class is not sameas(class) -%}
+                    {%- if property.class is not same as(class) -%}
                         <small>from&nbsp;{{ property_link(property, false, true) }}</small>
                     {%- endif -%}
                 </td>
@@ -192,7 +192,7 @@
                     {%- endif %}
                 </div>
                 <div class="col-md-2">
-                    {%- if method.class is not sameas(class) -%}
+                    {%- if method.class is not same as(class) -%}
                         <small>from&nbsp;{{ method_link(method, false, true) }}</small>
                     {%- endif -%}
                 </div>
@@ -213,7 +213,7 @@
 
 {% block method %}
     <h3 id="method_{{ method.name }}">
-        <div class="location">{% if method.class is not sameas(class) %}in {{ method_link(method, false, true) }} {% endif %}at line {{ method.line }}</div>
+        <div class="location">{% if method.class is not same as(class) %}in {{ method_link(method, false, true) }} {% endif %}at line {{ method.line }}</div>
         <code>{{ block('method_signature') }}</code>
     </h3>
     <div class="details">
