@@ -16,10 +16,10 @@ namespace Sami;
  */
 class Message
 {
-    const PARSE_ERROR             = 1;
-    const PARSE_CLASS             = 2;
-    const PARSE_VERSION_FINISHED  = 3;
-    const RENDER_PROGRESS         = 4;
+    const PARSE_ERROR = 1;
+    const PARSE_CLASS = 2;
+    const PARSE_VERSION_FINISHED = 3;
+    const RENDER_PROGRESS = 4;
     const RENDER_VERSION_FINISHED = 5;
-    const SWITCH_VERSION          = 6;
+    const SWITCH_VERSION = 6;
 }

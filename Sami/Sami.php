@@ -156,9 +156,9 @@ class Sami extends Container
         $this['twig'] = function () {
             $twig = new \Twig_Environment(new \Twig_Loader_Filesystem(array('/')), array(
                 'strict_variables' => true,
-                'debug'            => true,
-                'auto_reload'      => true,
-                'cache'            => false,
+                'debug' => true,
+                'auto_reload' => true,
+                'cache' => false,
             ));
             $twig->addExtension(new TwigExtension());
 

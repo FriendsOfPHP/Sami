@@ -88,16 +88,16 @@ class PropertyReflection extends Reflection
     public function toArray()
     {
         return array(
-            'name'       => $this->name,
-            'line'       => $this->line,
+            'name' => $this->name,
+            'line' => $this->line,
             'short_desc' => $this->shortDesc,
-            'long_desc'  => $this->longDesc,
-            'hint'       => $this->hint,
-            'hint_desc'  => $this->hintDesc,
-            'tags'       => $this->tags,
-            'modifiers'  => $this->modifiers,
-            'default'    => $this->default,
-            'errors'     => $this->errors,
+            'long_desc' => $this->longDesc,
+            'hint' => $this->hint,
+            'hint_desc' => $this->hintDesc,
+            'tags' => $this->tags,
+            'modifiers' => $this->modifiers,
+            'default' => $this->default,
+            'errors' => $this->errors,
         );
     }
 
@@ -105,13 +105,13 @@ class PropertyReflection extends Reflection
     {
         $property = new self($array['name'], $array['line']);
         $property->shortDesc = $array['short_desc'];
-        $property->longDesc  = $array['long_desc'];
-        $property->hint      = $array['hint'];
-        $property->hintDesc  = $array['hint_desc'];
-        $property->tags      = $array['tags'];
+        $property->longDesc = $array['long_desc'];
+        $property->hint = $array['hint'];
+        $property->hintDesc = $array['hint_desc'];
+        $property->tags = $array['tags'];
         $property->modifiers = $array['modifiers'];
-        $property->default   = $array['default'];
-        $property->errors    = $array['errors'];
+        $property->default = $array['default'];
+        $property->errors = $array['errors'];
 
         return $property;
     }

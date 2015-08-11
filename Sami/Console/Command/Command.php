@@ -180,7 +180,7 @@ abstract class Command extends BaseCommand
 
         if ($this->input->getOption('verbose') && count($this->errors)) {
             foreach ($this->errors as $error) {
-                $this->output->write(sprintf("<fg=red>ERROR</>: "));
+                $this->output->write(sprintf('<fg=red>ERROR</>: '));
                 $this->output->writeln($error, OutputInterface::OUTPUT_RAW);
             }
             $this->output->writeln('');

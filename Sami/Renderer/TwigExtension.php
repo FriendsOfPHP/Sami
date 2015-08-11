@@ -30,7 +30,7 @@ class TwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'desc'    => new \Twig_Filter_Method($this, 'parseDesc', array('needs_context' => true, 'is_safe' => array('html'))),
+            'desc' => new \Twig_Filter_Method($this, 'parseDesc', array('needs_context' => true, 'is_safe' => array('html'))),
             'snippet' => new \Twig_Filter_Method($this, 'getSnippet'),
         );
     }
@@ -44,11 +44,11 @@ class TwigExtension extends \Twig_Extension
     {
         return array(
             'namespace_path' => new \Twig_Function_Method($this, 'pathForNamespace', array('needs_context' => true)),
-            'class_path'     => new \Twig_Function_Method($this, 'pathForClass', array('needs_context' => true)),
-            'method_path'    => new \Twig_Function_Method($this, 'pathForMethod', array('needs_context' => true)),
-            'property_path'  => new \Twig_Function_Method($this, 'pathForProperty', array('needs_context' => true)),
-            'path'           => new \Twig_Function_Method($this, 'pathForStaticFile', array('needs_context' => true)),
-            'abbr_class'     => new \Twig_Function_Method($this, 'abbrClass', array('is_safe' => array('html'))),
+            'class_path' => new \Twig_Function_Method($this, 'pathForClass', array('needs_context' => true)),
+            'method_path' => new \Twig_Function_Method($this, 'pathForMethod', array('needs_context' => true)),
+            'property_path' => new \Twig_Function_Method($this, 'pathForProperty', array('needs_context' => true)),
+            'path' => new \Twig_Function_Method($this, 'pathForStaticFile', array('needs_context' => true)),
+            'abbr_class' => new \Twig_Function_Method($this, 'abbrClass', array('is_safe' => array('html'))),
         );
     }
 
@@ -97,7 +97,7 @@ class TwigExtension extends \Twig_Extension
             $short = array_pop($parts);
         }
 
-        return sprintf("<abbr title=\"%s\">%s</abbr>", $class, $short);
+        return sprintf('<abbr title="%s">%s</abbr>', $class, $short);
     }
 
     public function parseDesc(array $context, $desc, ClassReflection $class)

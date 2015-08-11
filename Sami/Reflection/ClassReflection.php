@@ -447,54 +447,54 @@ class ClassReflection extends Reflection
     public function toArray()
     {
         return array(
-            'name'         => $this->name,
-            'line'         => $this->line,
-            'short_desc'   => $this->shortDesc,
-            'long_desc'    => $this->longDesc,
-            'hint'         => $this->hint,
-            'tags'         => $this->tags,
-            'namespace'    => $this->namespace,
-            'file'         => $this->file,
-            'relative_file'=> $this->relativeFilePath,
-            'hash'         => $this->hash,
-            'parent'       => $this->parent,
-            'modifiers'    => $this->modifiers,
-            'is_trait'     => $this->isTrait(),
+            'name' => $this->name,
+            'line' => $this->line,
+            'short_desc' => $this->shortDesc,
+            'long_desc' => $this->longDesc,
+            'hint' => $this->hint,
+            'tags' => $this->tags,
+            'namespace' => $this->namespace,
+            'file' => $this->file,
+            'relative_file' => $this->relativeFilePath,
+            'hash' => $this->hash,
+            'parent' => $this->parent,
+            'modifiers' => $this->modifiers,
+            'is_trait' => $this->isTrait(),
             'is_interface' => $this->isInterface(),
-            'aliases'      => $this->aliases,
-            'errors'       => $this->errors,
-            'interfaces'   => $this->interfaces,
-            'traits'       => $this->traits,
-            'properties'   => array_map(function ($property) { return $property->toArray(); }, $this->properties),
-            'methods'      => array_map(function ($method) { return $method->toArray(); }, $this->methods),
-            'constants'    => array_map(function ($constant) { return $constant->toArray(); }, $this->constants),
+            'aliases' => $this->aliases,
+            'errors' => $this->errors,
+            'interfaces' => $this->interfaces,
+            'traits' => $this->traits,
+            'properties' => array_map(function ($property) { return $property->toArray(); }, $this->properties),
+            'methods' => array_map(function ($method) { return $method->toArray(); }, $this->methods),
+            'constants' => array_map(function ($constant) { return $constant->toArray(); }, $this->constants),
         );
     }
 
     public static function fromArray(Project $project, $array)
     {
         $class = new self($array['name'], $array['line']);
-        $class->shortDesc        = $array['short_desc'];
-        $class->longDesc         = $array['long_desc'];
-        $class->hint             = $array['hint'];
-        $class->tags             = $array['tags'];
-        $class->namespace        = $array['namespace'];
-        $class->hash             = $array['hash'];
-        $class->file             = $array['file'];
+        $class->shortDesc = $array['short_desc'];
+        $class->longDesc = $array['long_desc'];
+        $class->hint = $array['hint'];
+        $class->tags = $array['tags'];
+        $class->namespace = $array['namespace'];
+        $class->hash = $array['hash'];
+        $class->file = $array['file'];
         $class->relativeFilePath = $array['relative_file'];
-        $class->modifiers        = $array['modifiers'];
+        $class->modifiers = $array['modifiers'];
         if ($array['is_interface']) {
             $class->setInterface(true);
         }
         if ($array['is_trait']) {
             $class->setTrait(true);
         }
-        $class->aliases    = $array['aliases'];
-        $class->errors     = $array['errors'];
-        $class->parent     = $array['parent'];
+        $class->aliases = $array['aliases'];
+        $class->errors = $array['errors'];
+        $class->parent = $array['parent'];
         $class->interfaces = $array['interfaces'];
-        $class->constants  = $array['constants'];
-        $class->traits     = $array['traits'];
+        $class->constants = $array['constants'];
+        $class->traits = $array['traits'];
 
         $class->setProject($project);
 

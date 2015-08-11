@@ -112,10 +112,10 @@ class Renderer
         $variables = array(
             'namespaces' => $project->getNamespaces(),
             'interfaces' => $project->getProjectInterfaces(),
-            'classes'    => $project->getProjectClasses(),
-            'items'      => $this->getIndex($project),
-            'index'      => $this->indexer->getIndex($project),
-            'tree'       => $this->getTree($project),
+            'classes' => $project->getProjectClasses(),
+            'items' => $this->getIndex($project),
+            'index' => $this->indexer->getIndex($project),
+            'tree' => $this->getTree($project),
         );
 
         foreach ($this->theme->getTemplates('global') as $template => $target) {
@@ -135,12 +135,12 @@ class Renderer
             }
 
             $variables = array(
-                'namespace'     => $namespace,
+                'namespace' => $namespace,
                 'subnamespaces' => $project->getNamespaceSubNamespaces($namespace),
-                'classes'       => $project->getNamespaceClasses($namespace),
-                'interfaces'    => $project->getNamespaceInterfaces($namespace),
-                'exceptions'    => $project->getNamespaceExceptions($namespace),
-                'tree'          => $this->getTree($project),
+                'classes' => $project->getNamespaceClasses($namespace),
+                'interfaces' => $project->getNamespaceInterfaces($namespace),
+                'exceptions' => $project->getNamespaceExceptions($namespace),
+                'tree' => $this->getTree($project),
             );
 
             foreach ($this->theme->getTemplates('namespace') as $template => $target) {
@@ -157,12 +157,12 @@ class Renderer
             }
 
             $variables = array(
-                'class'      => $class,
+                'class' => $class,
                 'properties' => $class->getProperties($project->getConfig('include_parent_data')),
-                'methods'    => $class->getMethods($project->getConfig('include_parent_data')),
-                'constants'  => $class->getConstants($project->getConfig('include_parent_data')),
-                'traits'     => $class->getTraits($project->getConfig('include_parent_data')),
-                'tree'       => $this->getTree($project),
+                'methods' => $class->getMethods($project->getConfig('include_parent_data')),
+                'constants' => $class->getConstants($project->getConfig('include_parent_data')),
+                'traits' => $class->getTraits($project->getConfig('include_parent_data')),
+                'tree' => $this->getTree($project),
             );
 
             foreach ($this->theme->getTemplates('class') as $template => $target) {

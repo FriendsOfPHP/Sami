@@ -16,7 +16,8 @@ use Sami\Reflection\ClassReflection;
 use Sami\Reflection\PropertyReflection;
 
 /**
- * Looks for @property tags on classes in the format of:
+ * Looks for @property tags on classes in the format of:.
+ *
  * @property [<type>] [name] [<description>]
  */
 class PropertyClassVisitor implements ClassVisitorInterface

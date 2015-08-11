@@ -68,15 +68,15 @@ class ParameterReflection extends Reflection
     public function toArray()
     {
         return array(
-            'name'       => $this->name,
-            'line'       => $this->line,
+            'name' => $this->name,
+            'line' => $this->line,
             'short_desc' => $this->shortDesc,
-            'long_desc'  => $this->longDesc,
-            'hint'       => $this->hint,
-            'tags'       => $this->tags,
-            'modifiers'  => $this->modifiers,
-            'default'    => $this->default,
-            'is_by_ref'  => $this->byRef,
+            'long_desc' => $this->longDesc,
+            'hint' => $this->hint,
+            'tags' => $this->tags,
+            'modifiers' => $this->modifiers,
+            'default' => $this->default,
+            'is_by_ref' => $this->byRef,
         );
     }
 
@@ -84,12 +84,12 @@ class ParameterReflection extends Reflection
     {
         $parameter = new self($array['name'], $array['line']);
         $parameter->shortDesc = $array['short_desc'];
-        $parameter->longDesc  = $array['long_desc'];
-        $parameter->hint      = $array['hint'];
-        $parameter->tags      = $array['tags'];
+        $parameter->longDesc = $array['long_desc'];
+        $parameter->hint = $array['hint'];
+        $parameter->tags = $array['tags'];
         $parameter->modifiers = $array['modifiers'];
-        $parameter->default   = $array['default'];
-        $parameter->byRef     = $array['is_by_ref'];
+        $parameter->default = $array['default'];
+        $parameter->byRef = $array['is_by_ref'];
 
         return $parameter;
     }

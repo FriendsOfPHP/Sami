@@ -146,17 +146,17 @@ class MethodReflection extends Reflection
     public function toArray()
     {
         return array(
-            'name'       => $this->name,
-            'line'       => $this->line,
+            'name' => $this->name,
+            'line' => $this->line,
             'short_desc' => $this->shortDesc,
-            'long_desc'  => $this->longDesc,
-            'hint'       => $this->hint,
-            'hint_desc'  => $this->hintDesc,
-            'tags'       => $this->tags,
-            'modifiers'  => $this->modifiers,
-            'is_by_ref'  => $this->byRef,
+            'long_desc' => $this->longDesc,
+            'hint' => $this->hint,
+            'hint_desc' => $this->hintDesc,
+            'tags' => $this->tags,
+            'modifiers' => $this->modifiers,
+            'is_by_ref' => $this->byRef,
             'exceptions' => $this->exceptions,
-            'errors'     => $this->errors,
+            'errors' => $this->errors,
             'parameters' => array_map(function ($parameter) { return $parameter->toArray(); }, $this->parameters),
         );
     }
@@ -164,13 +164,13 @@ class MethodReflection extends Reflection
     public static function fromArray(Project $project, $array)
     {
         $method = new self($array['name'], $array['line']);
-        $method->shortDesc  = $array['short_desc'];
-        $method->longDesc   = $array['long_desc'];
-        $method->hint       = $array['hint'];
-        $method->hintDesc   = $array['hint_desc'];
-        $method->tags       = $array['tags'];
-        $method->modifiers  = $array['modifiers'];
-        $method->byRef      = $array['is_by_ref'];
+        $method->shortDesc = $array['short_desc'];
+        $method->longDesc = $array['long_desc'];
+        $method->hint = $array['hint'];
+        $method->hintDesc = $array['hint_desc'];
+        $method->tags = $array['tags'];
+        $method->modifiers = $array['modifiers'];
+        $method->byRef = $array['is_by_ref'];
         $method->exceptions = $array['exceptions'];
         $method->errors = $array['errors'];
 
