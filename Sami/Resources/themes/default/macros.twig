@@ -3,32 +3,40 @@
 {%- endmacro %}
 
 {% macro class_link(class, absolute) -%}
+    {% from _self import abbr_class %}
+
     {%- if class.projectclass -%}
         <a href="{{ class_path(class) }}">
     {%- elseif class.phpclass -%}
         <a target="_blank" href="http://php.net/{{ class }}">
     {%- endif %}
-    {{- _self.abbr_class(class, absolute|default(false)) }}
+    {{- abbr_class(class, absolute|default(false)) }}
     {%- if class.projectclass or class.phpclass %}</a>{% endif %}
 {%- endmacro %}
 
 {% macro method_link(method, absolute, classonly) -%}
+    {% from _self import abbr_class %}
+
     <a href="{{ method_path(method) }}">
-        {{- _self.abbr_class(method.class) }}{% if not classonly|default(false) %}::{{ method.name }}{% endif -%}
+        {{- abbr_class(method.class) }}{% if not classonly|default(false) %}::{{ method.name }}{% endif -%}
     </a>
 {%- endmacro %}
 
 {% macro property_link(property, absolute, classonly) -%}
+    {% from _self import abbr_class %}
+
     <a href="{{ property_path(property) }}">
-        {{- _self.abbr_class(property.class) }}{% if not classonly|default(true) %}#{{ property.name }}{% endif -%}
+        {{- abbr_class(property.class) }}{% if not classonly|default(true) %}#{{ property.name }}{% endif -%}
     </a>
 {%- endmacro %}
 
 {% macro hint_link(hints) -%}
+    {% from _self import class_link %}
+
     {% if hints %}
         {%- for hint in hints %}
             {%- if hint.class %}
-                {{- _self.class_link(hint.name) }}
+                {{- class_link(hint.name) }}
             {%- elseif hint.name %}
                 {{- abbr_class(hint.name) }}
             {%- endif %}
@@ -61,14 +69,16 @@
 {%- endmacro %}
 
 {% macro render_classes(classes) -%}
+    {% from _self import class_link %}
+
     <div class="container-fluid underlined">
         {% for class in classes %}
             <div class="row">
                 <div class="col-md-6">
                     {% if class.isInterface %}
-                        <em>{{ _self.class_link(class, true) }}</em>
+                        <em>{{ class_link(class, true) }}</em>
                     {% else %}
-                        {{ _self.class_link(class, true) }}
+                        {{ class_link(class, true) }}
                     {% endif %}
                 </div>
                 <div class="col-md-6">

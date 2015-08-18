@@ -1,8 +1,10 @@
+{% from _self import element %}
+
 (function(root) {
 
     var bhIndex = null;
     var rootPath = '';
-    var treeHtml = '{{ _self.element(tree, project.config('default_opened_level'), 0)|replace({"'": "\\'", "\n": ''})|raw }}';
+    var treeHtml = '{{ element(tree, project.config('default_opened_level'), 0)|replace({"'": "\\'", "\n": ''})|raw }}';
 
     var searchTypeClasses = {
         'Namespace': 'label-default',
@@ -15,18 +17,20 @@
 
     var searchIndex = [
         {% block search_index %}
+            {% from _self import add_class_methods_index %}
+
             {% for ns in namespaces -%}
                 {"type": "Namespace", "link": "{{ namespace_path(ns) }}", "name": "{{ ns|replace({'\\': '\\\\'}) }}", "doc": "Namespace {{ ns|replace({'\\': '\\\\'}) }}"},
             {%- endfor %}
 
             {% for class in interfaces -%}
                 {"type": "Interface", {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
-                {{ _self.add_class_methods_index(class) }}
+                {{ add_class_methods_index(class) }}
             {% endfor %}
 
             {% for class in classes -%}
                 {"type": {% if class.isTrait %}"Trait"{% else %}"Class"{% endif %}, {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
-                {{ _self.add_class_methods_index(class) }}
+                {{ add_class_methods_index(class) }}
             {% endfor %}
 
             {# Override this block, search_index_extra, to add custom search entries! #}
@@ -217,6 +221,8 @@ $(function() {
 {% endmacro %}
 
 {% macro element(tree, opened, depth) %}
+    {% from _self import element %}
+
     <ul>
         {%- for element in tree -%}
             {% if element[2] %}
@@ -225,7 +231,7 @@ $(function() {
                         <span class="glyphicon glyphicon-play"></span>{% if not project.config('simulate_namespaces') %}<a href="{{ namespace_path(element[1]) }}">{% endif %}{{ element[0] }}{% if not project.config('simulate_namespaces') %}</a>{% endif %}
                     </div>
                     <div class="bd">
-                        {{ _self.element(element[2], opened, depth + 1) -}}
+                        {{ element(element[2], opened, depth + 1) -}}
                     </div>
                 </li>
             {% else %}
