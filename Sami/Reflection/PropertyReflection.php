@@ -27,6 +27,11 @@ class PropertyReflection extends Reflection
 
     public function setModifiers($modifiers)
     {
+        // if no modifiers, property is public
+        if (0 === ($modifiers & self::VISIBILITY_MODIFER_MASK)) {
+            $modifiers = self::MODIFIER_PUBLIC;
+        }
+
         $this->modifiers = $modifiers;
     }
 

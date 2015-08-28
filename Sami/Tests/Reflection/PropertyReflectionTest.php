@@ -1,0 +1,24 @@
+<?php
+
+namespace Sami\Tests\Reflection;
+
+use Sami\Reflection\PropertyReflection;
+
+class PropertyReflectionTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSetGetModifiers()
+    {
+        $property = new PropertyReflection('foo', 0);
+        $property->setModifiers(0);
+        $this->assertTrue($property->isPublic());
+
+        $property->setModifiers(PropertyReflection::MODIFIER_PUBLIC);
+        $this->assertTrue($property->isPublic());
+
+        $property->setModifiers(PropertyReflection::MODIFIER_PROTECTED);
+        $this->assertTrue($property->isProtected());
+
+        $property->setModifiers(PropertyReflection::MODIFIER_PRIVATE);
+        $this->assertTrue($property->isPrivate());
+    }
+}

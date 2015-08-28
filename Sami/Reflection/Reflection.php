@@ -21,6 +21,7 @@ abstract class Reflection
     const MODIFIER_STATIC = 8;
     const MODIFIER_ABSTRACT = 16;
     const MODIFIER_FINAL = 32;
+    const VISIBILITY_MODIFER_MASK = 7; // 1 | 2 | 4
 
     protected $name;
     protected $line;
