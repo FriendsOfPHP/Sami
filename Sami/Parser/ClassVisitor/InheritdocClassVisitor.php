@@ -52,9 +52,17 @@ class InheritdocClassVisitor implements ClassVisitorInterface
             }
 
             if ('{@inheritdoc}' == strtolower(trim($method->getShortDesc())) || !$method->getDocComment()) {
-                $method->setShortDesc($parentMethod->getShortDesc());
-                $method->setLongDesc($parentMethod->getLongDesc());
-                $method->setExceptions($parentMethod->getRawExceptions());
+                if (!$method->getShortDesc()) {
+                    $method->setShortDesc($parentMethod->getShortDesc());
+                }
+
+                if (!$method->getLongDesc()) {
+                    $method->setLongDesc($parentMethod->getLongDesc());
+                }
+
+                if (!$method->getExceptions()) {
+                    $method->setExceptions($parentMethod->getRawExceptions());
+                }
 
                 $modified = true;
             }
