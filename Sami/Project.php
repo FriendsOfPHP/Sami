@@ -107,7 +107,7 @@ class Project
         $previousParse = null;
         $previousRender = null;
         foreach ($this->versions as $version) {
-            $this->switchVersion($version, $callback);
+            $this->switchVersion($version, $callback, $force);
 
             $this->parseVersion($version, $previousParse, $callback, $force);
             $this->renderVersion($version, $previousRender, $callback, $force);
@@ -121,7 +121,7 @@ class Project
     {
         $previous = null;
         foreach ($this->versions as $version) {
-            $this->switchVersion($version, $callback);
+            $this->switchVersion($version, $callback, $force);
 
             $this->parseVersion($version, $previous, $callback, $force);
 
@@ -133,7 +133,7 @@ class Project
     {
         $previous = null;
         foreach ($this->versions as $version) {
-            $this->switchVersion($version, $callback);
+            $this->switchVersion($version, $callback, $force);
 
             $this->renderVersion($version, $previous, $callback, $force);
 
@@ -141,14 +141,17 @@ class Project
         }
     }
 
-    public function switchVersion(Version $version, $callback = null)
+    public function switchVersion(Version $version, $callback = null, $force = false)
     {
         if (null !== $callback) {
             call_user_func($callback, Message::SWITCH_VERSION, $version);
         }
 
         $this->version = $version;
-        $this->read();
+
+        if (!$force) {
+            $this->read();
+        }
     }
 
     public function hasNamespaces()
