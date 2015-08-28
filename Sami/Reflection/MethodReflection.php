@@ -41,7 +41,7 @@ class MethodReflection extends Reflection
     {
         // if no modifiers, method is public
         if (0 === ($modifiers & self::VISIBILITY_MODIFER_MASK)) {
-            $modifiers = self::MODIFIER_PUBLIC;
+            $modifiers |= self::MODIFIER_PUBLIC;
         }
 
         $this->modifiers = $modifiers;

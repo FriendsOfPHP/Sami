@@ -20,5 +20,9 @@ class MethodReflectionTest extends \PHPUnit_Framework_TestCase
 
         $method->setModifiers(MethodReflection::MODIFIER_PRIVATE);
         $this->assertTrue($method->isPrivate());
+
+        $method->setModifiers(MethodReflection::MODIFIER_ABSTRACT);
+        $this->assertTrue($method->isPublic());
+        $this->assertTrue($method->isAbstract());
     }
 }

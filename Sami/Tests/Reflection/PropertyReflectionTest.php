@@ -20,5 +20,9 @@ class PropertyReflectionTest extends \PHPUnit_Framework_TestCase
 
         $property->setModifiers(PropertyReflection::MODIFIER_PRIVATE);
         $this->assertTrue($property->isPrivate());
+
+        $property->setModifiers(PropertyReflection::MODIFIER_STATIC);
+        $this->assertTrue($property->isPublic());
+        $this->assertTrue($property->isStatic());
     }
 }
