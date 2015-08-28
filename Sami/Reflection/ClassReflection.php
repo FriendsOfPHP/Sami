@@ -381,11 +381,7 @@ class ClassReflection extends Reflection
 
     public function setInterface($boolean)
     {
-        if ($boolean) {
-            $this->category = self::CATEGORY_INTERFACE;
-        } else {
-            $this->category = self::CATEGORY_CLASS;
-        }
+        $this->category = $boolean ? self::CATEGORY_INTERFACE : self::CATEGORY_CLASS;
     }
 
     public function isInterface()
@@ -395,11 +391,7 @@ class ClassReflection extends Reflection
 
     public function setTrait($boolean)
     {
-        if ($boolean) {
-            $this->category = self::CATEGORY_TRAIT;
-        } else {
-            $this->category = self::CATEGORY_CLASS;
-        }
+        $this->category = $boolean ? self::CATEGORY_TRAIT : self::CATEGORY_CLASS;
     }
 
     public function isTrait()
@@ -499,21 +491,15 @@ class ClassReflection extends Reflection
         $class->setProject($project);
 
         foreach ($array['methods'] as $method) {
-            $method = MethodReflection::fromArray($project, $method);
-            $method->setClass($class);
-            $class->addMethod($method);
+            $class->addMethod(MethodReflection::fromArray($project, $method));
         }
 
         foreach ($array['properties'] as $property) {
-            $property = PropertyReflection::fromArray($project, $property);
-            $property->setClass($class);
-            $class->addProperty($property);
+            $class->addProperty(PropertyReflection::fromArray($project, $property));
         }
 
         foreach ($array['constants'] as $constant) {
-            $constant = ConstantReflection::fromArray($project, $constant);
-            $constant->setClass($class);
-            $class->addConstant($constant);
+            $class->addConstant(ConstantReflection::fromArray($project, $constant));
         }
 
         return $class;

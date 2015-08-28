@@ -180,8 +180,7 @@ class MethodReflection extends Reflection
         $method->errors = $array['errors'];
 
         foreach ($array['parameters'] as $parameter) {
-            $parameter = ParameterReflection::fromArray($project, $parameter);
-            $method->addParameter($parameter);
+            $method->addParameter(ParameterReflection::fromArray($project, $parameter));
         }
 
         return $method;
