@@ -34,7 +34,7 @@ class ClassTraverser
     {
         // parent classes/interfaces are visited before their "children"
         $classes = $project->getProjectClasses();
-        $modified = array();
+        $modified = new \SplObjectStorage();
         while ($class = array_shift($classes)) {
             // re-push the class at the end if parent class/interfaces have not been visited yet
             if (($parent = $class->getParent()) && isset($classes[$parent->getName()])) {
@@ -43,12 +43,27 @@ class ClassTraverser
                 continue;
             }
 
-            foreach ($class->getInterfaces() as $interface) {
+            foreach ($interfaces = $class->getInterfaces() as $interface) {
                 if (isset($classes[$interface->getName()])) {
                     $classes[$class->getName()] = $class;
 
                     continue 2;
                 }
+            }
+
+            // only visits classes not coming from the cache
+            // and for which parent/interfaces also come from the cache
+            $visit = !$class->isFromCache() || ($parent && !$parent->isFromCache());
+            foreach ($interfaces as $interface) {
+                if (!$interface->isFromCache()) {
+                    $visit = true;
+
+                    break;
+                }
+            }
+
+            if (!$visit) {
+                continue;
             }
 
             $isModified = false;
@@ -57,7 +72,7 @@ class ClassTraverser
             }
 
             if ($isModified) {
-                $modified[] = $class;
+                $modified->attach($class);
             }
         }
 

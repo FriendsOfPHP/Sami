@@ -29,40 +29,40 @@ class InheritdocClassVisitor implements ClassVisitorInterface
                     continue;
                 }
 
-                if (!$parameter->getShortDesc()) {
+                if ($parameter->getShortDesc() != $parentParameter->getShortDesc()) {
                     $parameter->setShortDesc($parentParameter->getShortDesc());
                     $modified = true;
                 }
 
-                if (!$parameter->getHint()) {
+                if ($parameter->getHint() != $parentParameter->getRawHint()) {
                     // FIXME: should test for a raw hint from tags, not the one from PHP itself
                     $parameter->setHint($parentParameter->getRawHint());
                     $modified = true;
                 }
             }
 
-            if (!$method->getHint()) {
+            if ($method->getHint() != $parentMethod->getRawHint()) {
                 $method->setHint($parentMethod->getRawHint());
                 $modified = true;
             }
 
-            if (!$method->getHintDesc()) {
+            if ($method->getHintDesc() != $parentMethod->getHintDesc()) {
                 $method->setHintDesc($parentMethod->getHintDesc());
                 $modified = true;
             }
 
             if ('{@inheritdoc}' == strtolower(trim($method->getShortDesc())) || !$method->getDocComment()) {
-                if (!$method->getShortDesc()) {
+                if ($method->getShortDesc() != $parentMethod->getShortDesc()) {
                     $method->setShortDesc($parentMethod->getShortDesc());
                     $modified = true;
                 }
 
-                if (!$method->getLongDesc()) {
+                if ($method->getLongDesc() != $parentMethod->getLongDesc()) {
                     $method->setLongDesc($parentMethod->getLongDesc());
                     $modified = true;
                 }
 
-                if (!$method->getExceptions()) {
+                if ($method->getExceptions() != $parentMethod->getRawExceptions()) {
                     $method->setExceptions($parentMethod->getRawExceptions());
                     $modified = true;
                 }

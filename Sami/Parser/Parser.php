@@ -38,6 +38,7 @@ class Parser
         $steps = iterator_count($this->iterator);
         $context = $this->parser->getContext();
         $transaction = new Transaction($project);
+        $toStore = new \SplObjectStorage();
         foreach ($this->iterator as $file) {
             ++$step;
 
@@ -62,7 +63,8 @@ class Parser
 
                 $project->addClass($class);
                 $transaction->addClass($class);
-                $this->store->writeClass($project, $class);
+                $toStore->attach($class);
+                $class->notFromCache();
             }
         }
 
@@ -73,8 +75,9 @@ class Parser
         }
 
         // visit each class for stuff that can only be done when all classes are parsed
-        $modified = $this->traverser->traverse($project);
-        foreach ($modified as $class) {
+        $toStore->addAll($this->traverser->traverse($project));
+
+        foreach ($toStore as $class) {
             $this->store->writeClass($project, $class);
         }
 
