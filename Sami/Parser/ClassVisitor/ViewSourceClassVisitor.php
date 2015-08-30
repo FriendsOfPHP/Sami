@@ -29,7 +29,7 @@ class ViewSourceClassVisitor implements ClassVisitorInterface
     {
         $filePath = $this->remoteRepository->getRelativePath($class->getFile());
 
-        if ('' !== $filePath) {
+        if ($class->getRelativeFilePath() != $filePath) {
             $class->setRelativeFilePath($filePath);
 
             return true;

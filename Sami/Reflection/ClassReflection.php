@@ -43,6 +43,7 @@ class ClassReflection extends Reflection
     protected $projectClass = true;
     protected $aliases = array();
     protected $errors = array();
+    protected $fromCache = false;
 
     public function __toString()
     {
@@ -436,6 +437,16 @@ class ClassReflection extends Reflection
         $this->errors = $errors;
     }
 
+    public function isFromCache()
+    {
+        return $this->fromCache;
+    }
+
+    public function notFromCache()
+    {
+        $this->fromCache = false;
+    }
+
     public function toArray()
     {
         return array(
@@ -475,6 +486,7 @@ class ClassReflection extends Reflection
         $class->file = $array['file'];
         $class->relativeFilePath = $array['relative_file'];
         $class->modifiers = $array['modifiers'];
+        $class->fromCache = true;
         if ($array['is_interface']) {
             $class->setInterface(true);
         }
