@@ -415,10 +415,20 @@ class Project
 
     protected function prepareDir($dir)
     {
+        static $prepared = array();
+
         $dir = $this->replaceVars($dir);
+
+        if (isset($prepared[$dir])) {
+            return $dir;
+        }
+
+        $prepared[$dir] = true;
 
         if (!is_dir($dir)) {
             $this->flushDir($dir);
+
+            return $dir;
         }
 
         $samiVersion = null;
