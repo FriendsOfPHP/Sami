@@ -133,7 +133,8 @@ class Project
     {
         $previous = null;
         foreach ($this->versions as $version) {
-            $this->switchVersion($version, $callback, $force);
+            // here, we don't want to flush the parse cache, as we are rendering
+            $this->switchVersion($version, $callback, false);
 
             $this->renderVersion($version, $previous, $callback, $force);
 
