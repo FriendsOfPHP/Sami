@@ -102,6 +102,10 @@ class TwigExtension extends \Twig_Extension
 
     public function parseDesc(array $context, $desc, ClassReflection $class)
     {
+        if (!$desc) {
+            return $desc;
+        }
+
         if (null === $this->markdown) {
             $this->markdown = new Markdown();
         }
