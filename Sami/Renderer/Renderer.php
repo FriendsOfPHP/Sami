@@ -45,9 +45,13 @@ class Renderer
         return $this->getDiff($project)->isAlreadyRendered();
     }
 
-    public function render(Project $project, $callback = null)
+    public function render(Project $project, $callback = null, $force = false)
     {
-        $this->twig->setCache($project->getCacheDir().'/twig');
+        $this->twig->setCache($cacheDir = $project->getCacheDir().'/twig');
+
+        if ($force) {
+            $project->flushDir($cacheDir);
+        }
 
         $diff = $this->getDiff($project);
 

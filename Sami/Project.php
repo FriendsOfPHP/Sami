@@ -490,7 +490,7 @@ class Project
             $this->seedCache($previous, $this->getBuildDir());
         }
 
-        $diff = $this->renderer->render($this, $callback);
+        $diff = $this->renderer->render($this, $callback, $force);
 
         if (null !== $callback) {
             call_user_func($callback, Message::RENDER_VERSION_FINISHED, $diff);
