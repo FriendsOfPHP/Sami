@@ -1,32 +1,26 @@
 {% macro namespace_link(namespace) -%}
-    <a href="{{ namespace_path(namespace) }}">{{ namespace }}</a>
+    <a href="{{ namespace_path(namespace) }}">{{ namespace|raw }}</a>
 {%- endmacro %}
 
 {% macro class_link(class, absolute) -%}
-    {% from _self import abbr_class %}
-
     {%- if class.projectclass -%}
         <a href="{{ class_path(class) }}">
     {%- elseif class.phpclass -%}
-        <a target="_blank" href="http://php.net/{{ class }}">
+        <a target="_blank" href="http://php.net/{{ class|raw }}">
     {%- endif %}
     {{- abbr_class(class, absolute|default(false)) }}
     {%- if class.projectclass or class.phpclass %}</a>{% endif %}
 {%- endmacro %}
 
 {% macro method_link(method, absolute, classonly) -%}
-    {% from _self import abbr_class %}
-
     <a href="{{ method_path(method) }}">
-        {{- abbr_class(method.class) }}{% if not classonly|default(false) %}::{{ method.name }}{% endif -%}
+        {{- abbr_class(method.class) }}{% if not classonly|default(false) %}::{{ method.name|raw }}{% endif -%}
     </a>
 {%- endmacro %}
 
 {% macro property_link(property, absolute, classonly) -%}
-    {% from _self import abbr_class %}
-
     <a href="{{ property_path(property) }}">
-        {{- abbr_class(property.class) }}{% if not classonly|default(true) %}#{{ property.name }}{% endif -%}
+        {{- abbr_class(property.class) }}{% if not classonly|default(true) %}#{{ property.name|raw }}{% endif -%}
     </a>
 {%- endmacro %}
 
@@ -52,16 +46,12 @@
     {%- endif %}
 {%- endmacro %}
 
-{% macro abbr_class(class, absolute) -%}
-    <abbr title="{{ class }}">{{ absolute|default(false) ? class : class.shortname }}</abbr>
-{%- endmacro %}
-
 {% macro method_parameters_signature(method) -%}
     {%- from "macros.twig" import hint_link -%}
     (
         {%- for parameter in method.parameters %}
             {%- if parameter.hashint %}{{ hint_link(parameter.hint) }} {% endif -%}
-            ${{ parameter.name }}
+            ${{ parameter.name|raw }}
             {%- if parameter.default %} = {{ parameter.default }}{% endif %}
             {%- if not loop.last %}, {% endif %}
         {%- endfor -%}
@@ -97,6 +87,6 @@
         {% else %}
             {% set current_ns = ns %}
         {% endif %}
-        <li><a href="{{ namespace_path(current_ns) }}">{{ ns }}</a></li>
+        <li><a href="{{ namespace_path(current_ns) }}">{{ ns|raw }}</a></li>
     {% endfor %}
 {% endmacro %}

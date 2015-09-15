@@ -43,12 +43,12 @@ class TwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('namespace_path', array($this, 'pathForNamespace'), array('needs_context' => true)),
-            new \Twig_SimpleFunction('class_path', array($this, 'pathForClass'), array('needs_context' => true)),
-            new \Twig_SimpleFunction('method_path', array($this, 'pathForMethod'), array('needs_context' => true)),
-            new \Twig_SimpleFunction('property_path', array($this, 'pathForProperty'), array('needs_context' => true)),
+            new \Twig_SimpleFunction('namespace_path', array($this, 'pathForNamespace'), array('needs_context' => true, 'is_safe' => array('all'))),
+            new \Twig_SimpleFunction('class_path', array($this, 'pathForClass'), array('needs_context' => true, 'is_safe' => array('all'))),
+            new \Twig_SimpleFunction('method_path', array($this, 'pathForMethod'), array('needs_context' => true, 'is_safe' => array('all'))),
+            new \Twig_SimpleFunction('property_path', array($this, 'pathForProperty'), array('needs_context' => true, 'is_safe' => array('all'))),
             new \Twig_SimpleFunction('path', array($this, 'pathForStaticFile'), array('needs_context' => true)),
-            new \Twig_SimpleFunction('abbr_class', array($this, 'abbrClass'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('abbr_class', array($this, 'abbrClass'), array('is_safe' => array('all'))),
         );
     }
 
@@ -82,15 +82,19 @@ class TwigExtension extends \Twig_Extension
         return $this->relativeUri($this->currentDepth).$file;
     }
 
-    public function abbrClass($class)
+    public function abbrClass($class, $absolute = false)
     {
         if ($class instanceof ClassReflection) {
             $short = $class->getShortName();
             $class = $class->getName();
+
+            if ($short === $class && !$absolute) {
+                return $class;
+            }
         } else {
             $parts = explode('\\', $class);
 
-            if (1 == count($parts)) {
+            if (1 == count($parts) && !$absolute) {
                 return $class;
             }
 

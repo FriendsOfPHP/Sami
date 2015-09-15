@@ -1,6 +1,6 @@
 {% extends "layout/layout.twig" %}
 {% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link, source_link %}
-{% block title %}{{ class.name }} | {{ parent() }}{% endblock %}
+{% block title %}{{ class|raw }} | {{ parent() }}{% endblock %}
 {% block body_class 'class' %}
 {% block page_id 'class:' ~ (class.name|replace({'\\': '_'})) %}
 
@@ -8,9 +8,9 @@
     {% if class.namespace %}
         <div class="namespace-breadcrumbs">
             <ol class="breadcrumb">
-                <li><span class="label label-default">{{ class.categoryName }}</span></li>
+                <li><span class="label label-default">{{ class.categoryName|raw }}</span></li>
                 {{ breadcrumbs(class.namespace) }}
-                <li>{{ class.shortname }}</li>
+                <li>{{ class.shortname|raw }}</li>
             </ol>
         </div>
     {% endif %}
@@ -19,7 +19,7 @@
 {% block page_content %}
 
     <div class="page-header">
-        <h1>{{ class.name|split('\\')|last }}</h1>
+        <h1>{{ class.name|split('\\')|last|raw }}</h1>
     </div>
 
     <p>{{ block('class_signature') }}</p>
@@ -67,8 +67,8 @@
 
 {% block class_signature -%}
     {% if not class.interface and class.abstract %}abstract {% endif %}
-    {{ class.categoryName }}
-    <strong>{{ class.shortname }}</strong>
+    {{ class.categoryName|raw }}
+    <strong>{{ class.shortname|raw }}</strong>
     {%- if class.parent %}
         extends {{ class_link(class.parent) }}
     {%- endif %}
@@ -89,7 +89,7 @@
     {% if method.protected %}protected{% endif %}
     {% if method.private %}private{% endif %}
     {{ hint_link(method.hint) }}
-    <strong>{{ method.name }}</strong>{{ block('method_parameters_signature') }}
+    <strong>{{ method.name|raw }}</strong>{{ block('method_parameters_signature') }}
 {%- endblock %}
 
 {% block method_parameters_signature -%}
@@ -102,7 +102,7 @@
         {% for parameter in method.parameters %}
             <tr>
                 <td>{% if parameter.hint %}{{ hint_link(parameter.hint) }}{% endif %}</td>
-                <td>${{ parameter.name }}</td>
+                <td>${{ parameter.name|raw }}</td>
                 <td>{{ parameter.shortdesc|desc(class) }}</td>
             </tr>
         {% endfor %}
@@ -133,8 +133,8 @@
     <table class="table table-condensed">
         {% for tag in method.tags('see') %}
             <tr>
-                <td>{{ tag[0] }}</td>
-                <td>{{ tag[1:]|join(' ') }}</td>
+                <td>{{ tag[0]|raw }}</td>
+                <td>{{ tag[1:]|join(' ')|raw }}</td>
             </tr>
         {% endfor %}
     </table>
@@ -144,7 +144,7 @@
     <table class="table table-condensed">
         {% for constant in constants %}
             <tr>
-                <td>{{ constant.name }}</td>
+                <td>{{ constant.name|raw }}</td>
                 <td class="last">
                     <p><em>{{ constant.shortdesc|desc(class) }}</em></p>
                     <p>{{ constant.longdesc|desc(class) }}</p>
@@ -158,13 +158,13 @@
     <table class="table table-condensed">
         {% for property in properties %}
             <tr>
-                <td class="type" id="property_{{ property.name }}">
+                <td class="type" id="property_{{ property.name|raw }}">
                     {% if property.static %}static{% endif %}
                     {% if property.protected %}protected{% endif %}
                     {% if property.private %}private{% endif %}
                     {{ hint_link(property.hint) }}
                 </td>
-                <td>${{ property.name }}</td>
+                <td>${{ property.name|raw }}</td>
                 <td class="last">{{ property.shortdesc|desc(class) }}</td>
                 <td>
                     {%- if property.class is not same as(class) -%}
@@ -184,7 +184,7 @@
                     {% if method.static %}static&nbsp;{% endif %}{{ hint_link(method.hint) }}
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method_{{ method.name }}">{{ method.name }}</a>{{ block('method_parameters_signature') }}
+                    <a href="#method_{{ method.name|raw }}">{{ method.name|raw }}</a>{{ block('method_parameters_signature') }}
                     {% if not method.shortdesc %}
                         <p class="no-description">No description</p>
                     {% else %}
@@ -212,8 +212,8 @@
 {% endblock %}
 
 {% block method %}
-    <h3 id="method_{{ method.name }}">
-        <div class="location">{% if method.class is not same as(class) %}in {{ method_link(method, false, true) }} {% endif %}at line {{ method.line }}</div>
+    <h3 id="method_{{ method.name|raw }}">
+        <div class="location">{% if method.class is not same as(class) %}in {{ method_link(method, false, true) }} {% endif %}at line {{ method.line|raw }}</div>
         <code>{{ block('method_signature') }}</code>
     </h3>
     <div class="details">

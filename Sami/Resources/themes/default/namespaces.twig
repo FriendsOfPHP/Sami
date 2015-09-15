@@ -15,11 +15,11 @@
                 {% if top_level != last_name %}
                     {% if last_name %}</ul></div>{% endif %}
                     <div class="namespace-container">
-                        <h2>{{ top_level }}</h2>
+                        <h2>{{ top_level|raw }}</h2>
                         <ul>
                     {% set last_name = top_level %}
                 {% endif %}
-                <li><a href="{{ namespace_path(namespace) }}">{{ namespace }}</a></li>
+                <li><a href="{{ namespace_path(namespace) }}">{{ namespace|raw }}</a></li>
             {% endfor %}
                 </ul>
             </div>
