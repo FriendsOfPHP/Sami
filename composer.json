@@ -22,7 +22,8 @@
         "symfony/filesystem": "~2.1",
         "symfony/yaml": "~2.1",
         "symfony/process": "~2.1",
-        "phpdocumentor/reflection-docblock": "~2.0"
+        "phpdocumentor/reflection-docblock": "~2.0",
+        "blackfire/php-sdk": "dev-php-sdk-plus"
     },
     "autoload": {
         "psr-4": { "Sami\\": "Sami/" }
