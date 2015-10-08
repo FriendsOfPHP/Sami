@@ -12,6 +12,8 @@ matrix:
           env: TWIG=1.x
         - php: 5.5
         - php: 5.6
+        - php: 5.6
+          env: BLACKFIRE=on
         - php: 7.0
         - php: hhvm
 
@@ -21,11 +23,26 @@ cache:
     - $HOME/.composer/cache/files
 
 before_install:
-    - sh -c "if [ '$TWIG' = '2.x' ]; then sed -i 's/~1.20|~2.0/~2.0/g' composer.json; composer update; fi"
-    - sh -c "if [ '$TWIG' = '1.x' ]; then sed -i 's/~1.20|~2.0/~1.20/g' composer.json; composer update; fi"
+    - |
+        if [[ "$BLACKFIRE" = "on" ]]; then
+            openssl aes-256-cbc -K $encrypted_16ab3ffdcd52_key -iv $encrypted_16ab3ffdcd52_iv -in .blackfire.travis.ini.enc -out ~/.blackfire.ini -d
+            curl -L https://blackfire.io/api/v1/releases/agent/linux/amd64 | tar zxpf -
+            chmod 755 agent && ./agent --config=~/.blackfire.ini --socket=unix:///tmp/blackfire.sock &
+        fi
+    - if [[ "$TWIG" = "2.x" ]]; then sed -i 's/~1.20|~2.0/~2.0/g' composer.json; composer update; fi
+    - if [[ "$TWIG" = "1.x" ]]; then sed -i 's/~1.20|~2.0/~1.20/g' composer.json; composer update; fi
 
 install:
     - travis_retry composer install
+
+before_script:
+    - phpenv config-rm xdebug.ini || true
+    - |
+        if [[ "$BLACKFIRE" = "on" ]]; then
+            curl -L https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$(phpenv version-name | tr -d '.')-zts | tar zxpf -
+            echo "extension=$(pwd)/$(ls blackfire-*.so | tr -d '[[:space:]]')" > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/blackfire.ini
+            echo "blackfire.agent_socket=unix:///tmp/blackfire.sock" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/blackfire.ini
+        fi
 
 script:
     - phpunit
