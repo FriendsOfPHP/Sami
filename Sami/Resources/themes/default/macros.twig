@@ -52,6 +52,14 @@
     {%- endif %}
 {%- endmacro %}
 
+{% macro method_source_link(method) -%}
+    {% if method.sourcepath %}
+        <a href="{{ method.sourcepath }}">line {{ method.line }}</a>
+    {%- else %}
+        line {{ method.line }}
+    {%- endif %}
+{%- endmacro %}
+
 {% macro abbr_class(class, absolute) -%}
     <abbr title="{{ class }}">{{ absolute|default(false) ? class : class.shortname }}</abbr>
 {%- endmacro %}
