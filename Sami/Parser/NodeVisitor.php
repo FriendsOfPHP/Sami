@@ -272,13 +272,20 @@ class NodeVisitor extends NodeVisitorAbstract
 
             $matches = [];
             if (preg_match('#{@see ([\w|\\\]+)::(\w+)}#', $shortDesc, $matches)) {
-                if (class_exists($matches[1])) {
+                $class = $matches[1];
+
+                // If no absolute namespace is used, prepend current namespace
+                if (strpos($class, '\\') !== 0) {
+                    $class = (new \ReflectionClass($method->getClass()))->getNamespaceName() . '\\' . $class;
+                }
+
+                if (class_exists($class)) {
                     $subParams = (new $matches[1]())->{$matches[2]}()['params'];
                     $parameter->setSubParams($subParams);
                 }
             }
 
-            $parameter->setShortDesc($tag[2]);
+            $parameter->setShortDesc($shortDesc);
 
             if (!$parameter->hasHint()) {
                 $parameter->setHint($this->resolveHint($tag[0]));
