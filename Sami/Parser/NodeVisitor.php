@@ -267,7 +267,6 @@ class NodeVisitor extends NodeVisitorAbstract
 
         foreach ($tags as $i => $tag) {
             $parameter = $method->getParameter($tag[1] ? $tag[1] : $i);
-
             $shortDesc = $tag[2];
 
             $matches = [];
@@ -276,16 +275,16 @@ class NodeVisitor extends NodeVisitorAbstract
 
                 // If no absolute namespace is used, prepend current namespace
                 if (strpos($class, '\\') !== 0) {
-                    $class = (new \ReflectionClass($method->getClass()))->getNamespaceName() . '\\' . $class;
+                    $class = '\\' . $this->context->getClass()->getNamespace() . '\\' . $class;
                 }
 
                 if (class_exists($class)) {
-                    $subParams = (new $matches[1]())->{$matches[2]}()['params'];
+                    $subParams = (new $class())->{$matches[2]}()['params'];
                     $parameter->setSubParams($subParams);
                 }
             }
 
-            $parameter->setShortDesc($shortDesc);
+            $parameter->setShortDesc($tag[2]);
 
             if (!$parameter->hasHint()) {
                 $parameter->setHint($this->resolveHint($tag[0]));
