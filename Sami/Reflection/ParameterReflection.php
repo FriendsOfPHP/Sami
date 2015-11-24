@@ -107,4 +107,20 @@ class ParameterReflection extends Reflection
 
         return $parameter;
     }
+
+    public function longestPropertyName()
+    {
+        $count = 0;
+
+        if (empty($this->subParams)) {
+            return $count;
+        }
+
+        foreach ($this->subParams as $property) {
+            $length = strlen($property->getName());
+            $count = $length > $count ? $length : $count;
+        }
+
+        return $count;
+    }
 }

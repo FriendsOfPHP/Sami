@@ -49,6 +49,7 @@ class TwigExtension extends \Twig_Extension
             'property_path'  => new \Twig_Function_Method($this, 'pathForProperty', array('needs_context' => true)),
             'path'           => new \Twig_Function_Method($this, 'pathForStaticFile', array('needs_context' => true)),
             'abbr_class'     => new \Twig_Function_Method($this, 'abbrClass', array('is_safe' => array('html'))),
+            'code_sample'    => new \Twig_Function_Method($this, 'codeSample', array('is_safe' => array('html'))),
         );
     }
 
@@ -141,5 +142,11 @@ class TwigExtension extends \Twig_Extension
     public function getName()
     {
         return 'sami';
+    }
+
+    public function codeSample(MethodReflection $method)
+    {
+        $renderer = new CodeSample($method);
+        return $renderer->render();
     }
 }

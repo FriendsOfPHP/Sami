@@ -13,6 +13,8 @@ class SubParamReflection extends Reflection
 
     public function __construct(array $data, $name)
     {
+        $this->name = $name;
+
         if (isset($data['description'])) {
             $this->description = $data['description'];
         }
@@ -48,6 +50,11 @@ class SubParamReflection extends Reflection
     public function getClass()
     {}
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function getDescription()
     {
         return $this->description;
@@ -76,5 +83,21 @@ class SubParamReflection extends Reflection
     public function getProperties()
     {
         return $this->properties;
+    }
+
+    public function longestPropertyName()
+    {
+        $count = 0;
+
+        if (empty($this->properties)) {
+            return $count;
+        }
+
+        foreach ($this->properties as $property) {
+            $length = strlen($property->getName());
+            $count = $length > $count ? $length : $count;
+        }
+
+        return $count;
     }
 }
