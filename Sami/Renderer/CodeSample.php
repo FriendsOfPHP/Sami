@@ -2,16 +2,18 @@
 
 namespace Sami\Renderer;
 
+use Sami\Reflection\ClassReflection;
 use Sami\Reflection\MethodReflection;
 use Sami\Reflection\SubParamReflection;
-use Symfony\Component\Finder\Finder;
 
 class CodeSample
 {
     private $method;
+    private $class;
 
-    public function __construct(MethodReflection $method)
+    public function __construct(ClassReflection $class, MethodReflection $method)
     {
+        $this->class = $class;
         $this->method = $method;
     }
 
@@ -45,15 +47,29 @@ class CodeSample
             }
         }
 
-        $content .= sprintf("\n\$response = \$service->%s(%s);", $this->method->getName(), $args);
+        $response = '';
+
+        $hints = $this->method->getHint();
+
+        if (count($hints) > 1) {
+            $response = '$response = ';
+        } elseif (isset($hints[0])) {
+            $matches = [];
+            preg_match('#(?:.+\\\)?(\w+)#', $hints[0]->getName(), $matches);
+            if (isset($matches[1]) && $matches[1] !== 'void') {
+                $response = sprintf("$%s = ", lcfirst($matches[1]));
+            }
+        }
+
+        $content .= sprintf(
+            "\n%s\$%s->%s(%s);", $response, lcfirst($this->class->getShortName()), $this->method->getName(), $args
+        );
 
         return $content;
     }
 
     private function exampleValue($type, $name)
     {
-        $content = '';
-
         switch ($type) {
             case 'string':
                 $content = sprintf("'{%s}'", $name);

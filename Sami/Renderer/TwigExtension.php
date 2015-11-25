@@ -144,9 +144,9 @@ class TwigExtension extends \Twig_Extension
         return 'sami';
     }
 
-    public function codeSample(MethodReflection $method)
+    public function codeSample(ClassReflection $class, MethodReflection $method)
     {
-        $renderer = new CodeSample($method);
+        $renderer = new CodeSample($class, $method);
         return $renderer->render();
     }
 }

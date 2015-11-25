@@ -69,6 +69,9 @@ class ParameterReflection extends Reflection
     public function setSubParams(array $params)
     {
         foreach ($params as $name => $param) {
+            if (isset($param['documented']) && $param['documented'] === false) {
+                continue;
+            }
             $this->subParams[$name] = new SubParamReflection($param, $name);
         }
     }

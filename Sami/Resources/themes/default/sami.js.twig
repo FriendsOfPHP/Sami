@@ -222,7 +222,14 @@ $(function() {
             {% if element[2] %}
                 <li data-name="namespace:{{ element[1]|replace({'\\': '_'}) }}" {% if depth < opened %}class="opened"{% endif %}>
                     <div style="padding-left:{{ depth * 18 }}px" class="hd">
-                        <span class="glyphicon glyphicon-play"></span>{% if not project.config('simulate_namespaces') %}<a href="{{ namespace_path(element[1]) }}">{% endif %}{{ element[0] }}{% if not project.config('simulate_namespaces') %}</a>{% endif %}
+                        <span class="glyphicon glyphicon-play"></span>
+                        {% if not project.config('simulate_namespaces') %}
+                            <a href="{{ namespace_path(element[1]) }}">
+                        {% endif %}
+                        {{ element[0] }}
+                        {% if not project.config('simulate_namespaces') and element[1]|length > 0 %}
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="bd">
                         {{ _self.element(element[2], opened, depth + 1) -}}

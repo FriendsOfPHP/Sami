@@ -33,6 +33,9 @@ class SubParamReflection extends Reflection
 
         if (isset($data['properties'])) {
             foreach ($data['properties'] as $propName => $prop) {
+                if (isset($prop['documented']) && $prop['documented'] === false) {
+                    continue;
+                }
 
                 if ($name == 'metadata') {
                     $this->itemSchema = new SubParamReflection($data['properties'], '');
