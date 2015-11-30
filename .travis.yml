@@ -1,15 +1,7 @@
 language: php
 
-env:
-    global:
-        - TWIG=2.x
-
 matrix:
     include:
-        - php: 5.3
-          env: TWIG=1.x
-        - php: 5.4
-          env: TWIG=1.x
         - php: 5.5
         - php: 5.6
         - php: 5.6
@@ -29,8 +21,6 @@ before_install:
             curl -L https://blackfire.io/api/v1/releases/agent/linux/amd64 | tar zxpf -
             chmod 755 agent && ./agent --config=~/.blackfire.ini --socket=unix:///tmp/blackfire.sock &
         fi
-    - if [[ "$TWIG" = "2.x" ]]; then sed -i 's/~1.20|~2.0/~2.0/g' composer.json; composer update; fi
-    - if [[ "$TWIG" = "1.x" ]]; then sed -i 's/~1.20|~2.0/~1.20/g' composer.json; composer update; fi
 
 install:
     - travis_retry composer install
