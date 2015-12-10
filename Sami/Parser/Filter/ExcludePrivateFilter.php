@@ -9,7 +9,7 @@ use Sami\Reflection\MethodReflection;
 use Sami\Reflection\PropertyReflection;
 
 /**
- * ExcludePrivateFilter
+ * ExcludePrivateFilter.
  *
  * @author Gabriele Martini <gabrielemartini1990@gmail.com>
  */
