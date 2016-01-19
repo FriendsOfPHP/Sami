@@ -1,9 +1,31 @@
 CHANGELOG
 =========
 
-* 3.0.7 (2015-XX-XX)
+* 3.2.0 (2016-01-19)
 
- * n/a
+ * improved performance (a lot)
+ * fixed --force option (again)
+ * added a link to class methods if a remote repository is configured
+ * added GitLab support
+ * added BitBucket support
+ * fixed Windows support
+
+* 3.1.0 (2015-08-30)
+
+ * improved parsing performance
+ * fixed --force flag
+ * fixed cache invalidation
+ * fixed method doccomments on inherited classes when using caching
+ * fixed visibility issue on methods and properties
+ * removed usage of Twig deprecated features
+
+* 3.0.8 (2015-08-13)
+
+ * added support for Twig 1.x and 2.x
+
+* 3.0.7 (2015-07-11)
+
+ * added responsive meta tags
 
 * 3.0.6 (2015-06-28)
 
