@@ -148,6 +148,11 @@ class MethodReflection extends Reflection
         $this->errors = $errors;
     }
 
+    public function getSourcePath()
+    {
+        return $this->class->getSourcePath($this->line);
+    }
+
     public function toArray()
     {
         return array(

@@ -1,5 +1,5 @@
 {% extends "layout/layout.twig" %}
-{% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link, source_link %}
+{% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link, source_link, method_source_link %}
 {% block title %}{{ class.name }} | {{ parent() }}{% endblock %}
 {% block body_class 'class' %}
 {% block page_id 'class:' ~ (class.name|replace({'\\': '_'})) %}
@@ -213,7 +213,7 @@
 
 {% block method %}
     <h3 id="method_{{ method.name }}">
-        <div class="location">{% if method.class is not same as(class) %}in {{ method_link(method, false, true) }} {% endif %}at line {{ method.line }}</div>
+        <div class="location">{% if method.class is not same as(class) %}in {{ method_link(method, false, true) }} {% endif %}at {{ method_source_link(method) }}</div>
         <code>{{ block('method_signature') }}</code>
     </h3>
     <div class="details">
