@@ -1,0 +1,9 @@
+---------------------------------------------------------------------------
+
+by antoligy at 2015-11-16T00:36:13Z
+
+The Blackfire test has failed here, but it seems as though that's an issue with missing env variables in Travis and not this 100% untested code.
+
+I'm currently using this alongside #186 and the two work beautifully together.
+
+Cheers in advance! :smile:
