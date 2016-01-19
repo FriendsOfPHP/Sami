@@ -12,15 +12,15 @@
     <ul class="pagination">
         {% for letter in 'A'..'Z' %}
             {% if items[letter] is defined and items[letter]|length > 1 %}
-                <li><a href="#letter{{ letter }}">{{ letter }}</a></li>
+                <li><a href="#letter{{ letter|raw }}">{{ letter|raw }}</a></li>
             {% else %}
-                <li class="disabled"><a href="#letter{{ letter }}">{{ letter }}</a></li>
+                <li class="disabled"><a href="#letter{{ letter|raw }}">{{ letter|raw }}</a></li>
             {% endif %}
         {% endfor %}
     </ul>
 
     {% for letter, elements in items -%}
-        <h2 id="letter{{ letter }}">{{ letter }}</h2>
+        <h2 id="letter{{ letter|raw }}">{{ letter|raw }}</h2>
         <dl id="index">
             {%- for element in elements %}
                 {%- set type = element[0] %}

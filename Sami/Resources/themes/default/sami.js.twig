@@ -20,16 +20,16 @@
             {% from _self import add_class_methods_index %}
 
             {% for ns in namespaces -%}
-                {"type": "Namespace", "link": "{{ namespace_path(ns) }}", "name": "{{ ns|replace({'\\': '\\\\'}) }}", "doc": "Namespace {{ ns|replace({'\\': '\\\\'}) }}"},
+                {"type": "Namespace", "link": "{{ namespace_path(ns) }}", "name": "{{ ns|replace({'\\': '\\\\'})|raw }}", "doc": "Namespace {{ ns|replace({'\\': '\\\\'})|raw }}"},
             {%- endfor %}
 
             {% for class in interfaces -%}
-                {"type": "Interface", {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
+                {"type": "Interface", {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'})|raw }}", "fromLink": "{{ namespace_path(class.namespace)|raw }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'})|raw }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
                 {{ add_class_methods_index(class) }}
             {% endfor %}
 
             {% for class in classes -%}
-                {"type": {% if class.isTrait %}"Trait"{% else %}"Class"{% endif %}, {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'}) }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'}) }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
+                {"type": {% if class.isTrait %}"Trait"{% else %}"Class"{% endif %}, {% if class.namespace %}"fromName": "{{ class.namespace|replace({'\\': '\\\\'})|raw }}", "fromLink": "{{ namespace_path(class.namespace) }}",{% endif %} "link": "{{ class_path(class) }}", "name": "{{ class.name|replace({'\\': '\\\\'})|raw }}", "doc": "{{ class.shortdesc|desc(class)|json_encode }}"},
                 {{ add_class_methods_index(class) }}
             {% endfor %}
 
@@ -215,7 +215,7 @@ $(function() {
         {% set from_name = class.name|replace({'\\': '\\\\'}) %}
         {% set from_link = class_path(class) %}
         {% for meth in class.methods %}
-            {"type": "Method", "fromName": "{{ from_name }}", "fromLink": "{{ from_link }}", "link": "{{ method_path(meth) }}", "name": "{{ meth|replace({'\\': '\\\\'}) }}", "doc": "{{ meth.shortdesc|desc(class)|json_encode }}"},
+            {"type": "Method", "fromName": "{{ from_name|raw }}", "fromLink": "{{ from_link|raw }}", "link": "{{ method_path(meth) }}", "name": "{{ meth|replace({'\\': '\\\\'})|raw }}", "doc": "{{ meth.shortdesc|desc(class)|json_encode }}"},
         {% endfor %}
     {% endif %}
 {% endmacro %}
@@ -226,9 +226,9 @@ $(function() {
     <ul>
         {%- for element in tree -%}
             {% if element[2] %}
-                <li data-name="namespace:{{ element[1]|replace({'\\': '_'}) }}" {% if depth < opened %}class="opened"{% endif %}>
-                    <div style="padding-left:{{ depth * 18 }}px" class="hd">
-                        <span class="glyphicon glyphicon-play"></span>{% if not project.config('simulate_namespaces') %}<a href="{{ namespace_path(element[1]) }}">{% endif %}{{ element[0] }}{% if not project.config('simulate_namespaces') %}</a>{% endif %}
+                <li data-name="namespace:{{ element[1]|replace({'\\': '_'})|raw }}" {% if depth < opened %}class="opened"{% endif %}>
+                    <div style="padding-left:{{ (depth * 18)|raw }}px" class="hd">
+                        <span class="glyphicon glyphicon-play"></span>{% if not project.config('simulate_namespaces') %}<a href="{{ namespace_path(element[1]) }}">{% endif %}{{ element[0]|raw }}{% if not project.config('simulate_namespaces') %}</a>{% endif %}
                     </div>
                     <div class="bd">
                         {{ element(element[2], opened, depth + 1) -}}
