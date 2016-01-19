@@ -23,7 +23,7 @@
         "symfony/yaml": "~3.0",
         "symfony/process": "~3.0",
         "phpdocumentor/reflection-docblock": "~2.0",
-        "blackfire/php-sdk": "^1.5.6"
+        "blackfire/php-sdk": "^1.5.18"
     },
     "autoload": {
         "psr-4": { "Sami\\": "Sami/" }

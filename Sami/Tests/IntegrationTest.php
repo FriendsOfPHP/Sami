@@ -2,13 +2,15 @@
 
 namespace Sami\Tests;
 
-use Blackfire\Client;
+use Blackfire\Bridge\PhpUnit\TestCaseTrait as BlackfireTestCaseTrait;
 use Blackfire\Profile;
 use Sami\Sami;
 use Symfony\Component\Filesystem\Filesystem;
 
 class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
+    use BlackfireTestCaseTrait;
+
     private $bf;
     private $sami;
 
@@ -51,7 +53,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             ->assert('metrics.sami.storage.read_calls.count <= '.$readCalls, $readCalls.' read calls')
         ;
 
-        $profile = $this->getBlackfireClient()->assertPhpUnit($this, $config, function () use ($sami) {
+        $profile = $this->assertBlackfire($config, function () use ($sami) {
             $sami['project']->parse();
         });
     }
@@ -62,11 +64,6 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             array(true, 0, 6),
             array(false, 5, 0),
         );
-    }
-
-    private function getBlackfireClient()
-    {
-        return null !== $this->bf ? $this->bf : $this->bf = new Client();
     }
 
     private function clearCache()
