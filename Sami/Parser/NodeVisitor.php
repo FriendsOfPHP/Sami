@@ -12,6 +12,7 @@
 namespace Sami\Parser;
 
 use PhpParser\Node as AbstractNode;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node\Stmt as StmtNode;
 use PhpParser\Node\Stmt\ClassConst as ClassConstNode;
@@ -151,8 +152,13 @@ class NodeVisitor extends NodeVisitorAbstract
             if ($param->default) {
                 $parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
             }
-            if ((string) $param->type) {
-                $parameter->setHint($this->resolveHint(array(array((string) $param->type, false))));
+
+            if ($type = (string) $param->type) {
+                if ($param->type instanceof FullyQualified && strpos($type, '\\') !== 0) {
+                    $type = '\\'.$type;
+                }
+
+                $parameter->setHint($this->resolveHint(array(array($type, false))));
             }
             $method->addParameter($parameter);
         }
