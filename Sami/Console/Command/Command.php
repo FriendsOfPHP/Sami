@@ -41,7 +41,7 @@ abstract class Command extends BaseCommand
      */
     protected function configure()
     {
-        $this->getDefinition()->addArgument(new InputArgument('config', InputArgument::REQUIRED, 'The configuration'));
+        $this->getDefinition()->addArgument(new InputArgument('config', InputArgument::OPTIONAL, 'The configuration (Defaults to sami.cfg.php)'));
         $this->getDefinition()->addOption(new InputOption('only-version', '', InputOption::VALUE_REQUIRED, 'The version to build'));
     }
 
@@ -51,6 +51,11 @@ abstract class Command extends BaseCommand
         $this->output = $output;
 
         $config = $input->getArgument('config');
+
+        if ($config == '') {
+            $config = 'sami.cfg.php';
+        }
+
         $filesystem = new Filesystem();
 
         if (!$filesystem->isAbsolutePath($config)) {
