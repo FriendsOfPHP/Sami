@@ -39,6 +39,23 @@ class ClassTraverserTest extends \PHPUnit_Framework_TestCase
         $traverser->traverse($project);
     }
 
+    /**
+     * @dataProvider getNamespaceDetectionClasses
+     */
+    public function testNamespaceDetection($interfaceName, $parentName, $className, $class, $parent, $interface, $expectedNamespaces)
+    {
+        $store = new ArrayStore();
+        $store->setClasses(array($class, $parent, $interface));
+
+        $project = new Project($store);
+
+        $project->loadClass($interfaceName);
+        $project->loadClass($parentName);
+        $project->loadClass($className);
+
+        $this->assertEquals($expectedNamespaces, $project->getNamespaces());
+    }
+
     public function getTraverseOrderClasses()
     {
         // as classes are sorted by name in Project, we try all combinaison
@@ -53,7 +70,16 @@ class ClassTraverserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function createClasses($interfaceName, $parentName, $className)
+    public function getNamespaceDetectionClasses()
+    {
+        return array(
+            array_merge($this->createClasses('C1', 'C2', 'C3'), array(array(''))),
+            array_merge($this->createClasses('C1', 'C2', 'C3', 'Ns1'), array(array('', 'Ns1'))),
+            array_merge($this->createClasses('C1', 'C2', 'C3', "Ns1\Ns2\Ns3"), array(array('', 'Ns1', "Ns1\Ns2", "Ns1\Ns2\Ns3"))),
+        );
+    }
+
+    protected function createClasses($interfaceName, $parentName, $className, $namespaceName = null)
     {
         $interface = new ClassReflection($interfaceName, 1);
 
@@ -62,6 +88,9 @@ class ClassTraverserTest extends \PHPUnit_Framework_TestCase
 
         $class = new ClassReflection($className, 1);
         $class->setParent($parentName);
+        if ($namespaceName) {
+            $class->setNamespace($namespaceName);
+        }
 
         return array($interfaceName, $parentName, $className, $class, $parent, $interface);
     }
