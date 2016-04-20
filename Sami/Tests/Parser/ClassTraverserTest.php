@@ -55,7 +55,7 @@ class ClassTraverserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedNamespaces, $project->getNamespaces());
     }
-    
+
     public function getTraverseOrderClasses()
     {
         // as classes are sorted by name in Project, we try all combinaison
@@ -69,13 +69,13 @@ class ClassTraverserTest extends \PHPUnit_Framework_TestCase
             $this->createClasses('C3', 'C2', 'C1'),
         );
     }
-    
+
     public function getNamespaceDetectionClasses()
     {
         return array(
-            array_merge($this->createClasses('C1', 'C2', 'C3'), array(array(""))),
-            array_merge($this->createClasses('C1', 'C2', 'C3', "Ns1"), array(array("", "Ns1"))),
-            array_merge($this->createClasses('C1', 'C2', 'C3', "Ns1\Ns2\Ns3"), array(array("", "Ns1", "Ns1\Ns2", "Ns1\Ns2\Ns3"))),
+            array_merge($this->createClasses('C1', 'C2', 'C3'), array(array(''))),
+            array_merge($this->createClasses('C1', 'C2', 'C3', 'Ns1'), array(array('', 'Ns1'))),
+            array_merge($this->createClasses('C1', 'C2', 'C3', "Ns1\Ns2\Ns3"), array(array('', 'Ns1', "Ns1\Ns2", "Ns1\Ns2\Ns3"))),
         );
     }
 
