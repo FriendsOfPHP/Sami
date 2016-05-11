@@ -136,7 +136,7 @@ class Sami extends Container
             $visitors = array(
                 new ClassVisitor\InheritdocClassVisitor(),
                 new ClassVisitor\MethodClassVisitor(),
-                new ClassVisitor\PropertyClassVisitor(),
+                new ClassVisitor\PropertyClassVisitor($sc['parser_context']),
             );
 
             if ($sc['remote_repository'] instanceof AbstractRemoteRepository) {
