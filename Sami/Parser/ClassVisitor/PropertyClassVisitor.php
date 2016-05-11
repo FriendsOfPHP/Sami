@@ -24,7 +24,7 @@ use Sami\Reflection\PropertyReflection;
  */
 class PropertyClassVisitor implements ClassVisitorInterface
 {
-	protected $context;
+    protected $context;
 
     public function __construct(ParserContext $context)
     {
@@ -85,16 +85,15 @@ class PropertyClassVisitor implements ClassVisitorInterface
         // Account for default array syntax
         $tag = str_replace('array()', 'array', $tag);
 
-		/** @var PropertyTag $propertyTag */
-		$propertyTag = $this->context->getDocBlockParser()->getTag('@property '.$tag);
+        /** @var PropertyTag $propertyTag */
+        $propertyTag = $this->context->getDocBlockParser()->getTag('@property '.$tag);
+        $propertyName = $propertyTag->getVariableName();
 
-		$propertyName = $propertyTag->getVariableName();
+        if (!$propertyName) {
+            return array();
+        }
 
-		if ( !$propertyName ) {
-			return array();
-		}
-
-		$type = $propertyTag->getType();
+        $type = $propertyTag->getType();
 
         $description = $propertyTag->getDescription();
         $property = array('name' => substr($propertyName, 1));
