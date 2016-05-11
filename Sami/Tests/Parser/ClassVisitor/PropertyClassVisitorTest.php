@@ -12,6 +12,7 @@
 namespace Sami\Tests\Parser\ClassVisitor;
 
 use Sami\Parser\ClassVisitor\PropertyClassVisitor;
+use Sami\Parser\DocBlockParser;
 
 class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +26,10 @@ class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
         );
         $class->expects($this->any())->method('getTags')->with($this->equalTo('property'))->will($this->returnValue($property));
 
-        $visitor = new PropertyClassVisitor();
+        $context = $this->prophesize('Sami\Parser\ParserContext');
+        $context->getDocBlockParser()->willReturn(new DocBlockParser())->shouldBeCalled();
+
+        $visitor = new PropertyClassVisitor($context->reveal());
         $visitor->visit($class);
 
         $this->assertTrue(array_key_exists('color', $class->getProperties()));

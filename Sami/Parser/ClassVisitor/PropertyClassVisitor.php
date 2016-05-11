@@ -100,9 +100,7 @@ class PropertyClassVisitor implements ClassVisitorInterface
         if (strlen($type)) {
             $property['hint'] = $type;
         }
-        if (strlen($description)) {
-            $property['description'] = $description;
-        }
+        $property['description'] = $description;
 
         return $property;
     }
