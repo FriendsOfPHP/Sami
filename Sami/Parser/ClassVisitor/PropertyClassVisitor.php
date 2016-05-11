@@ -11,7 +11,9 @@
 
 namespace Sami\Parser\ClassVisitor;
 
+use phpDocumentor\Reflection\DocBlock\Tag\PropertyTag;
 use Sami\Parser\ClassVisitorInterface;
+use Sami\Parser\ParserContext;
 use Sami\Reflection\ClassReflection;
 use Sami\Reflection\PropertyReflection;
 
@@ -22,6 +24,13 @@ use Sami\Reflection\PropertyReflection;
  */
 class PropertyClassVisitor implements ClassVisitorInterface
 {
+	protected $context;
+
+    public function __construct(ParserContext $context)
+    {
+        $this->context = $context;
+    }
+
     public function visit(ClassReflection $class)
     {
         $modified = false;
@@ -76,27 +85,23 @@ class PropertyClassVisitor implements ClassVisitorInterface
         // Account for default array syntax
         $tag = str_replace('array()', 'array', $tag);
 
-        $parts = preg_split('/(?:\s+)/Su', $tag, 3, PREG_SPLIT_DELIM_CAPTURE);
-        if (isset($parts[1])) {
-            if ('$' !== $parts[0][0]) {
-                $type = $parts[0];
-                $propertyName = substr($parts[1], 1);
-            } elseif ('$' !== $parts[1][0]) {
-                $type = $parts[1];
-                $propertyName = substr($parts[0], 1);
-            }
-        } elseif (isset($parts[0])) {
-            $propertyName = substr($parts[0], 1);
-        } else {
-            return array();
-        }
+		/** @var PropertyTag $propertyTag */
+		$propertyTag = $this->context->getDocBlockParser()->getTag('@property '.$tag);
 
-        $description = implode('', $parts);
-        $property = array('name' => $propertyName);
-        if (isset($type)) {
+		$propertyName = $propertyTag->getVariableName();
+
+		if ( !$propertyName ) {
+			return array();
+		}
+
+		$type = $propertyTag->getType();
+
+        $description = $propertyTag->getDescription();
+        $property = array('name' => substr($propertyName, 1));
+        if (strlen($type)) {
             $property['hint'] = $type;
         }
-        if (isset($description)) {
+        if (strlen($description)) {
             $property['description'] = $description;
         }
 
