@@ -52,7 +52,7 @@ class NodeVisitor extends NodeVisitorAbstract
             $this->addClass($node);
         } elseif ($node instanceof TraitNode) {
             $this->addTrait($node);
-        } elseif ($node instanceof TraitUseNode) {
+        } elseif ($this->context->getClass() && $node instanceof TraitUseNode) {
             $this->addTraitUse($node);
         } elseif ($this->context->getClass() && $node instanceof PropertyNode) {
             $this->addProperty($node);
