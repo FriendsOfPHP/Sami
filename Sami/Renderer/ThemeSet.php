@@ -59,7 +59,7 @@ class ThemeSet
         // populate parent
         foreach ($parents as $name => $parent) {
             if (!isset($this->themes[$parent])) {
-                throw new \LogicException(sprintf('Theme "%s" inherits from an unknomwn "%s" theme.', $name, $parent));
+                throw new \LogicException(sprintf('Theme "%s" inherits from an unknown "%s" theme.', $name, $parent));
             }
 
             $this->themes[$name]->setParent($this->themes[$parent]);
