@@ -22,6 +22,7 @@
         "symfony/filesystem": "~2.1",
         "symfony/yaml": "~2.1",
         "symfony/process": "~2.1",
+        "symfony/event-dispatcher": "~2.1",
         "phpdocumentor/reflection-docblock": "~2.0",
         "blackfire/php-sdk": "^1.5.6"
     },
