@@ -141,6 +141,11 @@ abstract class Reflection
         return isset($this->tags[$name]) ? $this->tags[$name] : array();
     }
 
+    public function getDeprecated()
+    {
+        return $this->getTags('deprecated');
+    }
+
     // not serialized as it is only useful when parsing
     public function setDocComment($comment)
     {
