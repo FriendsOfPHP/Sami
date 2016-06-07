@@ -1,9 +1,23 @@
 CHANGELOG
 =========
 
-* 3.2.1 (2016-XX-XX)
+* 3.3.0 (2016-06-07)
 
- * n/a
+ * added support for the deprecated tag
+ * removed extra whitespace in generated HTML
+ * removed usage of PHP reflection to determine if a class is internal
+
+* 3.2.3 (2016-05-12)
+
+ * fixed trait support when using filters
+
+* 3.2.2 (2016-05-11)
+
+ * switched to phpDocumentor's parser for "@property" tag parsing
+
+* 3.2.1 (2016-01-22)
+
+ * fixed type hints when using a FQCN
 
 * 3.2.0 (2016-01-19)
 
