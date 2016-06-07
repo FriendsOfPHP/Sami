@@ -1,5 +1,5 @@
 {% extends "layout/layout.twig" %}
-{% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link, source_link, method_source_link %}
+{% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link, source_link, method_source_link, deprecated, deprecations %}
 {% block title %}{{ class|raw }} | {{ parent() }}{% endblock %}
 {% block body_class 'class' %}
 {% block page_id 'class:' ~ (class.name|replace({'\\': '_'})) %}
@@ -19,10 +19,15 @@
 {% block page_content %}
 
     <div class="page-header">
-        <h1>{{ class.name|split('\\')|last|raw }}</h1>
+        <h1>
+            {{ class.name|split('\\')|last|raw }}
+            {{ deprecated(class) }}
+        </h1>
     </div>
 
     <p>{{ block('class_signature') }}</p>
+
+    {{ deprecations(class) }}
 
     {% if class.shortdesc or class.longdesc %}
         <div class="description">
@@ -95,6 +100,7 @@
 {% block method_parameters_signature -%}
     {%- from "macros.twig" import method_parameters_signature -%}
     {{ method_parameters_signature(method) }}
+    {{ deprecated(method) }}
 {%- endblock %}
 
 {% block parameters %}
@@ -217,6 +223,8 @@
         <code>{{ block('method_signature') }}</code>
     </h3>
     <div class="details">
+        {{ deprecations(method) }}
+
         {% if method.shortdesc or method.longdesc %}
             <div class="method-description">
                 {% if not method.shortdesc and not method.longdesc %}
