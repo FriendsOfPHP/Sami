@@ -25,9 +25,9 @@
 {%- endmacro %}
 
 {% macro hint_link(hints) -%}
-    {% from _self import class_link %}
+    {%- from _self import class_link %}
 
-    {% if hints %}
+    {%- if hints %}
         {%- for hint in hints %}
             {%- if hint.class %}
                 {{- class_link(hint.name) }}
