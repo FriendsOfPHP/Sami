@@ -219,7 +219,7 @@
 
 {% block method %}
     <h3 id="method_{{ method.name|raw }}">
-        <div class="location">{% if method.class is not same as(class) %}in {{ method_link(method, false, true) }} {% endif %}at line {{ method_source_link(method) }}</div>
+        <div class="location">{% if method.class is not same as(class) %}in {{ method_link(method, false, true) }} {% endif %}at {{ method_source_link(method) }}</div>
         <code>{{ block('method_signature') }}</code>
     </h3>
     <div class="details">
