@@ -25,9 +25,9 @@
 {%- endmacro %}
 
 {% macro hint_link(hints) -%}
-    {% from _self import class_link %}
+    {%- from _self import class_link %}
 
-    {% if hints %}
+    {%- if hints %}
         {%- for hint in hints %}
             {%- if hint.class %}
                 {{- class_link(hint.name) }}
@@ -71,7 +71,7 @@
 {%- endmacro %}
 
 {% macro render_classes(classes) -%}
-    {% from _self import class_link %}
+    {% from _self import class_link, deprecated %}
 
     <div class="container-fluid underlined">
         {% for class in classes %}
@@ -82,6 +82,7 @@
                     {% else %}
                         {{ class_link(class, true) }}
                     {% endif %}
+                    {{ deprecated(class) }}
                 </div>
                 <div class="col-md-6">
                     {{ class.shortdesc|desc(class) }}
@@ -101,4 +102,24 @@
         {% endif %}
         <li><a href="{{ namespace_path(current_ns) }}">{{ ns|raw }}</a></li>
     {% endfor %}
+{% endmacro %}
+
+{% macro deprecated(reflection) %}
+    {% if reflection.deprecated %}<small><sup><span class="label label-danger">deprecated</span></sup></small>{% endif %}
+{% endmacro %}
+
+{% macro deprecations(reflection) %}
+    {% from _self import deprecated %}
+
+    {% if reflection.deprecated %}
+        <p>
+            {{ deprecated(reflection )}}
+            {% for tag in reflection.deprecated %}
+                <tr>
+                    <td>{{ tag[0]|raw }}</td>
+                    <td>{{ tag[1:]|join(' ')|raw }}</td>
+                </tr>
+            {% endfor %}
+        </p>
+    {% endif %}
 {% endmacro %}

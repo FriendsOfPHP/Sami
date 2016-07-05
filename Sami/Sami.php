@@ -35,7 +35,7 @@ use Sami\Version\Version;
 
 class Sami extends Container
 {
-    const VERSION = '3.2.1-DEV';
+    const VERSION = '3.3.1-DEV';
 
     public function __construct($iterator = null, array $config = array())
     {
@@ -136,7 +136,7 @@ class Sami extends Container
             $visitors = array(
                 new ClassVisitor\InheritdocClassVisitor(),
                 new ClassVisitor\MethodClassVisitor(),
-                new ClassVisitor\PropertyClassVisitor(),
+                new ClassVisitor\PropertyClassVisitor($sc['parser_context']),
             );
 
             if ($sc['remote_repository'] instanceof AbstractRemoteRepository) {
