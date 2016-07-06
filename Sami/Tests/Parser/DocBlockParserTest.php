@@ -203,9 +203,42 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                         'example' => array('Description'),
                         'link' => array('http://www.google.com'),
                         'method' => array('void setInteger(integer $integer)'),
-                        'property-read' => array('string $myProperty'),
-                        'property' => array('string $myProperty'),
-                        'property-write' => array('string $myProperty'),
+                        'property-read' => array(   // array of all properties
+                            array(                  // array of one property
+                                array(              // array of all typehints of one property
+                                    array(          // array of one typehint
+                                        'string',   // the typehint
+                                        null,       // whether or not the typehint is an array
+                                    )
+                                ),
+                                'myProperty',       // property name
+                                ''                  // property description
+                            ),
+                        ),
+                        'property' => array(        // see above
+                            array(
+                                array(
+                                    array(
+                                        'string',
+                                        null,
+                                    )
+                                ),
+                                'myProperty',
+                                ''
+                            )
+                        ),
+                        'property-write' => array(  // see above
+                            array(
+                                array(
+                                    array(
+                                        'string',
+                                        null,
+                                    )
+                                ),
+                                'myProperty',
+                                ''
+                            )
+                        ),
                         'see' => array('SomeClass::SomeMethod'),
                         'since' => array('1.0.1 First time this was introduced.'),
                         'source' => array('2 1 Check that ensures lazy counting.'),
