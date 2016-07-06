@@ -23,21 +23,21 @@ class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
             array(
                 array(),
                 'animal',
-                'Your favourite animal'
+                'Your favourite animal',
             ),
             array(
                 array(
                     'string',
-                    null
+                    null,
                 ),
                 'color',
-                'Your favourite color'
+                'Your favourite color',
             ),
             array(
                 array(),
                 'enigma',
-                null
-            )
+                null,
+            ),
         );
         $class->expects($this->any())->method('getTags')->with($this->equalTo('property'))->will($this->returnValue($property));
 

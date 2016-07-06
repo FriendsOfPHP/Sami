@@ -11,7 +11,6 @@
 
 namespace Sami\Parser\ClassVisitor;
 
-use phpDocumentor\Reflection\DocBlock\Tag\PropertyTag;
 use Sami\Parser\ClassVisitorInterface;
 use Sami\Parser\ParserContext;
 use Sami\Reflection\ClassReflection;
@@ -50,14 +49,13 @@ class PropertyClassVisitor implements ClassVisitorInterface
      * Adds a new property to the class using an array of tokens.
      *
      * @param ClassReflection $class       Class reflection
-     * @param string|array          $propertyTag Property tag contents
+     * @param string|array    $propertyTag Property tag contents
      *
      * @return bool
      */
     protected function injectProperty(ClassReflection $class, $propertyTag)
     {
-        if (is_array($propertyTag) && count($propertyTag) == 3 && !empty($propertyTag[1]))
-        {
+        if (is_array($propertyTag) && count($propertyTag) == 3 && !empty($propertyTag[1])) {
             $property = new PropertyReflection($propertyTag[1], $class->getLine());
             $property->setDocComment($propertyTag[2]);
             $property->setShortDesc($propertyTag[2]);
@@ -70,6 +68,7 @@ class PropertyClassVisitor implements ClassVisitorInterface
 
             return true;
         }
+
         return false;
     }
 }
