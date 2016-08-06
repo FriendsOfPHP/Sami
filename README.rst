@@ -62,7 +62,7 @@ argument:
 .. code-block:: php
 
     return new Sami($iterator, array(
-        'theme'                => 'default'
+        'theme'                => 'default',
         'title'                => 'Symfony2 API',
         'build_dir'            => __DIR__.'/build',
         'cache_dir'            => __DIR__.'/cache',
@@ -97,7 +97,7 @@ And here is how you can configure different versions:
     ;
 
     return new Sami($iterator, array(
-        'theme'                => 'symfony',
+        'theme'                => 'default',
         'versions'             => $versions,
         'title'                => 'Symfony2 API',
         'build_dir'            => __DIR__.'/../build/sf2/%version%',
