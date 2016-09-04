@@ -11,7 +11,6 @@
 
 namespace Sami\Parser\ClassVisitor;
 
-use phpDocumentor\Reflection\DocBlock\Tag\PropertyTag;
 use Sami\Parser\ClassVisitorInterface;
 use Sami\Parser\ParserContext;
 use Sami\Reflection\ClassReflection;
@@ -37,7 +36,7 @@ class PropertyClassVisitor implements ClassVisitorInterface
         $properties = $class->getTags('property');
         if (!empty($properties)) {
             foreach ($properties as $propertyTag) {
-                if ($this->injectProperty($class, implode(' ', $propertyTag))) {
+                if ($this->injectProperty($class, $propertyTag)) {
                     $modified = true;
                 }
             }
@@ -50,58 +49,26 @@ class PropertyClassVisitor implements ClassVisitorInterface
      * Adds a new property to the class using an array of tokens.
      *
      * @param ClassReflection $class       Class reflection
-     * @param string          $propertyTag Property tag contents
+     * @param string|array    $propertyTag Property tag contents
      *
      * @return bool
      */
     protected function injectProperty(ClassReflection $class, $propertyTag)
     {
-        if (!$data = $this->parseProperty($propertyTag)) {
-            return false;
+        if (is_array($propertyTag) && count($propertyTag) == 3 && !empty($propertyTag[1])) {
+            $property = new PropertyReflection($propertyTag[1], $class->getLine());
+            $property->setDocComment($propertyTag[2]);
+            $property->setShortDesc($propertyTag[2]);
+
+            if (!empty($propertyTag[0])) {
+                $property->setHint($propertyTag[0]);
+            }
+
+            $class->addProperty($property);
+
+            return true;
         }
 
-        $property = new PropertyReflection($data['name'], $class->getLine());
-        $property->setDocComment($data['description']);
-        $property->setShortDesc($data['description']);
-
-        if (isset($data['hint'])) {
-            $property->setHint(array(array($data['hint'], null)));
-        }
-
-        $class->addProperty($property);
-
-        return true;
-    }
-
-    /**
-     * Parses the parts of an @property tag into an associative array.
-     *
-     * @param string $tag Property tag contents
-     *
-     * @return array
-     */
-    protected function parseProperty($tag)
-    {
-        // Account for default array syntax
-        $tag = str_replace('array()', 'array', $tag);
-
-        /** @var PropertyTag $propertyTag */
-        $propertyTag = $this->context->getDocBlockParser()->getTag('@property '.$tag);
-        $propertyName = $propertyTag->getVariableName();
-
-        if (!$propertyName) {
-            return array();
-        }
-
-        $type = $propertyTag->getType();
-
-        $description = $propertyTag->getDescription();
-        $property = array('name' => substr($propertyName, 1));
-        if (strlen($type)) {
-            $property['hint'] = $type;
-        }
-        $property['description'] = $description;
-
-        return $property;
+        return false;
     }
 }
