@@ -17,7 +17,10 @@ class MethodClassVisitorTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddsMethods()
     {
-        $class = $this->getMock('Sami\Reflection\ClassReflection', array('getTags'), array('Mock', 1));
+        $class = $this->getMockBuilder('Sami\Reflection\ClassReflection')
+            ->setMethods(array('getTags'))
+            ->setConstructorArgs(array('Mock', 1))
+            ->getMock();
         $property = array(
             explode(' ', 'string askQuestion() Ask 3 questions'),
         );
