@@ -28,7 +28,7 @@ class ClassTraverserTest extends \PHPUnit_Framework_TestCase
 
         $project = new Project($store);
 
-        $visitor = $this->getMock('Sami\Parser\ClassVisitorInterface');
+        $visitor = $this->getMockBuilder('Sami\Parser\ClassVisitorInterface')->getMock();
         $visitor->expects($this->at(0))->method('visit')->with($project->loadClass($interfaceName));
         $visitor->expects($this->at(1))->method('visit')->with($project->loadClass($parentName));
         $visitor->expects($this->at(2))->method('visit')->with($project->loadClass($className));
