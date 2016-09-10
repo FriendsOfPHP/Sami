@@ -29,10 +29,10 @@ class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
         );
         $class->expects($this->any())->method('getTags')->with($this->equalTo('property'))->will($this->returnValue($property));
 
-        $context = $this->prophesize('Sami\Parser\ParserContext');
-        $context->getDocBlockParser()->willReturn(new DocBlockParser())->shouldBeCalled();
+        $context = $this->getMockBuilder('Sami\Parser\ParserContext')->disableOriginalConstructor()->getMock();
+        $context->expects($this->atLeastOnce())->method('getDocBlockParser')->will($this->returnValue(new DocBlockParser()));
 
-        $visitor = new PropertyClassVisitor($context->reveal());
+        $visitor = new PropertyClassVisitor($context);
         $visitor->visit($class);
 
         $this->assertTrue(array_key_exists('color', $class->getProperties()));
