@@ -2,3 +2,4 @@ composer.phar
 cache
 build
 vendor
+/.phpunit

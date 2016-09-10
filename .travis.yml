@@ -15,14 +15,24 @@ matrix:
         - php: 5.6
           env: BLACKFIRE=on
         - php: 7.0
-        - php: hhvm
+        # Use the newer stack for HHVM as HHVM does not support Precise anymore since a long time and so Precise has an outdated version
+        - php: hhvm-3.12
+          sudo: required
+          dist: trusty
+          group: edge
+    fast_finish: true
 
 sudo: false
 
 cache:
     - $HOME/.composer/cache/files
+    - .phpunit
 
 before_install:
+    - if [[ ! $TRAVIS_PHP_VERSION = hhvm* ]]; then INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; else INI_FILE=/etc/hhvm/php.ini; fi
+    - echo memory_limit = -1 >> $INI_FILE
+    - if [[ ! $TRAVIS_PHP_VERSION = hhvm* ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
+    - ./phpunit install
     - |
         if [[ "$BLACKFIRE" = "on" ]]; then
             openssl aes-256-cbc -K $encrypted_16ab3ffdcd52_key -iv $encrypted_16ab3ffdcd52_iv -in .blackfire.travis.ini.enc -out ~/.blackfire.ini -d
@@ -31,9 +41,6 @@ before_install:
         fi
     - if [[ "$TWIG" = "2.x" ]]; then sed -i 's/~1.20|~2.0/~2.0/g' composer.json; composer update; fi
     - if [[ "$TWIG" = "1.x" ]]; then sed -i 's/~1.20|~2.0/~1.20/g' composer.json; composer update; fi
-
-install:
-    - travis_retry composer install
 
 before_script:
     - phpenv config-rm xdebug.ini || true
@@ -45,4 +52,4 @@ before_script:
         fi
 
 script:
-    - phpunit
+    - ./phpunit
