@@ -3,6 +3,8 @@ CHANGELOG
 
 * 4.0.0 (2016-XX-XX)
 
+ * upgraded to PHPParser 3.0 (removed support for 2.x)
+ * removed support for Twig 1.x
  * removed support for PHP 5.3 and 5.4
  * upgraded Symfony to 3.*
 
