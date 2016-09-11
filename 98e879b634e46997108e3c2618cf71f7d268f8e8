@@ -1,0 +1,29 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2016-09-10T02:32:10Z
+
+@davidsoderberg @gquemener @GrahamCampbell @schnittstabil @javiereguiluz @KKSzymanowski @sas1024 @krzysiekpiasecki Can you test this new version and tell me if it fixes your issues before I merge it and release a new major version?
+
+---------------------------------------------------------------------------
+
+by KKSzymanowski at 2016-09-10T06:54:32Z
+
+Sorry, but my package no longer uses Sami, so I can't really test it.
+
+---------------------------------------------------------------------------
+
+by davidsoderberg at 2016-09-10T08:55:02Z
+
+Sorry I do not use sami any more.
+
+---------------------------------------------------------------------------
+
+by krzysiekpiasecki at 2016-09-10T12:31:35Z
+
+#228 is fixed by Sami 4.0.0-DEV
+
+---------------------------------------------------------------------------
+
+by schnittstabil at 2016-09-10T14:05:05Z
+
+LGTM :+1:
