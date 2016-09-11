@@ -3,6 +3,7 @@ CHANGELOG
 
 * 4.0.0 (2016-XX-XX)
 
+ * fixed parsing of @property tags in DocBlocks
  * added PublicFilter (same implementation as the old DefaultFilter in 3.x)
  * changed DefaultFilter to included protected methods and properties
  * removed SymfonyFilter
