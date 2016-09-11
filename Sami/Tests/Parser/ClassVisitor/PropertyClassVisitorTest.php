@@ -12,7 +12,6 @@
 namespace Sami\Tests\Parser\ClassVisitor;
 
 use Sami\Parser\ClassVisitor\PropertyClassVisitor;
-use Sami\Parser\DocBlockParser;
 
 class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,15 +21,30 @@ class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getTags'))
             ->setConstructorArgs(array('Mock', 1))
             ->getMock();
+
         $property = array(
-            explode(' ', '$animal Your favorite animal'),
-            explode(' ', 'string $color Your favorite color'),
-            explode(' ', '$enigma'),
+            array(
+                array(),
+                'animal',
+                'Your favourite animal',
+            ),
+            array(
+                array(
+                    'string',
+                    null,
+                ),
+                'color',
+                'Your favourite color',
+            ),
+            array(
+                array(),
+                'enigma',
+                null,
+            ),
         );
         $class->expects($this->any())->method('getTags')->with($this->equalTo('property'))->will($this->returnValue($property));
 
         $context = $this->getMockBuilder('Sami\Parser\ParserContext')->disableOriginalConstructor()->getMock();
-        $context->expects($this->atLeastOnce())->method('getDocBlockParser')->will($this->returnValue(new DocBlockParser()));
 
         $visitor = new PropertyClassVisitor($context);
         $visitor->visit($class);

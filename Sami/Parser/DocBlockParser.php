@@ -61,6 +61,9 @@ class DocBlockParser
                     $this->parseHint($tag->getTypes()),
                     $tag->getDescription(),
                 );
+            case 'PropertyTag':
+            case 'PropertyReadTag':
+            case 'PropertyWriteTag':
             case 'ParamTag':
                 return array(
                     $this->parseHint($tag->getTypes()),
