@@ -1,0 +1,188 @@
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-07T09:56:06Z
+
+I'm having trouble with the PHP 7 Travis build failing. Can't reproduce that, although I'm using the same PHP and PHPUnit versions:
+
+<img width="1411" alt="bildschirmfoto 2016-07-07 um 11 55 19" src="https://cloud.githubusercontent.com/assets/17005834/16649565/c5a74a9c-4439-11e6-97a6-93c7c146dc6e.png">
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-07T10:00:20Z
+
+> https://github.com/FriendsOfPHP/Sami/pull/224#issuecomment-231035036
+
+You're using same PHP and PHPUnit versions locally and not getting these warnings?
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-07T10:02:03Z
+
+> You're using same PHP and PHPUnit versions locally and not getting these warnings?
+
+No the screenshot is from my local machine. I do get the warnings (do you want me to take care of them and change the old tests?), but I do not get the errors that Travis shows, although the versions match. o.O
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-07T10:14:31Z
+
+If no errors on Travis, then you shouldn't take care of that as part of this PR. I guess Travis is using slightly different PHPUnit version where that method isn't deprecated.
+
+What you can do is open an issue about that warning so that can be fixed in separate PR.
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-07T12:01:42Z
+
+Still, I'm getting errors in Travis, too. And my versions of PHP and PHPunit are exactly the same (compare my screenshot and the build summary from Travis CI, PHP 7.0.8 and PHPUnit 5.4.6). I'm a bit lost now, how can I make that build pass?
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-07T12:39:58Z
+
+You can send a separate PR with a fix for `getMock` method calls. Then once it's merged you'll rebase your PR on top of `master` branch (of origin repo) and this PR should also pass the build.
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-07T12:42:26Z
+
+I'm not talking about the warnings right now. The Travis build does not fail because of the warnings (I think).
+
+There are errors in the Travis PHP 7 build. Errors that I can not reproduce locally, although my PHP and PHPUnit versions are the same that Travis uses. So I don't know how to fix those errors, since I don't get them locally.
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-07T12:48:56Z
+
+I think there's something wrong with Travis. For example, the first error:
+![bildschirmfoto 2016-07-07 um 14 45 05](https://cloud.githubusercontent.com/assets/17005834/16653539/83fb911c-4451-11e6-9c9b-2ab6dd6bb405.png)
+
+It says that argument 2 passed to phpDocumentor\Reflection\DocBlock::__construct() must be an instance of phpDocumentor\Reflection\DocBlock\Description. But here is `phpDocumentor\Reflection\DocBlock::__construct()`:
+<img width="613" alt="bildschirmfoto 2016-07-07 um 14 47 20" src="https://cloud.githubusercontent.com/assets/17005834/16653576/c165b3de-4451-11e6-90bf-e53a0ba978de.png">
+
+Clearly, the second argument is of type `phpDocumentor\Reflection\DocBlock\Context`. That's strange...
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-07T13:01:00Z
+
+Maybe because you've removed `$context->getDocBlockParser()->willReturn(new DocBlockParser())->shouldBeCalled();` line, that set DocBlockParser to the mocked class?
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-07T14:36:47Z
+
+Hmm... I removed that because it doesn't get called anymore in the context of `PropertyClassVisitorTest::testAddsProperties()`, since it got called out of `PropertyClassVisitor::parseProperty()`, and that method doesn't exist anymore, because it is no longer needed. Because the parsing now happens when a new `ClassReflection` object is instantiated, not inside the visitor. (This is how all other tags get parsed, only properties were special up to now, that's why the behavior in #114 occurred).
+
+Keeping that in would result in PHPUnit complaining that a method doesn't get called, although it is _supposed_ to not get called.
+
+The problem is this:
+
+My local machine: PHP 7.0.8, PHPUnit 5.4.6, a specific set of unit tests => no errors
+Travis CI build: Same PHP version, same PHPUnit version, same set of tests => errors
+
+Also, the errors complain about types being wrong which are _clearly_ not wrong when you look at the code. There's got to be something wrong here, but I just can't get the hang of it... :(
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-07T14:39:48Z
+
+> Keeping that in would result in PHPUnit complaining that a method doesn't get called, although it is supposed to not get called.
+
+I thought, that removing that causes the error you're getting.
+
+> There's got to be something wrong here, but I just can't get the hang of it... :(
+
+I recommend to use xDebug to debug test suite and see what's happening inside.
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-07T14:46:12Z
+
+> I thought, that removing that causes the error you're getting.
+
+No, keeping that in would result in an error because of the reason I mentioned above.
+
+> I recommend to use xDebug to debug test suite and see what's happening inside.
+
+That's the point I'm trying to make. I would love to debug, but I can't, because on my machine, there are no errors. Although my versions of PHP and PHPUnit are the same that Travis uses.
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-07T14:51:32Z
+
+I'm out of Ideas here. My code works, I'm sure. All tests are green (or at least yellow), I'm also sure. The errors that the Travis build yields are no errors, I checked, you can see it in the screenshot above. There _is_ no type error.
+
+I don't want to load you up with work, but could you maybe check out my branch, run the tests with PHP 7.0.8 and PHPUnit 5.4.6 and tell me if you get any errors?
+
+Maybe, but just maybe, this could also be a result of the deprecated method being used? Next thing I'll do is what you told me earlier: fix #225 in another branch, rebase this branch on top of that and see what happens.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-07T15:59:25Z
+
+I have PHP 7.0.1 locally and not getting that error with same PHPUnit version. Probably something strange happening in PHP 7.0.8 only.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-08T08:05:53Z
+
+Installed PHP 7.0.8 locally and still not getting those Fatal Errors about wrong context given.
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-08T08:10:16Z
+
+Just like me... getting the warnings, but not the errors. That's really strange. I will try and do as you suggested and fix #225. Maybe this is some kind of weird, unforeseeable followup-error of this. Won't make it today though, I'm on customer support duty today... :-/. I'll see to it ASAP.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-08T08:15:31Z
+
+You can contact Travis CI support and see if they can help.
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-18T08:32:13Z
+
+Just a heads up: Contacted Travis CI support, currently waiting for reply.
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-20T08:19:49Z
+
+Travis CI support got in touch with me, telling me how to trigger a debug build and debug it via SSH. Will definitely try and see what I can find, might just take a few days since I've got a bunch of tasks to do at work. Not giving up on this!
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-20T08:22:38Z
+
+> Travis CI support got in touch with me, telling me how to trigger a debug build and debug it via SSH.
+
+Is this feature documented? It could save me some time, while figuring out why PHP 7 tests for some of my projects are passing locally, but end up on `Segmentation fault` on same PHP 7 version Travis.
+
+> Not giving up on this!
+
+👍
+
+---------------------------------------------------------------------------
+
+by Christoph-Harms at 2016-07-20T08:26:39Z
+
+> Is this feature documented?
+
+I think not, because it's also not fully integrated in the UI yet. But I could forward you the email with the instructions to the email address in your profile if you like.
+
+---------------------------------------------------------------------------
+
+by aik099 at 2016-07-20T08:29:10Z
+
+> But I could forward you the email with the instructions to the email address in your profile if you like.
+
+Please do. The only stuff I could find was using Vagrant boxes, that no longer work.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-09-11T16:23:00Z
+
+Just for your information, the problem was PHPUnit uses phpdocumentor/docblock as a dependency like Sami, but with different versions that are incompatible. I've now included a script that creates a phpunit that does not exhibit this problem. So, after rebasing on current master, you can just run `./phpunit` instead of the regular one and things will work as expected.
