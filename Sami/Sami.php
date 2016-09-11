@@ -11,10 +11,9 @@
 
 namespace Sami;
 
-use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser as PhpParser;
+use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
 use Pimple\Container;
 use Sami\Parser\ClassTraverser;
@@ -35,7 +34,7 @@ use Sami\Version\Version;
 
 class Sami extends Container
 {
-    const VERSION = '3.3.1-DEV';
+    const VERSION = '4.0.0-DEV';
 
     public function __construct($iterator = null, array $config = array())
     {
@@ -101,7 +100,7 @@ class Sami extends Container
         };
 
         $this['php_parser'] = function () {
-            return new PhpParser(new Lexer());
+            return (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         };
 
         $this['php_traverser'] = function ($sc) {
