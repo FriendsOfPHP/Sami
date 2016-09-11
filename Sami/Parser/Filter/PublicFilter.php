@@ -14,15 +14,15 @@ namespace Sami\Parser\Filter;
 use Sami\Reflection\MethodReflection;
 use Sami\Reflection\PropertyReflection;
 
-class DefaultFilter extends TrueFilter
+class PublicFilter extends TrueFilter
 {
     public function acceptMethod(MethodReflection $method)
     {
-        return !$method->isPrivate();
+        return $method->isPublic();
     }
 
     public function acceptProperty(PropertyReflection $property)
     {
-        return !$property->isPrivate();
+        return $property->isPublic();
     }
 }

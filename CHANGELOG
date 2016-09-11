@@ -3,6 +3,8 @@ CHANGELOG
 
 * 4.0.0 (2016-XX-XX)
 
+ * added PublicFilter (same implementation as the old DefaultFilter in 3.x)
+ * changed DefaultFilter to included protected methods and properties
  * removed SymfonyFilter
  * upgraded to PHPParser 3.0 (removed support for 2.x)
  * removed support for Twig 1.x
