@@ -11,18 +11,18 @@
 
 namespace Sami\Parser\Filter;
 
-use Sami\Reflection\ClassReflection;
 use Sami\Reflection\MethodReflection;
+use Sami\Reflection\PropertyReflection;
 
-class SymfonyFilter extends DefaultFilter
+class PublicFilter extends TrueFilter
 {
-    public function acceptClass(ClassReflection $class)
-    {
-        return $class->getTags('api');
-    }
-
     public function acceptMethod(MethodReflection $method)
     {
-        return parent::acceptMethod($method) && $method->getTags('api');
+        return $method->isPublic();
+    }
+
+    public function acceptProperty(PropertyReflection $property)
+    {
+        return $property->isPublic();
     }
 }

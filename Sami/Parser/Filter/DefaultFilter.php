@@ -18,11 +18,11 @@ class DefaultFilter extends TrueFilter
 {
     public function acceptMethod(MethodReflection $method)
     {
-        return $method->isPublic();
+        return !$method->isPrivate();
     }
 
     public function acceptProperty(PropertyReflection $property)
     {
-        return $property->isPublic();
+        return !$property->isPrivate();
     }
 }
