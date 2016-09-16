@@ -55,11 +55,14 @@
             <form action="#" method="GET">
                 <select id="version-switcher" name="version">
                     {% for version in project.versions %}
-                        <option value="{{ path('../' ~ version ~ '/index.html') }}"{{ version == project.version ? ' selected' : '' }}>{{ version.longname }}</option>
+                        <option value="{{ path('../' ~ version ~ '/index.html') }}" data-version="{{version}}">{{ version.longname }}</option>
                     {% endfor %}
                 </select>
             </form>
         {% endif %}
+        <script>
+            $('option[data-version="'+window.projectVersion+'"]').attr('selected', true);
+        </script>
         <form id="search-form" action="{{ path('search.html') }}" method="GET">
             <span class="glyphicon glyphicon-search"></span>
             <input name="search"
