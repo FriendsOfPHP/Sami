@@ -486,9 +486,10 @@ class Project
             $this->flushDir($this->getBuildDir());
         }
 
-        if ($previous && !$this->renderer->isRendered($this)) {
+        if ($previous && !$this->renderer->isRendered($this) && $this->getConfig('remote_repository') === NULL ) {
             $this->seedCache($previous, $this->getBuildDir());
         }
+
 
         $diff = $this->renderer->render($this, $callback, $force);
 
