@@ -61,7 +61,7 @@
             </form>
         {% endif %}
         <script>
-            $('option[data-version="'+window.projectVersion+'"]').attr('selected', true);
+            $('option[data-version="'+window.projectVersion+'"]').prop('selected', true);
         </script>
         <form id="search-form" action="{{ path('search.html') }}" method="GET">
             <span class="glyphicon glyphicon-search"></span>
