@@ -140,14 +140,4 @@ class TwigExtension extends \Twig_Extension
 
         return rtrim(str_repeat('../', $value), '/').'/';
     }
-
-    /**
-     * Returns the name of the extension.
-     *
-     * @return string The extension name
-     */
-    public function getName()
-    {
-        return 'sami';
-    }
 }
