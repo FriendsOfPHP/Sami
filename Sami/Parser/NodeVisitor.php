@@ -141,6 +141,7 @@ class NodeVisitor extends NodeVisitorAbstract
     protected function addMethod(ClassMethodNode $node)
     {
         $method = new MethodReflection($node->name, $node->getLine());
+        $method->setClass($this->context->getClass());
         $method->setModifiers((string) $node->type);
 
         $method->setByRef((string) $node->byRef);
