@@ -45,10 +45,6 @@
 
             $('#search').val(term);
             var container = $('.search-results');
-
-            // create the search index
-            {{ block('search_index') }}
-
             var results = Sami.search(term);
             var len = results.length;
 
