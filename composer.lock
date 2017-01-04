@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "36a340074d29572f5390b472e6f1dd7d",
+    "content-hash": "de0ad0c2cd3ca49c10963002b8abb839",
     "packages": [
         {
             "name": "blackfire/php-sdk",
@@ -875,7 +875,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.9"
+        "php": ">=7.0"
     },
     "platform-dev": []
 }

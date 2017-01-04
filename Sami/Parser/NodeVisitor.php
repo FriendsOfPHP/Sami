@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt as StmtNode;
 use PhpParser\Node\Stmt\ClassConst as ClassConstNode;
 use PhpParser\Node\Stmt\ClassMethod as ClassMethodNode;
 use PhpParser\Node\Stmt\Class_ as ClassNode;
+use PhpParser\Node\Stmt\ClassLike as ClassLikeNode;
 use PhpParser\Node\Stmt\Interface_ as InterfaceNode;
 use PhpParser\Node\Stmt\Namespace_ as NamespaceNode;
 use PhpParser\Node\Stmt\Property as PropertyNode;
@@ -109,10 +110,12 @@ class NodeVisitor extends NodeVisitorAbstract
         $class->setTrait(true);
     }
 
-    protected function addClassOrInterface(StmtNode $node)
+    protected function addClassOrInterface(ClassLikeNode $node)
     {
         $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
-        $class->setModifiers($node->getType());
+        if ($class instanceof ClassNode) {
+            $class->setModifiers($node->flags);
+        }
         $class->setNamespace($this->context->getNamespace());
         $class->setAliases($this->context->getAliases());
         $class->setHash($this->context->getHash());
@@ -141,13 +144,12 @@ class NodeVisitor extends NodeVisitorAbstract
     protected function addMethod(ClassMethodNode $node)
     {
         $method = new MethodReflection($node->name, $node->getLine());
-        $method->setModifiers((string) $node->type);
-
+        $method->setModifiers($node->flags);
         $method->setByRef((string) $node->byRef);
 
         foreach ($node->params as $param) {
             $parameter = new ParameterReflection($param->name, $param->getLine());
-            $parameter->setModifiers((string) $param->type);
+            $parameter->setModifiers($param->type);
             $parameter->setByRef($param->byRef);
             if ($param->default) {
                 $parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
@@ -194,7 +196,7 @@ class NodeVisitor extends NodeVisitorAbstract
     {
         foreach ($node->props as $prop) {
             $property = new PropertyReflection($prop->name, $prop->getLine());
-            $property->setModifiers($node->type);
+            $property->setModifiers($node->flags);
 
             $property->setDefault($prop->default);
 
