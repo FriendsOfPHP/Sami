@@ -8,6 +8,8 @@ matrix:
         - php: hhvm-stable
           sudo: required
           dist: trusty
+    allow_failures:
+        - php: hhvm-stable
     fast_finish: true
 
 sudo: false
