@@ -1,7 +1,11 @@
 CHANGELOG
 =========
 
-* 4.0.0 (2016-XX-XX)
+* 4.0.1 (2017-XX-XX)
+
+ * n/a
+
+* 4.0.0 (2017-01-05)
 
  * fixed version switcher
  * fixed parsing of @property tags in DocBlocks
