@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "de0ad0c2cd3ca49c10963002b8abb839",
+    "content-hash": "3fa9a56e24192f57b468ef52ad602644",
     "packages": [
         {
             "name": "blackfire/php-sdk",
@@ -746,16 +746,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "2.x-dev",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "166922bcfe11d32b4870e82268c7526d740ab736"
+                "reference": "2a86dde1288d7270169083d0e078dc7ebe0f48b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/166922bcfe11d32b4870e82268c7526d740ab736",
-                "reference": "166922bcfe11d32b4870e82268c7526d740ab736",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/2a86dde1288d7270169083d0e078dc7ebe0f48b6",
+                "reference": "2a86dde1288d7270169083d0e078dc7ebe0f48b6",
                 "shasum": ""
             },
             "require": {
@@ -804,7 +804,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-12-24 10:36:01"
+            "time": "2017-01-05T17:12:02+00:00"
         }
     ],
     "packages-dev": [
@@ -869,9 +869,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "twig/twig": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
