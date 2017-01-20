@@ -123,3 +123,23 @@
         </p>
     {% endif %}
 {% endmacro %}
+
+{% macro todo(reflection) %}
+        {% if reflection.todo %}<small><sup><span class="label label-info">todo</span></sup></small>{% endif %}
+{% endmacro %}
+
+{% macro todos(reflection) %}
+        {% from _self import todo %}
+
+        {% if reflection.todo %}
+            <p>
+                {{ todo(reflection )}}
+                {% for tag in reflection.todo %}
+                    <tr>
+                        <td>{{ tag[0]|raw }}</td>
+                        <td>{{ tag[1:]|join(' ')|raw }}</td>
+                        </tr>
+                {% endfor %}
+            </p>
+        {% endif %}
+{% endmacro %}

@@ -181,6 +181,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                 * @author Author Name
                 * @covers SomeClass::SomeMethod
                 * @deprecated 1.0 for ever
+                * @todo Something needs to be done
                 * @example Description
                 * @link http://www.google.com
                 * @method void setInteger(integer $integer)
@@ -200,6 +201,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                         'author' => array('Author Name'),
                         'covers' => array('SomeClass::SomeMethod'),
                         'deprecated' => array('1.0 for ever'),
+                        'todo' => array('Something needs to be done'),
                         'example' => array('Description'),
                         'link' => array('http://www.google.com'),
                         'method' => array('void setInteger(integer $integer)'),
@@ -208,7 +210,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                                 array(              // array of all typehints of one property
                                     array(          // array of one typehint
                                         'string',   // the typehint
-                                        null// whether or not the typehint is an array
+                                        null,       // whether or not the typehint is an array
                                     ),
                                 ),
                                 'myProperty',       // property name
