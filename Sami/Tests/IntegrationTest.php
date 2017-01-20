@@ -22,6 +22,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->sami = new Sami(dirname(__DIR__).'/Console', array(
             'build_dir' => $dir.'/build',
             'cache_dir' => $dir.'/cache',
+            'insert_todos' => true,
         ));
     }
 

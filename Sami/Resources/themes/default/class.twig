@@ -1,5 +1,5 @@
 {% extends "layout/layout.twig" %}
-{% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link, source_link, method_source_link, deprecated, deprecations %}
+{% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link, source_link, method_source_link, deprecated, deprecations, todo, todos %}
 {% block title %}{{ class|raw }} | {{ parent() }}{% endblock %}
 {% block body_class 'class' %}
 {% block page_id 'class:' ~ (class.name|replace({'\\': '_'})) %}
@@ -37,6 +37,9 @@
             {% if class.longdesc -%}
                 <p>{{ class.longdesc|desc(class) }}</p>
             {%- endif %}
+            {% if project.config('insert_todos') == true %}
+                {{ todos(class) }}
+            {% endif %}
         </div>
     {% endif %}
 
@@ -237,6 +240,9 @@
                     <p>{{ method.longdesc|desc(class) }}</p>
                     {%- endif %}
                 {%- endif %}
+                {% if project.config('insert_todos') == true %}
+                    {{ todos(method) }}
+                {% endif %}
             </div>
         {% endif %}
         <div class="tags">

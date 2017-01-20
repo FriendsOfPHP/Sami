@@ -146,6 +146,11 @@ abstract class Reflection
         return $this->getTags('deprecated');
     }
 
+    public function getTodo()
+    {
+        return $this->getTags('todo');
+    }
+
     // not serialized as it is only useful when parsing
     public function setDocComment($comment)
     {
