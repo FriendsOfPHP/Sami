@@ -14,7 +14,6 @@ namespace Sami\Parser;
 use PhpParser\Node as AbstractNode;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\Node\Stmt as StmtNode;
 use PhpParser\Node\Stmt\ClassConst as ClassConstNode;
 use PhpParser\Node\Stmt\ClassMethod as ClassMethodNode;
 use PhpParser\Node\Stmt\Class_ as ClassNode;
@@ -25,6 +24,7 @@ use PhpParser\Node\Stmt\Property as PropertyNode;
 use PhpParser\Node\Stmt\TraitUse as TraitUseNode;
 use PhpParser\Node\Stmt\Trait_ as TraitNode;
 use PhpParser\Node\Stmt\Use_ as UseNode;
+use PhpParser\Node\NullableType;
 use Sami\Project;
 use Sami\Reflection\ClassReflection;
 use Sami\Reflection\ConstantReflection;
@@ -155,13 +155,27 @@ class NodeVisitor extends NodeVisitorAbstract
                 $parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
             }
 
-            if ($type = (string) $param->type) {
-                if ($param->type instanceof FullyQualified && strpos($type, '\\') !== 0) {
-                    $type = '\\'.$type;
-                }
+            $type = $param->type;
+            $typeStr = NULL;
 
-                $parameter->setHint($this->resolveHint(array(array($type, false))));
+            if (is_string($param->type)) {
+                $type = $param->type;
+                $typeStr = (string) $param->type;
+
             }
+            else if ($param->type instanceof NullableType){
+                $type = $param->type->type;
+                $typeStr = (string) $param->type->type;
+            }
+
+            if ($type instanceof FullyQualified && strpos($typeStr, '\\') !== 0) {
+                $typeStr = '\\'.$typeStr;
+            }
+                
+            if ($typeStr != NULL) {
+                $parameter->setHint($this->resolveHint(array(array($typeStr, false))));
+            }
+
             $method->addParameter($parameter);
         }
 
