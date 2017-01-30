@@ -155,13 +155,16 @@ class NodeVisitor extends NodeVisitorAbstract
                 $parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
             }
 
-            if ($type = (string) $param->type) {
+            if (is_string($param->type) || method_exists($param->type, "__toString")) {
+                $type = (string) $param->type;
+
                 if ($param->type instanceof FullyQualified && strpos($type, '\\') !== 0) {
                     $type = '\\'.$type;
                 }
 
                 $parameter->setHint($this->resolveHint(array(array($type, false))));
             }
+
             $method->addParameter($parameter);
         }
 
