@@ -156,14 +156,12 @@ class NodeVisitor extends NodeVisitorAbstract
             }
 
             $type = $param->type;
-            $typeStr = NULL;
+            $typeStr = null;
 
             if (is_string($param->type)) {
                 $type = $param->type;
                 $typeStr = (string) $param->type;
-
-            }
-            else if ($param->type instanceof NullableType){
+            } elseif ($param->type instanceof NullableType) {
                 $type = $param->type->type;
                 $typeStr = (string) $param->type->type;
             }
@@ -171,8 +169,8 @@ class NodeVisitor extends NodeVisitorAbstract
             if ($type instanceof FullyQualified && strpos($typeStr, '\\') !== 0) {
                 $typeStr = '\\'.$typeStr;
             }
-                
-            if ($typeStr != NULL) {
+
+            if ($typeStr != null) {
                 $parameter->setHint($this->resolveHint(array(array($typeStr, false))));
             }
 
