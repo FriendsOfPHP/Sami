@@ -170,7 +170,7 @@ class NodeVisitor extends NodeVisitorAbstract
                 $typeStr = '\\'.$typeStr;
             }
 
-            if ($typeStr != null) {
+            if ($typeStr !== null) {
                 $parameter->setHint($this->resolveHint(array(array($typeStr, false))));
             }
 
