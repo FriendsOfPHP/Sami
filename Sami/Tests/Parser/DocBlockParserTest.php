@@ -210,7 +210,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                                 array(              // array of all typehints of one property
                                     array(          // array of one typehint
                                         'string',   // the typehint
-                                        null,// whether or not the typehint is an array
+                                        null,       // whether or not the typehint is an array
                                     ),
                                 ),
                                 'myProperty',       // property name
