@@ -314,7 +314,7 @@ class NodeVisitor extends NodeVisitorAbstract
         $class = $this->context->getClass();
 
         // special aliases
-        if ('self' === $alias || 'static' === $alias) {
+        if ('self' === $alias || 'static' === $alias || '\$this' === $alias) {
             return $class->getName();
         }
 
