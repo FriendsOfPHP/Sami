@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2017-04-13T14:51:26Z
+
+If `NodeVisitor` class has tests, then please update them.
+
+---------------------------------------------------------------------------
+
+by TheRealDarklord at 2017-04-13T17:56:52Z
+
+looks like there is no unit test for `NodeVisitor`
