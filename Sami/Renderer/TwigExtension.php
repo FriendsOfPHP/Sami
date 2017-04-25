@@ -11,7 +11,7 @@
 
 namespace Sami\Renderer;
 
-use Michelf\Markdown;
+use Michelf\MarkdownExtra;
 use Sami\Reflection\ClassReflection;
 use Sami\Reflection\MethodReflection;
 use Sami\Reflection\PropertyReflection;
@@ -111,7 +111,7 @@ class TwigExtension extends \Twig_Extension
         }
 
         if (null === $this->markdown) {
-            $this->markdown = new Markdown();
+            $this->markdown = new MarkdownExtra();
         }
 
         // FIXME: the @see argument is more complex than just a class (Class::Method, local method directly, ...)
