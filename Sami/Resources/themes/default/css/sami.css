@@ -239,25 +239,29 @@ a abbr {
     cursor: pointer;
 }
 
-.method-description table {
+.method-description table, .description table {
     border: solid 1px #ccc;
     padding: 1em;
     margin: 1em;
 }
 
-.method-description td, .method-description th {
+.method-description td, .method-description th,
+.description td, .description th {
     padding: 0.75em 1.25em;
 }
 
-.method-description tbody tr:nth-child(even) {
+.method-description tbody tr:nth-child(even),
+.description tbody tr:nth-child(even) {
     background: #edf3fe;
 }
 
-.method-description tbody tr:nth-child(odd) {
+.method-description tbody tr:nth-child(odd),
+.description tbody tr:nth-child(odd) {
     background: #fff;
 }
 
-.method-description thead tr {
+.method-description thead tr,
+.description thead tr {
     background: #edf3fe;
 }
 
