@@ -1,0 +1,19 @@
+---------------------------------------------------------------------------
+
+by philip at 2017-01-20T23:00:07Z
+
+The failed coding standards error is unrelated to the changes here.
+
+---------------------------------------------------------------------------
+
+by philip at 2017-01-20T23:03:59Z
+
+All comments/suggestions are welcome.
+
+A configuration option was added, so feel free to suggest an alternative if that feels unnecessary. Also, it is disabled by default but this patch enables it for the tests. I wasn't sure how best to separate it out (test both enabled and disabled) so kept it simple.
+
+---------------------------------------------------------------------------
+
+by schodemeiss at 2017-05-05T18:20:11Z
+
+I'm all in favour of this being merged in. I was about to write the same thing myself. @fabpot, any chance of the merge?
