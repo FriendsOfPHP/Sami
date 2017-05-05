@@ -5,6 +5,9 @@ matrix:
         - php: 7.0
         - php: 7.0
           env: BLACKFIRE=on
+        - php: 7.1
+        - php: 7.1
+          env: BLACKFIRE=on
         - php: hhvm-stable
           sudo: required
           dist: trusty
