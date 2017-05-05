@@ -1,9 +1,19 @@
 CHANGELOG
 =========
 
-* 4.0.1 (2017-XX-XX)
+* 4.0.3 (2017-05-05)
 
- * n/a
+ * fixed Tree parser sets links for namespaces containing sub namespaces
+ * switched to Markdown Extra instead of Markdown
+ * added @todo tag support
+
+* 4.0.2 (2017-04-18)
+
+ * added $this as class name alias for hints
+
+* 4.0.1 (2017-03-24)
+
+ * fixed parsing nullable types with php 7.1
 
 * 4.0.0 (2017-01-05)
 
