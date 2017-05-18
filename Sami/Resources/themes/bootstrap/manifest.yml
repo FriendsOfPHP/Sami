@@ -1,0 +1,13 @@
+name:   bootstrap
+parent: enhanced
+
+static:
+    'css/bootstrap.min.css':            'css/bootstrap.css'
+    'css/bootstrap-responsive.min.css': 'css/bootstrap-responsive.css'
+    'css/layout.css':                   'css/layout.css'
+    'img/glyphicons-halflings.png':     'img/glyphicons-halflings.png'
+
+global:
+    'layout/base.twig':        'layout/base.html'
+    'layout/page.twig':        'layout/page.html'
+    'layout/layout.twig':      'layout/layout.html'
