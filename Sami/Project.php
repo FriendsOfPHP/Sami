@@ -463,10 +463,6 @@ class Project
             $this->store->flushProject($this);
         }
 
-        if ($previous && 0 === count($this->classes)) {
-            $this->seedCache($previous, $this->getCacheDir());
-        }
-
         $transaction = $this->parser->parse($this, $callback);
 
         if (null !== $callback) {
@@ -484,10 +480,6 @@ class Project
 
         if ($force && !$frozen) {
             $this->flushDir($this->getBuildDir());
-        }
-
-        if ($previous && !$this->renderer->isRendered($this)) {
-            $this->seedCache($previous, $this->getBuildDir());
         }
 
         $diff = $this->renderer->render($this, $callback, $force);
