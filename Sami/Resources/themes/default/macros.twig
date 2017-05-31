@@ -95,13 +95,13 @@
 {% macro breadcrumbs(namespace) %}
     {% set current_ns = '' %}
     {% for ns in namespace|split('\\') %}
-        {% if current_ns %}
+        {%- if current_ns -%}
             {% set current_ns = current_ns ~ '\\' ~ ns %}
-        {% else %}
+        {%- else -%}
             {% set current_ns = ns %}
-        {% endif %}
-        <li><a href="{{ namespace_path(current_ns) }}">{{ ns|raw }}</a></li>
-    {% endfor %}
+        {%- endif -%}
+        <li><a href="{{ namespace_path(current_ns) }}">{{ ns|raw }}</a></li><li class="backslash">\</li>
+    {%- endfor %}
 {% endmacro %}
 
 {% macro deprecated(reflection) %}

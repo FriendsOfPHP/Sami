@@ -40,7 +40,10 @@ html, body, #content {
 }
 
 .namespace-breadcrumbs .breadcrumb > li + li:before {
-    content: "\\"
+    content: "";
+}
+.namespace-breadcrumbs .breadcrumb > .backslash {
+    color: #ccc;
 }
 
 /* Site columns */
