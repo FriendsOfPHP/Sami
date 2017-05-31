@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by d3f3kt at 2017-05-31T18:06:03Z
+
+@fabpot I've removed the spaceless block. But now both list elements have to be in the same line without any spaces between them.
