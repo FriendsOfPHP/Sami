@@ -301,6 +301,11 @@ class ClassReflection extends Reflection
         return $this->project->getViewSourceUrl($this->relativeFilePath, $line);
     }
 
+    /**
+     * Get project.
+     * 
+     * @return Project
+     */
     public function getProject()
     {
         return $this->project;
