@@ -24,7 +24,8 @@ class HintReflection
 
     public function __toString()
     {
-        return $this->name;
+        // We're casting name to string, as it can be eg. `ClassReflection` object.
+        return (string) $this->name;
     }
 
     public function getName()
@@ -49,6 +50,6 @@ class HintReflection
 
     public function setArray($boolean)
     {
-        $this->array = (Boolean) $boolean;
+        $this->array = (bool) $boolean;
     }
 }
