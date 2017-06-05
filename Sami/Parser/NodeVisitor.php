@@ -165,7 +165,7 @@ class NodeVisitor extends NodeVisitorAbstract
                 $type = $param->type->type;
                 $typeStr = (string) $param->type->type;
             } else {
-                $typeStr = (string)$param->type;
+                $typeStr = (string) $param->type;
             }
 
             if ($type instanceof FullyQualified && strpos($typeStr, '\\') !== 0) {

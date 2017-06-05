@@ -25,10 +25,9 @@ use Sami\Store\ArrayStore;
  */
 class NodeVisitorTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Test method type hints.
-     * 
+     *
      * @dataProvider methodTypehintsDataProvider
      */
     public function testMethodTypehints(ClassReflection $classReflection, ClassMethod $method, array $expectedHints)
@@ -48,13 +47,13 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey($key, $expectedHints);
             $hint = $parameter->getHint();
             $this->assertCount(1, $hint);
-            $this->assertEquals($expectedHints[$key], (string)$hint[0]);
+            $this->assertEquals($expectedHints[$key], (string) $hint[0]);
         }
     }
 
     /**
      * Data provider for testMethodTypehints.
-     * 
+     *
      * @return array
      */
     public function methodTypehintsDataProvider()
@@ -68,11 +67,11 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
 
     private function methodTypehintsPrimiteveParameters()
     {
-        $classReflection = new ClassReflection("C1", 1);
-        $method = new ClassMethod("testMethod", array(
+        $classReflection = new ClassReflection('C1', 1);
+        $method = new ClassMethod('testMethod', array(
             'params' => array(
                 new Param('param1', null, 'int'),
-                new Param('param2', null, 'string')
+                new Param('param2', null, 'string'),
             ),
         ));
 
@@ -96,9 +95,9 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
 
     private function methodTypehintsClassParameters()
     {
-        $classReflection = new ClassReflection("C1", 1);
+        $classReflection = new ClassReflection('C1', 1);
         $paramClassReflection = new ClassReflection("Test\Class", 1);
-        $method = new ClassMethod("testMethod", array(
+        $method = new ClassMethod('testMethod', array(
             'params' => array(
                 new Param('param1', null, new FullyQualified('Test\\Class')),
             ),
@@ -126,9 +125,9 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
     {
         $classReflection = new ClassReflection("Test\Class", 1);
         $paramClassReflection = new ClassReflection("Test\Sub\Class", 1);
-        $method = new ClassMethod("testMethod", array(
+        $method = new ClassMethod('testMethod', array(
             'params' => array(
-                new Param('param1', null, new Relative("Sub\\Class")),
+                new Param('param1', null, new Relative('Sub\\Class')),
             ),
         ));
 
