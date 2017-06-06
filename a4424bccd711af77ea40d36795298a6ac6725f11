@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by TiS at 2017-06-05T15:46:25Z
+
+@fabpot Please, review this one. It should fix error introduced in 4.0.1 of not properly parsing class parameters.
