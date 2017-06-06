@@ -64,6 +64,7 @@ class Project
             'include_parent_data' => true,
             'theme' => 'default',
         ), $config);
+
         $this->filesystem = new Filesystem();
 
         if (count($this->versions) > 1) {
@@ -363,8 +364,6 @@ class Project
     {
         $this->filesystem->remove($dir);
         $this->filesystem->mkdir($dir);
-        file_put_contents($dir.'/SAMI_VERSION', Sami::VERSION);
-        file_put_contents($dir.'/PROJECT_VERSION', $this->version);
     }
 
     public function seedCache($previous, $current)
@@ -467,6 +466,8 @@ class Project
             $this->seedCache($previous, $this->getCacheDir());
         }
 
+        $this->writeProjectVersionFile($this->getCacheDir());
+
         $transaction = $this->parser->parse($this, $callback);
 
         if (null !== $callback) {
@@ -490,11 +491,19 @@ class Project
             $this->seedCache($previous, $this->getBuildDir());
         }
 
+        $this->writeProjectVersionFile($this->getBuildDir());
+
         $diff = $this->renderer->render($this, $callback, $force);
 
         if (null !== $callback) {
             call_user_func($callback, Message::RENDER_VERSION_FINISHED, $diff);
         }
+    }
+
+    protected function writeProjectVersionFile($dir)
+    {
+        file_put_contents($dir.'/SAMI_VERSION', Sami::VERSION);
+        file_put_contents($dir.'/PROJECT_VERSION', $this->version);
     }
 
     public function getSourceRoot()
