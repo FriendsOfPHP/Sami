@@ -24,7 +24,7 @@ class HintReflection
 
     public function __toString()
     {
-        //We're casting name to string, as it can be eg. `ClassReflection` object.
+        // We're casting name to string, as it can be eg. `ClassReflection` object.
         return (string) $this->name;
     }
 

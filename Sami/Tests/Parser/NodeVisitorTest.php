@@ -19,16 +19,12 @@ use Sami\Reflection\ParameterReflection;
 use Sami\Store\ArrayStore;
 
 /**
- * Test of node visitor.
- *
  * @author Tomasz Struczyński <t.struczynski@gmail.com>
  */
 class NodeVisitorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test method type hints.
-     *
-     * @dataProvider methodTypehintsDataProvider
+     * @dataProvider getMethodTypehints
      */
     public function testMethodTypehints(ClassReflection $classReflection, ClassMethod $method, array $expectedHints)
     {
@@ -52,11 +48,9 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for testMethodTypehints.
-     *
      * @return array
      */
-    public function methodTypehintsDataProvider()
+    public function getMethodTypehints()
     {
         return array(
             'primitive' => $this->methodTypehintsPrimiteveParameters(),

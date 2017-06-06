@@ -302,8 +302,6 @@ class ClassReflection extends Reflection
     }
 
     /**
-     * Get project.
-     *
      * @return Project
      */
     public function getProject()
