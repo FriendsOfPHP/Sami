@@ -156,7 +156,7 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
                 new Param('param1'),
             ),
         ));
-        $method->setDocComment(new \PhpParser\Comment\Doc("/** @param Test\\Class \$param1 */"));
+        $method->setDocComment(new \PhpParser\Comment\Doc('/** @param Test\\Class $param1 */'));
 
         $classReflection->setMethods(array($method));
         $store = new ArrayStore();
@@ -185,7 +185,7 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
                 new Param('param1'),
             ),
         ));
-        $method->setDocComment(new \PhpParser\Comment\Doc("/** @param Test\\Class|string \$param1 */"));
+        $method->setDocComment(new \PhpParser\Comment\Doc('/** @param Test\\Class|string $param1 */'));
 
         $classReflection->setMethods(array($method));
         $store = new ArrayStore();
