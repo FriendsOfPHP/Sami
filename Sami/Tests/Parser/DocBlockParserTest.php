@@ -84,10 +84,10 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
             ),
             array('
                 /**
-                 * @see http://symfony.com/
+                 * @see http://symfony.com/ This is a link description.
                  */
                 ',
-                array('tags' => array('see' => 'http://symfony.com/')),
+                array('tags' => array('see' => array(array('http://symfony.com/ This is a link description.', 'http://symfony.com/', 'This is a link description.')))),
             ),
             array('
                 /**
@@ -188,7 +188,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                 * @property-read string $myProperty
                 * @property string $myProperty
                 * @property-write string $myProperty
-                * @see SomeClass::SomeMethod
+                * @see SomeClass::SomeMethod This is a description.
                 * @since 1.0.1 First time this was introduced.
                 * @source 2 1 Check that ensures lazy counting.
                 * @uses MyClass::$items to retrieve the count from.
@@ -241,7 +241,7 @@ class DocBlockParserTest extends \PHPUnit_Framework_TestCase
                                 '',
                             ),
                         ),
-                        'see' => array('SomeClass::SomeMethod'),
+                        'see' => array(array('SomeClass::SomeMethod This is a description.', 'SomeClass::SomeMethod', 'This is a description.')),
                         'since' => array('1.0.1 First time this was introduced.'),
                         'source' => array('2 1 Check that ensures lazy counting.'),
                         'uses' => array('MyClass::$items to retrieve the count from.'),

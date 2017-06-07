@@ -39,6 +39,9 @@ class ParserContext
         return $this->filter;
     }
 
+    /**
+     * @return DocBlockParser
+     */
     public function getDocBlockParser()
     {
         return $this->docBlockParser;
