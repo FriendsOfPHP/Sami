@@ -38,12 +38,14 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
         $reflMethod = $classReflection->getMethod($method->name);
 
         $this->assertEquals(count($expectedHints), count($reflMethod->getParameters()));
-        foreach ($reflMethod->getParameters() as $key => $parameter) {
+        foreach ($reflMethod->getParameters() as $paramKey => $parameter) {
             /* @var $parameter ParameterReflection */
-            $this->assertArrayHasKey($key, $expectedHints);
+            $this->assertArrayHasKey($paramKey, $expectedHints);
             $hint = $parameter->getHint();
-            $this->assertCount(1, $hint);
-            $this->assertEquals($expectedHints[$key], (string) $hint[0]);
+            $this->assertCount(count($expectedHints[$paramKey]), $hint);
+            foreach ($expectedHints[$paramKey] as $hintKey => $hintVal) {
+                $this->assertEquals($hintVal, (string) $hint[$hintKey]);
+            }
         }
     }
 
@@ -53,13 +55,15 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
     public function getMethodTypehints()
     {
         return array(
-            'primitive' => $this->methodTypehintsPrimiteveParameters(),
-            'class' => $this->methodTypehintsClassParameters(),
-            'subnamespacedclass' => $this->methodTypehintsSubNamespacedClassParameters(),
+            'primitive' => $this->getMethodTypehintsPrimiteveParameters(),
+            'class' => $this->getMethodTypehintsClassParameters(),
+            'subnamespacedclass' => $this->getMethodTypehintsSubNamespacedClassParameters(),
+            'docblockclass' => $this->getMethodTypehintsDocblockClassParameters(),
+            'docblockmixedclass' => $this->getMethodTypehintsDocblockMixedClassParameters(),
         );
     }
 
-    private function methodTypehintsPrimiteveParameters()
+    private function getMethodTypehintsPrimiteveParameters()
     {
         $classReflection = new ClassReflection('C1', 1);
         $method = new ClassMethod('testMethod', array(
@@ -81,13 +85,13 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
             $classReflection,
             $method,
             array(
-                'param1' => 'int',
-                'param2' => 'string',
+                'param1' => array('int'),
+                'param2' => array('string'),
             ),
         );
     }
 
-    private function methodTypehintsClassParameters()
+    private function getMethodTypehintsClassParameters()
     {
         $classReflection = new ClassReflection('C1', 1);
         $paramClassReflection = new ClassReflection("Test\Class", 1);
@@ -110,12 +114,12 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
             $classReflection,
             $method,
             array(
-                'param1' => 'Test\Class',
+                'param1' => array('Test\Class'),
             ),
         );
     }
 
-    private function methodTypehintsSubNamespacedClassParameters()
+    private function getMethodTypehintsSubNamespacedClassParameters()
     {
         $classReflection = new ClassReflection("Test\Class", 1);
         $paramClassReflection = new ClassReflection("Test\Sub\Class", 1);
@@ -138,7 +142,65 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
             $classReflection,
             $method,
             array(
-                'param1' => 'Sub\Class',
+                'param1' => array('Sub\Class'),
+            ),
+        );
+    }
+
+    private function getMethodTypehintsDocblockClassParameters()
+    {
+        $classReflection = new ClassReflection('C1', 1);
+        $paramClassReflection = new ClassReflection("Test\Class", 1);
+        $method = new ClassMethod('testMethod', array(
+            'params' => array(
+                new Param('param1'),
+            ),
+        ));
+        $method->setDocComment(new \PhpParser\Comment\Doc("/** @param Test\\Class \$param1 */"));
+
+        $classReflection->setMethods(array($method));
+        $store = new ArrayStore();
+        $store->setClasses(array($classReflection, $paramClassReflection));
+
+        $project = new Project($store);
+
+        $project->loadClass('C1');
+        $project->loadClass('Test\\Class');
+
+        return array(
+            $classReflection,
+            $method,
+            array(
+                'param1' => array('Test\Class'),
+            ),
+        );
+    }
+
+    private function getMethodTypehintsDocblockMixedClassParameters()
+    {
+        $classReflection = new ClassReflection('C1', 1);
+        $paramClassReflection = new ClassReflection("Test\Class", 1);
+        $method = new ClassMethod('testMethod', array(
+            'params' => array(
+                new Param('param1'),
+            ),
+        ));
+        $method->setDocComment(new \PhpParser\Comment\Doc("/** @param Test\\Class|string \$param1 */"));
+
+        $classReflection->setMethods(array($method));
+        $store = new ArrayStore();
+        $store->setClasses(array($classReflection, $paramClassReflection));
+
+        $project = new Project($store);
+
+        $project->loadClass('C1');
+        $project->loadClass('Test\\Class');
+
+        return array(
+            $classReflection,
+            $method,
+            array(
+                'param1' => array('Test\Class', 'string'),
             ),
         );
     }
