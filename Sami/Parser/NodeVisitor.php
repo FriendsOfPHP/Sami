@@ -164,7 +164,7 @@ class NodeVisitor extends NodeVisitorAbstract
             } elseif ($param->type instanceof NullableType) {
                 $type = $param->type->type;
                 $typeStr = (string) $param->type->type;
-            } else {
+            } elseif ($param->type !== null) {
                 $typeStr = (string) $param->type;
             }
 
