@@ -31,6 +31,7 @@ abstract class Reflection
     protected $hintDesc;
     protected $tags;
     protected $docComment;
+    protected $see = array();
 
     public function __construct($name, $line)
     {
@@ -160,5 +161,54 @@ abstract class Reflection
     public function getDocComment()
     {
         return $this->docComment;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSee()
+    {
+        $see = array();
+        /* @var $project Project */
+        $project = $this->getClass()->getProject();
+        
+        foreach ($this->see as $seeElem) {
+            if ($seeElem[3]) {
+                $seeElem = $this->prepareMethodSee($seeElem);
+            } elseif ($seeElem[2]) {
+                $seeElem[2] = Project::isPhpTypeHint($seeElem[2]) ? $seeElem[2] : $project->getClass($seeElem[2]);
+            }
+            
+            $see[] = $seeElem;
+        }
+
+        return $see;
+    }
+
+    /**
+     * @param array $see
+     */
+    public function setSee(array $see)
+    {
+        $this->see = $see;
+    }
+
+    private function prepareMethodSee(array $seeElem)
+    {
+        /* @var $project Project */
+        $project = $this->getClass()->getProject();
+
+        $class = $project->getClass($seeElem[2]);
+        $method = $class->getMethod($seeElem[3]);
+        
+        if ($method) {
+            $seeElem[2] = false;
+            $seeElem[3] = $method;
+        } else {
+            $seeElem[2] = false;
+            $seeElem[3] = false;
+        }
+
+        return $seeElem;
     }
 }

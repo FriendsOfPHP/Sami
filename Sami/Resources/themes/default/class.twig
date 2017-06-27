@@ -140,10 +140,20 @@
 
 {% block see %}
     <table class="table table-condensed">
-        {% for tag in method.tags('see') %}
+        {% for see in method.see %}
             <tr>
-                <td>{{ tag[0]|raw }}</td>
-                <td>{{ tag[1:]|join(' ')|raw }}</td>
+                <td>
+                    {% if see[4] %}
+                        <a href="{{see[4]}}">{{see[4]}}</a>
+                    {% elseif see[3] %}
+                        {{ method_link(see[3], false, false) }}
+                    {% elseif see[2] %}
+                        {{ class_link(see[2]) }}
+                    {% else %}
+                        {{ see[0]|raw }}
+                    {% endif %}
+                </td>
+                <td>{{ see[1]|raw }}</td>
             </tr>
         {% endfor %}
     </table>

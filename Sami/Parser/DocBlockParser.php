@@ -17,6 +17,12 @@ use Sami\Parser\Node\DocBlockNode;
 
 class DocBlockParser
 {
+    /**
+     * @param mixed $comment
+     * @param ParserContext $context
+     * 
+     * @return DocBlockNode
+     */
     public function parse($comment, ParserContext $context)
     {
         $docBlock = null;
@@ -73,6 +79,15 @@ class DocBlockParser
             case 'ThrowsTag':
                 return array(
                     $tag->getType(),
+                    $tag->getDescription(),
+                );
+            case 'SeeTag':
+                // For backwards compatibility, in first cell we store content.
+                // In second - only a referer for further parsing.
+                // In docblock node we handle this in getOtherTags() method.
+                return array(
+                    $tag->getContent(),
+                    $tag->getReference(),
                     $tag->getDescription(),
                 );
             default:
