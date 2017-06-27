@@ -363,7 +363,7 @@ class NodeVisitor extends NodeVisitorAbstract
                     $description,
                     $this->resolveAlias($reference),
                     false,
-                    false
+                    false,
                 );
             }
         }

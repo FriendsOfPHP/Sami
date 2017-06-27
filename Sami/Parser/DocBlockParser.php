@@ -18,9 +18,9 @@ use Sami\Parser\Node\DocBlockNode;
 class DocBlockParser
 {
     /**
-     * @param mixed $comment
+     * @param mixed         $comment
      * @param ParserContext $context
-     * 
+     *
      * @return DocBlockNode
      */
     public function parse($comment, ParserContext $context)

@@ -171,14 +171,14 @@ abstract class Reflection
         $see = array();
         /* @var $project Project */
         $project = $this->getClass()->getProject();
-        
+
         foreach ($this->see as $seeElem) {
             if ($seeElem[3]) {
                 $seeElem = $this->prepareMethodSee($seeElem);
             } elseif ($seeElem[2]) {
                 $seeElem[2] = Project::isPhpTypeHint($seeElem[2]) ? $seeElem[2] : $project->getClass($seeElem[2]);
             }
-            
+
             $see[] = $seeElem;
         }
 
@@ -200,7 +200,7 @@ abstract class Reflection
 
         $class = $project->getClass($seeElem[2]);
         $method = $class->getMethod($seeElem[3]);
-        
+
         if ($method) {
             $seeElem[2] = false;
             $seeElem[3] = $method;
