@@ -6,7 +6,11 @@ Curious about what Sami generates? Have a look at the `Symfony API`_.
 Installation
 ------------
 
-Get Sami from as a `phar file`_:
+.. caution::
+
+    Sami requires **PHP 7**.
+
+Get Sami as a `phar file`_:
 
 .. code-block:: bash
 
