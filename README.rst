@@ -6,7 +6,7 @@ Curious about what Sami generates? Have a look at the `Symfony API`_.
 Installation
 ------------
 
-Get Sami from as a `phar file`_:
+Get Sami as a `phar file`_:
 
 .. code-block:: bash
 
@@ -18,6 +18,15 @@ without any arguments:
 .. code-block:: bash
 
     $ php sami.phar
+    
+*Note:* Sami 4.0.x requires PHP 7 to work correctly; Sami 3.3.0 can be run with PHP 5.3.9 or higher. 
+
+Install with composer:
+
+.. code-block:: bash
+    
+    $ composer require sami/sami
+    $ php vendor/bin/sami.php
 
 .. note::
 
