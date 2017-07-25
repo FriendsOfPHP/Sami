@@ -19,6 +19,13 @@ without any arguments:
 
     $ php sami.phar
 
+.. note::
+
+    Installing Sami as a regular Composer dependency is NOT supported. Sami is
+    a tool, not a library. As such, it should be installed as a standalone
+    package, so that Sami's dependencies do not interfere with your project's
+    dependencies.
+
 Configuration
 -------------
 
