@@ -15,7 +15,7 @@ use Sami\Project;
 
 abstract class VersionCollection implements \Iterator, \Countable
 {
-    protected $versions;
+    protected $versions = array();
     protected $indice;
     protected $project;
 
