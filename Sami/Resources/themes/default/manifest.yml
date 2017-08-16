@@ -20,6 +20,7 @@ global:
     'classes.twig':    'classes.html'
     'interfaces.twig': 'interfaces.html'
     'traits.twig':     'traits.html'
+    'todo.twig':       'todo.html'
     'opensearch.twig': 'opensearch.xml'
     'search.twig':     'search.html'
     'sami.js.twig':    'sami.js'
