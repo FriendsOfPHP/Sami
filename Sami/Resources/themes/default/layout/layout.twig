@@ -32,8 +32,8 @@
             <div class="collapse navbar-collapse" id="navbar-elements">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ path('classes.html') }}">Classes</a></li>
-                    {% if project.config('insert_all_todos') == true %}
-                    <li><a href="{{ path('todo.html') }}">ToDo</a></li>
+                    {% if project.config('insert_todos_page') == true %}
+                        <li><a href="{{ path('todo.html') }}">ToDo</a></li>
                     {% endif %}
                     {% if has_namespaces %}
                         <li><a href="{{ path('namespaces.html') }}">Namespaces</a></li>
