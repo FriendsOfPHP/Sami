@@ -15,7 +15,9 @@ class SingleVersionCollection extends VersionCollection
 {
     public function add($version, $longname = null)
     {
-        if (count($this->versions)) {
+        $countable = is_array($this->versions) || $this->versions instanceof \Countable;
+
+        if ($countable && count($this->versions)) {
             throw new \LogicException('A SingleVersionCollection can only contain one Version');
         }
 
