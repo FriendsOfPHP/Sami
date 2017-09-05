@@ -1,9 +1,27 @@
 CHANGELOG
 =========
 
-* 4.0.4 (2017-XX-XX)
+* 4.0.8 (2017-09-05)
 
- * n/a
+ * fixed counting of non-countable versions for PHP 7.2
+
+* 4.0.7 (2017-09-05)
+
+ * made Sami skip anonymous classes
+ * fixed Sami for PHP 7.2
+ * made sure VersionCollection::$versions is always an array
+
+* 4.0.6 (2017-06-08)
+
+ * corrected docblock based method parameters
+
+* 4.0.5 (2017-06-06)
+
+ * corrected node visitor to correctly resolve hints to class parameters
+
+* 4.0.4 (2017-05-31)
+
+ * made it possible to copy namespace from the UI
 
 * 4.0.3 (2017-05-05)
 
