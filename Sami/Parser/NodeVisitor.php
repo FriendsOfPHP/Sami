@@ -92,6 +92,11 @@ class NodeVisitor extends NodeVisitorAbstract
 
     protected function addClass(ClassNode $node)
     {
+        // Skip anonymous classes
+        if ($node->isAnonymous()) {
+            return;
+        }
+
         $class = $this->addClassOrInterface($node);
 
         foreach ($node->implements as $interface) {
