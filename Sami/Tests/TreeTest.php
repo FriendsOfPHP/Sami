@@ -31,7 +31,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $tree = new Tree();
 
         $generated = $tree->getTree($project);
-        $this->assertCount(3 ,$generated);
+        $this->assertCount(3, $generated);
 
         $this->assertEquals('[Global Namespace]', $generated[0][0]);
         $this->assertEquals('', $generated[0][1]);

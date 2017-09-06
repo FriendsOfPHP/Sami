@@ -49,8 +49,8 @@ class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
         $visitor = new PropertyClassVisitor($context);
         $visitor->visit($class);
 
-        $this->assertTrue(array_key_exists('color', $class->getProperties()));
-        $this->assertTrue(array_key_exists('animal', $class->getProperties()));
-        $this->assertTrue(array_key_exists('enigma', $class->getProperties()));
+        $this->assertArrayHasKey('color', $class->getProperties());
+        $this->assertArrayHasKey('animal', $class->getProperties());
+        $this->assertArrayHasKey('enigma', $class->getProperties());
     }
 }
