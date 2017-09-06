@@ -32,6 +32,6 @@ class MethodClassVisitorTest extends \PHPUnit_Framework_TestCase
         $visitor = new MethodClassVisitor();
         $visitor->visit($class);
 
-        $this->assertTrue(array_key_exists('askQuestion', $class->getMethods()));
+        $this->assertArrayHasKey('askQuestion', $class->getMethods());
     }
 }

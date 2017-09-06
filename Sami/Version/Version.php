@@ -46,7 +46,7 @@ class Version
 
     public function setFrozen($isFrozen)
     {
-        $this->isFrozen = (Boolean) $isFrozen;
+        $this->isFrozen = (bool) $isFrozen;
     }
 
     public function isFrozen()
