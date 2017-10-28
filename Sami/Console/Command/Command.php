@@ -72,11 +72,6 @@ abstract class Command extends BaseCommand
         }
     }
 
-    protected function loadSami(string $config): Sami
-    {
-        return require $config;
-    }
-
     public function update(Project $project)
     {
         $callback = $this->output->isDecorated() ? array($this, 'messageCallback') : null;
@@ -238,5 +233,10 @@ abstract class Command extends BaseCommand
     public function displaySwitch()
     {
         $this->output->writeln(sprintf("\n<fg=cyan>Version %s</>", $this->version));
+    }
+
+    private function loadSami(string $config)
+    {
+        return require $config;
     }
 }
