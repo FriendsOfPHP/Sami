@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+* 4.0.9 (2017-10-28)
+
+ * prevented scope collision in Sami config file
+ * fixed wrong variable using in NodeVisitor
+
 * 4.0.8 (2017-09-05)
 
  * fixed counting of non-countable versions for PHP 7.2
