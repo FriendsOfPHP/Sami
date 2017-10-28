@@ -61,7 +61,7 @@ abstract class Command extends BaseCommand
             throw new \InvalidArgumentException(sprintf('Configuration file "%s" does not exist.', $config));
         }
 
-        $this->sami = require $config;
+        $this->sami = $this->loadSami($config);
 
         if ($input->getOption('only-version')) {
             $this->sami['versions'] = $input->getOption('only-version');
@@ -70,6 +70,11 @@ abstract class Command extends BaseCommand
         if (!$this->sami instanceof Sami) {
             throw new \RuntimeException(sprintf('Configuration file "%s" must return a Sami instance.', $config));
         }
+    }
+
+    protected function loadSami(string $config): Sami
+    {
+        return require $config;
     }
 
     public function update(Project $project)
