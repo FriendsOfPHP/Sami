@@ -118,7 +118,7 @@ class NodeVisitor extends NodeVisitorAbstract
     protected function addClassOrInterface(ClassLikeNode $node)
     {
         $class = new ClassReflection((string) $node->namespacedName, $node->getLine());
-        if ($class instanceof ClassNode) {
+        if ($node instanceof ClassNode) {
             $class->setModifiers($node->flags);
         }
         $class->setNamespace($this->context->getNamespace());
