@@ -2,9 +2,10 @@
 
 namespace Sami\Tests\Reflection;
 
+use PHPUnit\Framework\TestCase;
 use Sami\Reflection\ClassReflection;
 
-class ClassReflectionTest extends \PHPUnit_Framework_TestCase
+class ClassReflectionTest extends TestCase
 {
     public function testIsPhpClass()
     {

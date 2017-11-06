@@ -11,9 +11,10 @@
 
 namespace Sami\Tests\Parser\ClassVisitor;
 
+use PHPUnit\Framework\TestCase;
 use Sami\Parser\ClassVisitor\PropertyClassVisitor;
 
-class PropertyClassVisitorTest extends \PHPUnit_Framework_TestCase
+class PropertyClassVisitorTest extends TestCase
 {
     public function testAddsProperties()
     {

@@ -11,10 +11,11 @@
 
 namespace Sami\Tests\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Sami\Parser\DocBlockParser;
 use Sami\Parser\Node\DocBlockNode;
 
-class DocBlockParserTest extends \PHPUnit_Framework_TestCase
+class DocBlockParserTest extends TestCase
 {
     /**
      * @dataProvider getParseTests
