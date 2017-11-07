@@ -35,7 +35,7 @@ class Renderer
         $this->twig = $twig;
         $this->themes = $themes;
         $this->tree = $tree;
-        $this->cachedTree = new \SplObjectStorage();
+        $this->cachedTree = array();
         $this->indexer = $indexer;
         $this->filesystem = new Filesystem();
     }
@@ -227,12 +227,20 @@ class Renderer
         return floor((++$this->step / $this->steps) * 100);
     }
 
+    /**
+     * Get tree for the given project.
+     *
+     * @param Project $project
+     *
+     * @return array
+     */
     private function getTree(Project $project)
     {
-        if (!isset($this->cachedTree[$project])) {
-            $this->cachedTree[$project] = $this->tree->getTree($project);
+        $key = $project->getVersion()->getName();
+        if (!isset($this->cachedTree[$key])) {
+            $this->cachedTree[$key] = $this->tree->getTree($project);
         }
 
-        return $this->cachedTree[$project];
+        return $this->cachedTree[$key];
     }
 }
