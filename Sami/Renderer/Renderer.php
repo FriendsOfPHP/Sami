@@ -236,7 +236,7 @@ class Renderer
      */
     private function getTree(Project $project)
     {
-        $key = $project->getVersion()->getName();
+        $key = $project->getBuildDir();
         if (!isset($this->cachedTree[$key])) {
             $this->cachedTree[$key] = $this->tree->getTree($project);
         }
