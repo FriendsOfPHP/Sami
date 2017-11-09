@@ -104,16 +104,10 @@ class Project
 
     public function update($callback = null, $force = false)
     {
-        $previousParse = null;
-        $previousRender = null;
         foreach ($this->versions as $version) {
             $this->switchVersion($version, $callback, $force);
-
-            $this->parseVersion($version, $previousParse, $callback, $force);
-            $this->renderVersion($version, $previousRender, $callback, $force);
-
-            $previousParse = $this->getCacheDir();
-            $previousRender = $this->getBuildDir();
+            $this->parseVersion($version, null, $callback, $force);
+            $this->renderVersion($version, null, $callback, $force);
         }
     }
 
@@ -149,6 +143,8 @@ class Project
         }
 
         $this->version = $version;
+
+        $this->initialize();
 
         if (!$force) {
             $this->read();
@@ -245,7 +241,7 @@ class Project
 
         foreach ($this->namespaces as $sub) {
             if (substr($sub, 0, $len) == $prefix
-                && strpos(substr($sub, $len), '\\') === false
+                && false === strpos(substr($sub, $len), '\\')
             ) {
                 $namespaces[] = $sub;
             }
@@ -437,7 +433,7 @@ class Project
             $samiVersion = file_get_contents($dir.'/SAMI_VERSION');
         }
 
-        if ($samiVersion !== Sami::VERSION) {
+        if (Sami::VERSION !== $samiVersion) {
             $this->flushDir($dir);
         }
 
@@ -503,7 +499,7 @@ class Project
             return;
         }
 
-        if (strpos($root, 'github') !== false) {
+        if (false !== strpos($root, 'github')) {
             return $root.'/tree/'.$this->version;
         }
     }
