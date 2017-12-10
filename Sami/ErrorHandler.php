@@ -39,7 +39,7 @@ class ErrorHandler
     public function handle($level, $message, $file = 'unknown', $line = 0, $context = array())
     {
         if (error_reporting() & $level) {
-            throw new \ErrorException(sprintf('%s: %s in %s line %d', isset($this->levels[$level]) ? $this->levels[$level] : $level, $message, $file, $line));
+            throw new \ErrorException(sprintf('%s: %s in %s line %d', $this->levels[$level] ?? $level, $message, $file, $line));
         }
 
         return false;

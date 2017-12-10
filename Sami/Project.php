@@ -89,7 +89,7 @@ class Project
 
     public function getConfig($name, $default = null)
     {
-        return isset($this->config[$name]) ? $this->config[$name] : $default;
+        return $this->config[$name] ?? $default;
     }
 
     public function getVersion()

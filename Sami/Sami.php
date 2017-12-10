@@ -47,7 +47,7 @@ class Sami extends Container
         }
 
         $this['_versions'] = function ($sc) {
-            $versions = isset($sc['versions']) ? $sc['versions'] : $sc['version'];
+            $versions = $sc['versions'] ?? $sc['version'];
 
             if (is_string($versions)) {
                 $versions = new Version($versions);

@@ -58,7 +58,7 @@ class Index implements \Serializable
 
     public function getHash($class)
     {
-        return isset($this->classes[$class]) ? $this->classes[$class] : false;
+        return $this->classes[$class] ?? false;
     }
 
     public function serialize()
