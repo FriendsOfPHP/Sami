@@ -44,7 +44,7 @@ class DocBlockNode
 
     public function getTag($key)
     {
-        return isset($this->tags[$key]) ? $this->tags[$key] : array();
+        return $this->tags[$key] ?? array();
     }
 
     public function getShortDesc()

@@ -138,7 +138,7 @@ abstract class Reflection
 
     public function getTags($name)
     {
-        return isset($this->tags[$name]) ? $this->tags[$name] : array();
+        return $this->tags[$name] ?? array();
     }
 
     public function getDeprecated()

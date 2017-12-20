@@ -408,7 +408,7 @@ class ClassReflection extends Reflection
 
     public function getMethod($name)
     {
-        return isset($this->methods[$name]) ? $this->methods[$name] : false;
+        return $this->methods[$name] ?? false;
     }
 
     public function getParentMethod($name)
