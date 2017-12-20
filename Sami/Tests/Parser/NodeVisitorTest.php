@@ -37,7 +37,7 @@ class NodeVisitorTest extends \PHPUnit_Framework_TestCase
         /* @var $method MethodReflection */
         $reflMethod = $classReflection->getMethod($method->name);
 
-        $this->assertEquals(count($expectedHints), count($reflMethod->getParameters()));
+        $this->assertCount(count($expectedHints), $reflMethod->getParameters());
         foreach ($reflMethod->getParameters() as $paramKey => $parameter) {
             /* @var $parameter ParameterReflection */
             $this->assertArrayHasKey($paramKey, $expectedHints);
