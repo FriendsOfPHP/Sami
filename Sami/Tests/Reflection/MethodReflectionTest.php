@@ -2,9 +2,10 @@
 
 namespace Sami\Tests\Reflection;
 
+use PHPUnit\Framework\TestCase;
 use Sami\Reflection\MethodReflection;
 
-class MethodReflectionTest extends \PHPUnit_Framework_TestCase
+class MethodReflectionTest extends TestCase
 {
     public function testSetGetModifiers()
     {

@@ -4,10 +4,11 @@ namespace Sami\Tests;
 
 use Blackfire\Bridge\PhpUnit\TestCaseTrait as BlackfireTestCaseTrait;
 use Blackfire\Profile;
+use PHPUnit\Framework\TestCase;
 use Sami\Sami;
 use Symfony\Component\Filesystem\Filesystem;
 
-class IntegrationTest extends \PHPUnit_Framework_TestCase
+class IntegrationTest extends TestCase
 {
     use BlackfireTestCaseTrait;
 

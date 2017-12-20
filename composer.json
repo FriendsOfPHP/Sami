@@ -26,7 +26,7 @@
         "blackfire/php-sdk": "^1.5.18"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "~3.2"
+        "symfony/phpunit-bridge": "~4.0"
     },
     "autoload": {
         "psr-4": { "Sami\\": "Sami/" }

@@ -8,6 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PhpParser\PrettyPrinter\Standard;
+use PHPUnit\Framework\TestCase;
 use Sami\Parser\DocBlockParser;
 use Sami\Parser\Filter\TrueFilter;
 use Sami\Parser\NodeVisitor;
@@ -21,7 +22,7 @@ use Sami\Store\ArrayStore;
 /**
  * @author Tomasz Struczyński <t.struczynski@gmail.com>
  */
-class NodeVisitorTest extends \PHPUnit_Framework_TestCase
+class NodeVisitorTest extends TestCase
 {
     /**
      * @dataProvider getMethodTypehints

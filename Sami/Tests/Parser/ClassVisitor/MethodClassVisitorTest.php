@@ -11,9 +11,10 @@
 
 namespace Sami\Tests\Parser\ClassVisitor;
 
+use PHPUnit\Framework\TestCase;
 use Sami\Parser\ClassVisitor\MethodClassVisitor;
 
-class MethodClassVisitorTest extends \PHPUnit_Framework_TestCase
+class MethodClassVisitorTest extends TestCase
 {
     public function testAddsMethods()
     {

@@ -2,12 +2,13 @@
 
 namespace Sami\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Sami\Project;
 use Sami\Reflection\ClassReflection;
 use Sami\Store\ArrayStore;
 use Sami\Version\Version;
 
-class ProjectTest extends \PHPUnit_Framework_TestCase
+class ProjectTest extends TestCase
 {
     public function testSwitchVersion()
     {

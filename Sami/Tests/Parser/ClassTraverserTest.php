@@ -11,12 +11,13 @@
 
 namespace Sami\Tests\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Sami\Parser\ClassTraverser;
 use Sami\Project;
 use Sami\Reflection\ClassReflection;
 use Sami\Store\ArrayStore;
 
-class ClassTraverserTest extends \PHPUnit_Framework_TestCase
+class ClassTraverserTest extends TestCase
 {
     /**
      * @dataProvider getTraverseOrderClasses
