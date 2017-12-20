@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by aik099 at 2017-11-06T08:18:29Z
+
+I'm not sure how PSR-1 is related to made changes, but you've indeed changed based class for test case class extension to support PHPUnit 6.
+
+---------------------------------------------------------------------------
+
+by carusogabriel at 2017-11-06T08:24:45Z
+
+@aik099 Just mentioned PSR-1 because namespaces usually are `Foo\Bar\Class` that before `PHP 5.3` were `Foo_Bar_Class` :smile:
+
+---------------------------------------------------------------------------
+
+by carusogabriel at 2017-12-10T05:13:38Z
+
+I've updated `phpunit-bridge` to version 4.0. This will help us test PHP 7.2 in #314
