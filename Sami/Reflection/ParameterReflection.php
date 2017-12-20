@@ -19,6 +19,7 @@ class ParameterReflection extends Reflection
     protected $byRef;
     protected $modifiers;
     protected $default;
+    protected $variadic;
 
     public function __toString()
     {
@@ -55,6 +56,16 @@ class ParameterReflection extends Reflection
         return $this->default;
     }
 
+    public function setVariadic($variadic)
+    {
+        $this->variadic = $variadic;
+    }
+
+    public function getVariadic()
+    {
+        return $this->variadic;
+    }
+
     public function getMethod()
     {
         return $this->method;
@@ -76,6 +87,7 @@ class ParameterReflection extends Reflection
             'tags' => $this->tags,
             'modifiers' => $this->modifiers,
             'default' => $this->default,
+            'variadic' => $this->variadic,
             'is_by_ref' => $this->byRef,
         );
     }
@@ -89,6 +101,7 @@ class ParameterReflection extends Reflection
         $parameter->tags = $array['tags'];
         $parameter->modifiers = $array['modifiers'];
         $parameter->default = $array['default'];
+        $parameter->variadic = $array['variadic'];
         $parameter->byRef = $array['is_by_ref'];
 
         return $parameter;
