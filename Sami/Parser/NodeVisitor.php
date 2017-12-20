@@ -159,7 +159,7 @@ class NodeVisitor extends NodeVisitorAbstract
             if ($param->default) {
                 $parameter->setDefault($this->context->getPrettyPrinter()->prettyPrintExpr($param->default));
             }
-            
+
             $parameter->setVariadic($param->variadic);
 
             $type = $param->type;
