@@ -111,7 +111,7 @@
         {% for parameter in method.parameters %}
             <tr>
                 <td>{% if parameter.hint %}{{ hint_link(parameter.hint) }}{% endif %}</td>
-                <td>${{ parameter.name|raw }}</td>
+                <td>{%- if parameter.variadic %}...{% endif %}${{ parameter.name|raw }}</td>
                 <td>{{ parameter.shortdesc|desc(class) }}</td>
             </tr>
         {% endfor %}
