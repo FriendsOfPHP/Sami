@@ -19,6 +19,7 @@ class ParameterReflection extends Reflection
     protected $byRef;
     protected $modifiers;
     protected $default;
+    protected $variadic;
 
     public function __toString()
     {
@@ -53,6 +54,16 @@ class ParameterReflection extends Reflection
     public function getDefault()
     {
         return $this->default;
+    }
+
+    public function setVariadic($variadic)
+    {
+        $this->variadic = $variadic;
+    }
+
+    public function getVariadic()
+    {
+        return $this->variadic;
     }
 
     public function getMethod()
