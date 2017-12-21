@@ -73,6 +73,7 @@ class Sami extends Container
                 'source_url' => $sc['source_url'],
                 'source_dir' => $sc['source_dir'],
                 'insert_todos' => $sc['insert_todos'],
+                'insert_todos_page' => $sc['insert_todos_page'],
             ));
             $project->setRenderer($sc['renderer']);
             $project->setParser($sc['parser']);
@@ -175,7 +176,8 @@ class Sami extends Container
         $this['source_dir'] = '';
         $this['source_url'] = '';
         $this['default_opened_level'] = 2;
-        $this['insert_todos'] = false;
+        $this['insert_todos'] = true;
+        $this['insert_todos_page'] = true;
 
         // simulate namespaces for projects based on the PEAR naming conventions
         $this['simulate_namespaces'] = false;

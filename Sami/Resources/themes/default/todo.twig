@@ -1,0 +1,47 @@
+{% extends "layout/layout.twig" %}
+{% from "macros.twig" import render_classes, breadcrumbs, namespace_link, class_link, property_link, method_link, hint_link, source_link, method_source_link, deprecated, deprecations, todo, todos %}
+{% set namespaces = '' %}
+{% block title %}All ToDo | {{ parent() }}{% endblock %}
+{% block body_class 'todo' %}
+
+{% block page_content %}
+    <div class="page-header">
+        <h1>ToDo</h1>
+    </div>
+    {% for class in classes %}
+        {% if class.todo and namespace_link(class) != namespaces %}
+            <h2>{{ namespace_link(class) }}</h2>
+            {% set namespaces = namespace_link(class) %}
+        {% endif %}
+        {{ todos(class) }}
+        {% if class.todo %}
+            <table>
+                <tr><td>&nbsp;{{ class_link(class) }}&nbsp;</td>
+                    <td>&nbsp;at {{ class.line|raw }}&nbsp;</td></tr></table><hr>
+        {% endif %}
+        {% for method in class.methods %}
+            {% if method.todo and namespace_link(class) != namespaces %}
+               <h2>{{ namespace_link(class) }}</h2>
+                {% set namespaces = namespace_link(class) %}
+            {% endif %}
+            {{ todos(method) }}
+            {% if method.todo %}
+                <table>
+               <tr><td>&nbsp;{{ method_link(method) }}&nbsp;</td>
+                   <td>&nbsp;at {{ method_source_link(method) }}&nbsp;</td></tr></table><hr>
+            {% endif %}
+        {% endfor %}
+        {% for property in class.properties %}
+            {% if property.todo  and namespace_link(class) != namespaces %}
+                <h2>{{ namespace_link(class) }}</h2>
+                {% set namespaces = namespace_link(class) %}
+            {% endif %}
+            {{ todos(property) }}
+            {% if property.todo %}
+                <table>
+                    <tr><td>&nbsp;{{ property_link(property) }}&nbsp;</td>
+                        <td>&nbsp;at {{ property.line|raw }}&nbsp;</td></tr></table><hr>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
