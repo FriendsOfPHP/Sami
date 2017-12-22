@@ -694,12 +694,10 @@ class ClassReflection extends Reflection
 
     public function sortInterfaces($sort)
     {
-        if ($sort) {
-           if (is_callable($sort)) {
-                uksort($this->interfaces, $sort);
-            } else {
-                ksort($this->interfaces);
-            } 
+       if (is_callable($sort)) {
+            uksort($this->interfaces, $sort);
+        } else {
+            ksort($this->interfaces);
         }
     }
 }
