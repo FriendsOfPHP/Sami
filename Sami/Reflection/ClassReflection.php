@@ -557,7 +557,7 @@ class ClassReflection extends Reflection
 
     public function isInterface()
     {
-        return $this->category === self::CATEGORY_INTERFACE;
+        return self::CATEGORY_INTERFACE === $this->category;
     }
 
     public function setTrait($boolean)
@@ -567,7 +567,7 @@ class ClassReflection extends Reflection
 
     public function isTrait()
     {
-        return $this->category === self::CATEGORY_TRAIT;
+        return self::CATEGORY_TRAIT === $this->category;
     }
 
     public function setCategory($category)
@@ -690,5 +690,14 @@ class ClassReflection extends Reflection
     public function getCategoryName()
     {
         return self::$categoryName[$this->category];
+    }
+
+    public function sortInterfaces($sort)
+    {
+        if (is_callable($sort)) {
+            uksort($this->interfaces, $sort);
+        } else {
+            ksort($this->interfaces);
+        }
     }
 }
