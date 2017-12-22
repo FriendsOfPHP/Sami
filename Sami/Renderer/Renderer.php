@@ -163,8 +163,8 @@ class Renderer
             $properties = $class->getProperties($project->getConfig('include_parent_data'));
 
             $sortProperties = $project->getConfig('sort_class_properties');
-            if($sortProperties) {
-                if(is_callable($sortProperties)) {
+            if ($sortProperties) {
+                if (is_callable($sortProperties)) {
                     uksort($properties, $sortProperties);
                 } else {
                     ksort($properties);
@@ -174,8 +174,8 @@ class Renderer
             $methods = $class->getMethods($project->getConfig('include_parent_data'));
 
             $sortMethods = $project->getConfig('sort_class_methods');
-            if($sortMethods) {
-                if(is_callable($sortMethods)) {
+            if ($sortMethods) {
+                if (is_callable($sortMethods)) {
                     uksort($methods, $sortMethods);
                 } else {
                     ksort($methods);
@@ -185,8 +185,8 @@ class Renderer
             $constants = $class->getConstants($project->getConfig('include_parent_data'));
 
             $sortConstants = $project->getConfig('sort_class_constants');
-            if($sortConstants) {
-                if(is_callable($sortConstants)) {
+            if ($sortConstants) {
+                if (is_callable($sortConstants)) {
                     uksort($constants, $sortConstants);
                 } else {
                     ksort($constants);
@@ -196,8 +196,8 @@ class Renderer
             $traits = $class->getTraits($project->getConfig('include_parent_data'));
 
             $sortTraits = $project->getConfig('sort_class_traits');
-            if($sortTraits) {
-                if(is_callable($sortTraits)) {
+            if ($sortTraits) {
+                if (is_callable($sortTraits)) {
                     uksort($traits, $sortTraits);
                 } else {
                     ksort($traits);
