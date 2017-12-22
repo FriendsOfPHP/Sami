@@ -204,6 +204,11 @@ class Renderer
                 }
             }
 
+            $sortInterfaces = $project->getConfig('sort_class_interfaces');
+            if ($sortInterfaces) {
+                $class->sortInterfaces($sortInterfaces);
+            }
+
             $variables = array(
                 'class' => $class,
                 'properties' => $properties,
