@@ -170,7 +170,7 @@ class Renderer
                     ksort($properties);
                 }
             }
-  
+
             $methods = $class->getMethods($project->getConfig('include_parent_data'));
 
             $sortMethods = $project->getConfig('sort_class_methods');
