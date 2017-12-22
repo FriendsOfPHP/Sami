@@ -691,4 +691,15 @@ class ClassReflection extends Reflection
     {
         return self::$categoryName[$this->category];
     }
+
+    public function sortInterfaces($sort)
+    {
+        if ($sort) {
+           if (is_callable($sort)) {
+                uksort($this->interfaces, $sort);
+            } else {
+                ksort($this->interfaces);
+            } 
+        }
+    }
 }
