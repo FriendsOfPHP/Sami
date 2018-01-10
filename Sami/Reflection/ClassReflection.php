@@ -638,9 +638,15 @@ class ClassReflection extends Reflection
             'errors' => $this->errors,
             'interfaces' => $this->interfaces,
             'traits' => $this->traits,
-            'properties' => array_map(function ($property) { return $property->toArray(); }, $this->properties),
-            'methods' => array_map(function ($method) { return $method->toArray(); }, $this->methods),
-            'constants' => array_map(function ($constant) { return $constant->toArray(); }, $this->constants),
+            'properties' => array_map(function ($property) {
+                return $property->toArray();
+            }, $this->properties),
+            'methods' => array_map(function ($method) {
+                return $method->toArray();
+            }, $this->methods),
+            'constants' => array_map(function ($constant) {
+                return $constant->toArray();
+            }, $this->constants),
         );
     }
 

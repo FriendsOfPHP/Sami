@@ -167,7 +167,9 @@ class MethodReflection extends Reflection
             'is_by_ref' => $this->byRef,
             'exceptions' => $this->exceptions,
             'errors' => $this->errors,
-            'parameters' => array_map(function ($parameter) { return $parameter->toArray(); }, $this->parameters),
+            'parameters' => array_map(function ($parameter) {
+                return $parameter->toArray();
+            }, $this->parameters),
         );
     }
 

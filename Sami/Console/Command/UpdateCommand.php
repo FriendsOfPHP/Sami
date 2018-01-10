@@ -29,7 +29,8 @@ class UpdateCommand extends Command
         $this
             ->setName('update')
             ->setDescription('Parses then renders a project')
-            ->setHelp(<<<EOF
+            ->setHelp(
+                <<<EOF
 The <info>%command.name%</info> command parses and renders a project:
 
     <info>php %command.full_name% config/symfony.php</info>

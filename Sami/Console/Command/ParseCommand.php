@@ -29,7 +29,8 @@ class ParseCommand extends Command
         $this
             ->setName('parse')
             ->setDescription('Parses a project')
-            ->setHelp(<<<EOF
+            ->setHelp(
+                <<<EOF
 The <info>%command.name%</info> command parses a project and generates a database
 with API information:
 

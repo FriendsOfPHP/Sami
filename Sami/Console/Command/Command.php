@@ -151,9 +151,13 @@ abstract class Command extends BaseCommand
         }
         $this->started = true;
 
-        $this->output->isDecorated() and $this->output->write(sprintf(
+        $this->output->isDecorated() and $this->output->write(
+            sprintf(
             "  Parsing <comment>%s</comment>%s\033[K\n          %s\033[K\n",
-            $this->renderProgressBar($progress, 50), count($this->errors) ? ' <fg=red>'.count($this->errors).' error'.(1 == count($this->errors) ? '' : 's').'</>' : '', $class->getName())
+            $this->renderProgressBar($progress, 50),
+            count($this->errors) ? ' <fg=red>'.count($this->errors).' error'.(1 == count($this->errors) ? '' : 's').'</>' : '',
+            $class->getName()
+        )
         );
     }
 
@@ -166,7 +170,9 @@ abstract class Command extends BaseCommand
 
         $this->output->isDecorated() and $this->output->write(sprintf(
             "  Rendering <comment>%s</comment>\033[K\n            <info>%s</info> %s\033[K\n",
-            $this->renderProgressBar($progression, 50), $section, $message
+            $this->renderProgressBar($progression, 50),
+            $section,
+            $message
         ));
     }
 
@@ -220,7 +226,9 @@ abstract class Command extends BaseCommand
         $this->output->writeln('<bg=cyan;fg=white> Version </>  <bg=cyan;fg=white> Updated C </>  <bg=cyan;fg=white> Updated N </>  <bg=cyan;fg=white> Removed C </>  <bg=cyan;fg=white> Removed N </>');
 
         foreach ($this->diffs as $version => $diff) {
-            $this->output->writeln(sprintf('%9s  %11d  %11d  %11d  %11d', $version,
+            $this->output->writeln(sprintf(
+                '%9s  %11d  %11d  %11d  %11d',
+                $version,
                 count($diff->getModifiedClasses()),
                 count($diff->getModifiedNamespaces()),
                 count($diff->getRemovedClasses()),

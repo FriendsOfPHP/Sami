@@ -11,7 +11,9 @@ $iterator = Finder::create()
 ;
 
 $versions = GitVersionCollection::create($dir)
-    ->addFromTags(function ($version) { return preg_match('/^v?4\.\d+\.\d+$/', $version); })
+    ->addFromTags(function ($version) {
+        return preg_match('/^v?4\.\d+\.\d+$/', $version);
+    })
     ->add('master', 'master branch')
 ;
 

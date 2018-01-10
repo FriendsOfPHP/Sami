@@ -29,7 +29,8 @@ class RenderCommand extends Command
         $this
             ->setName('render')
             ->setDescription('Renders a project')
-            ->setHelp(<<<EOF
+            ->setHelp(
+                <<<EOF
 The <info>%command.name%</info> command renders a project as a static set of HTML files:
 
     <info>php %command.full_name% render config/symfony.php</info>
