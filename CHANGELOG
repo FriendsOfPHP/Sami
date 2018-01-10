@@ -1,9 +1,10 @@
 CHANGELOG
 =========
 
-* 4.0.12 (2018-XX-XX)
+* 4.0.13 (2018-01-10)
 
- * n/a
+ * implemented option to sort properties, methods, constants, traits and interfaces
+ * fixed class properties display
 
 * 4.0.12 (2017-12-31)
 
