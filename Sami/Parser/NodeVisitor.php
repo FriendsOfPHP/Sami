@@ -180,7 +180,13 @@ class NodeVisitor extends NodeVisitorAbstract
             }
 
             if (null !== $typeStr) {
-                $parameter->setHint($this->resolveHint(array(array($typeStr, false))));
+                $typeArr = array(array($typeStr, false));
+
+                if ($param->type instanceof NullableType) {
+                    $typeArr[] = array('null', false);
+                }
+
+                $parameter->setHint($this->resolveHint($typeArr));
             }
 
             $method->addParameter($parameter);
