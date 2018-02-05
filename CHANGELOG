@@ -1,9 +1,13 @@
 CHANGELOG
 =========
 
-* 4.0.14 (2018-XX-XX)
+* 4.0.15 (2018-XX-XX)
 
  * n/a
+
+* 4.0.14 (2018-02-05)
+
+ * fixed type null for nullable type parameters not added as type (PHP 7)
 
 * 4.0.13 (2018-01-10)
 
