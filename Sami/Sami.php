@@ -73,6 +73,7 @@ class Sami extends Container
                 'source_url' => $sc['source_url'],
                 'source_dir' => $sc['source_dir'],
                 'insert_todos' => $sc['insert_todos'],
+                'insert_todos_page' => $sc['insert_todos_page'],
                 'sort_class_properties' => $sc['sort_class_properties'],
                 'sort_class_methods' => $sc['sort_class_methods'],
                 'sort_class_constants' => $sc['sort_class_constants'],
@@ -180,7 +181,8 @@ class Sami extends Container
         $this['source_dir'] = '';
         $this['source_url'] = '';
         $this['default_opened_level'] = 2;
-        $this['insert_todos'] = false;
+        $this['insert_todos'] = true;
+        $this['insert_todos_page'] = true;
         $this['sort_class_properties'] = false;
         $this['sort_class_methods'] = false;
         $this['sort_class_constants'] = false;
