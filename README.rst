@@ -67,7 +67,7 @@ that matter any instance of the Symfony `Finder`_ class):
 
     return new Sami($iterator);
 
-The ``Sami`` constructor optionally takes an array of options as a second
+The ``Sami`` constructor optionally takes an array of options_ as a second
 argument:
 
 .. code-block:: php
@@ -247,6 +247,7 @@ Files are contained into sections, depending on how Sami needs to treat them:
 .. _Symfony API: http://api.symfony.com/
 .. _phar file:   http://get.sensiolabs.org/sami.phar
 .. _Finder:      http://symfony.com/doc/current/components/finder.html
+.. _options:     docs/constructor_options.rst
 
 Search Index
 ~~~~~~~~~~~~
