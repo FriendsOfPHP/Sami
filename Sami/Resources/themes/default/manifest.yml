@@ -19,6 +19,7 @@ global:
     'namespaces.twig': 'namespaces.html'
     'classes.twig':    'classes.html'
     'interfaces.twig': 'interfaces.html'
+    'todo.twig':       'todo.html'
     'traits.twig':     'traits.html'
     'opensearch.twig': 'opensearch.xml'
     'search.twig':     'search.html'
