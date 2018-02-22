@@ -35,6 +35,12 @@ class DocBlockNode
 
         foreach ($tags as $name => $values) {
             foreach ($values as $i => $value) {
+                // For 'see' tag we try to maintain backwards compatibility
+                // by returning only a part of the value.
+                if ($name === 'see') {
+                    $value = $value[0];
+                }
+
                 $tags[$name][$i] = is_string($value) ? explode(' ', $value) : $value;
             }
         }
