@@ -331,19 +331,27 @@ class NodeVisitor extends NodeVisitorAbstract
 
         $class = $this->context->getClass();
 
-        // special aliases
-        if ('self' === $alias || 'static' === $alias || '\$this' === $alias) {
-            return $class->getName();
+        // A class MIGHT or MIGHT NOT be present in context.
+        // It is not present in cases, where eg. `@see` tag refers to non existing class/method.
+        // We may want to run class related checks only, if class is actually present.
+        if ($class) {
+            // special aliases
+            if ('self' === $alias || 'static' === $alias || '\$this' === $alias) {
+                return $class->getName();
+            }
+
+            // an alias defined by a use statement
+            $aliases = $class->getAliases();
+
+            if (isset($aliases[$alias])) {
+                return $aliases[$alias];
+            }
+
+            // a class in the current class namespace
+            return $class->getNamespace().'\\'.$alias;
         }
 
-        // an alias defined by a use statement
-        $aliases = $class->getAliases();
-        if (isset($aliases[$alias])) {
-            return $aliases[$alias];
-        }
-
-        // a class in the current class namespace
-        return $class->getNamespace().'\\'.$alias;
+        return $alias;
     }
 
     protected function resolveSee(array $see)
