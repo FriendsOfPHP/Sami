@@ -1,9 +1,13 @@
 CHANGELOG
 =========
 
-* 4.0.15 (2018-04-04)
+* 4.0.16 (2018-04-04)
 
  * fixed @see tag support
+
+* 4.0.15 (2018-02-22)
+
+ * added extended support for the @see tag
 
 * 4.0.14 (2018-02-05)
 
