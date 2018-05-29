@@ -54,7 +54,6 @@ that matter any instance of the Symfony `Finder`_ class):
     <?php
 
     use Sami\Sami;
-    use Sami\RemoteRepository\GitHubRemoteRepository;
     use Symfony\Component\Finder\Finder;
 
     $iterator = Finder::create()
