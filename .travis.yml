@@ -12,6 +12,9 @@ matrix:
 
 sudo: false
 
+git:
+    depth: 1
+
 cache:
     - $HOME/.composer/cache/files
     - .phpunit
