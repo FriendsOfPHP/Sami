@@ -212,6 +212,31 @@ class NodeVisitor extends NodeVisitorAbstract
 
         $method->setErrors($errors);
 
+        $returnType = $node->getReturnType();
+        $returnTypeStr = null;
+
+        if (is_string($returnType)) {
+            $returnTypeStr = (string) $returnType;
+        } elseif ($returnType instanceof NullableType) {
+            $returnTypeStr = (string) $returnType->type;
+        } elseif (null !== $returnType) {
+            $returnTypeStr = (string) $returnType;
+        }
+
+        if ($returnType instanceof FullyQualified && 0 !== strpos($returnTypeStr, '\\')) {
+            $returnTypeStr = '\\'.$returnTypeStr;
+        }
+
+        if (null !== $returnTypeStr) {
+            $returnTypeArr = array(array($returnTypeStr, false));
+
+            if ($returnType instanceof NullableType) {
+                $returnTypeArr[] = array('null', false);
+            }
+
+            $method->setHint($this->resolveHint($returnTypeArr));
+        }
+
         if ($this->context->getFilter()->acceptMethod($method)) {
             $this->context->getClass()->addMethod($method);
 

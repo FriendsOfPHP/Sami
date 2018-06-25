@@ -4,6 +4,7 @@ namespace Sami\Tests\Parser;
 
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Name\Relative;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
@@ -51,6 +52,23 @@ class NodeVisitorTest extends TestCase
     }
 
     /**
+     * @dataProvider getMethodReturnTypeHints
+     */
+    public function testMethodReturnTypeHints(ClassReflection $classReflection, ClassMethod $method, $expectedReturnType)
+    {
+        $parserContext = new ParserContext(new TrueFilter(), new DocBlockParser(), new Standard());
+        $parserContext->enterClass($classReflection);
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new NodeVisitor($parserContext));
+        $traverser->traverse(array($method));
+
+        /* @var $method MethodReflection */
+        $reflMethod = $classReflection->getMethod($method->name);
+
+        $this->assertEquals($expectedReturnType, $reflMethod->getHintAsString());
+    }
+
+    /**
      * @return array
      */
     public function getMethodTypehints()
@@ -63,6 +81,88 @@ class NodeVisitorTest extends TestCase
             'docblockmixedclass' => $this->getMethodTypehintsDocblockMixedClassParameters(),
         );
     }
+
+    /**
+     * @return array
+     */
+    public function getMethodReturnTypeHints()
+    {
+        return array(
+            'primitive' => $this->getPrimitiveMethodReturnType(),
+            'class' => $this->getClassMethodReturnType(),
+            'nullableType' => $this->getNullableMethodReturnType(),
+        );
+    }
+
+    private function getPrimitiveMethodReturnType()
+    {
+        $expectedReturnType = 'string';
+        $classReflection = new ClassReflection('C1', 1);
+        $method = new ClassMethod('testMethod', array(
+            'returnType' => 'string'
+        ));
+
+        $classReflection->setMethods(array($method));
+
+        $store = new ArrayStore();
+        $store->setClasses(array($classReflection));
+
+        $project = new Project($store);
+        $project->loadClass('C1');
+
+        return array(
+            $classReflection,
+            $method,
+            $expectedReturnType,
+        );
+    }
+
+    private function getClassMethodReturnType()
+    {
+        $expectedReturnType = 'Class';
+        $classReflection = new ClassReflection('C1', 1);
+        $method = new ClassMethod('testMethod', array(
+            'returnType' => new FullyQualified('Test\\Class'),
+        ));
+
+        $classReflection->setMethods(array($method));
+
+        $store = new ArrayStore();
+        $store->setClasses(array($classReflection));
+
+        $project = new Project($store);
+        $project->loadClass('C1');
+
+        return array(
+            $classReflection,
+            $method,
+            $expectedReturnType
+        );
+    }
+
+    private function getNullableMethodReturnType()
+    {
+        $expectedReturnType = 'Class|null';
+        $classReflection = new ClassReflection('C1', 1);
+        $method = new ClassMethod('testMethod', array(
+            'returnType' => new NullableType('Test\\Class'),
+        ));
+
+        $classReflection->setMethods(array($method));
+
+        $store = new ArrayStore();
+        $store->setClasses(array($classReflection));
+
+        $project = new Project($store);
+        $project->loadClass('C1');
+
+        return array(
+            $classReflection,
+            $method,
+            $expectedReturnType
+        );
+    }
+
 
     private function getMethodTypehintsPrimiteveParameters()
     {
