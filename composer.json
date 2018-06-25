@@ -1,41 +1,46 @@
 {
-    "name": "sami/sami",
-    "type": "application",
-    "description": "Sami, an API documentation generator",
-    "keywords": ["phpdoc"],
-    "homepage": "http://sami.sensiolabs.org",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Fabien Potencier",
-            "email": "fabien@symfony.com"
-        }
-    ],
-    "require": {
-        "php": ">=7.0",
-        "pimple/pimple": "~3.0",
-        "twig/twig": "~2.0",
-        "nikic/php-parser": "~3.0",
-        "michelf/php-markdown": "~1.3",
-        "symfony/console": "~3.0",
-        "symfony/finder": "~3.0",
-        "symfony/filesystem": "~3.0",
-        "symfony/yaml": "~3.0",
-        "symfony/process": "~3.0",
-        "phpdocumentor/reflection-docblock": "~2.0",
-        "blackfire/php-sdk": "^1.5.18"
-    },
-    "require-dev": {
-        "symfony/phpunit-bridge": "~4.0"
-    },
-    "autoload": {
-        "psr-4": { "Sami\\": "Sami/" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "4.0-dev"
-        }
-    },
-    "prefer-stable": true,
-    "bin": ["sami.php"]
+	"name" : "sami/sami",
+	"type" : "application",
+	"description" : "Sami, an API documentation generator",
+	"keywords" : [
+		"phpdoc"
+	],
+	"homepage" : "http://sami.sensiolabs.org",
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Fabien Potencier",
+			"email" : "fabien@symfony.com"
+		}
+	],
+	"require" : {
+		"php" : ">=7.0",
+		"pimple/pimple" : "~3.0",
+		"twig/twig" : "~2.0",
+		"nikic/php-parser" : "~3.0",
+		"michelf/php-markdown" : "~1.3",
+		"symfony/console" : ">=3.0 <5",
+		"symfony/finder" : ">=3.0 <5",
+		"symfony/filesystem" : ">=3.0 <5",
+		"symfony/yaml" : ">=3.0 <5",
+		"symfony/process" : ">=3.0 <5",
+		"phpdocumentor/reflection-docblock" : "~2.0",
+		"blackfire/php-sdk" : "^1.5.18"
+	},
+	"require-dev" : {
+		"symfony/phpunit-bridge" : "~4.0"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Sami\\" : "Sami/"
+		}
+	},
+	"extra" : {
+		"branch-alias" : {
+			"dev-master" : "4.0-dev"
+		}
+	},
+	"prefer-stable" : true,
+	"bin" : [
+		"sami.php"
+	]
 }
