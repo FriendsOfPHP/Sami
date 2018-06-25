@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-* 4.1.0 (2018-XX-XX)
+* 4.1.0 (2018-06-25)
 
  * dropped support for PHP 7.0
  * added support for Symfony 4+
