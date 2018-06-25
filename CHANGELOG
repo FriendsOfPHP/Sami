@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+* 4.1.0 (2018-XX-XX)
+
+ * dropped support for PHP 7.0
+ * added support for Symfony 4+
+ * allowed `true` and `false` type-hint
+ * added support for php7 return types
+
 * 4.0.16 (2018-04-04)
 
  * fixed @see tag support
