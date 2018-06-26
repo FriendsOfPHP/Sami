@@ -13,7 +13,6 @@ namespace Sami\Version;
 
 use Symfony\Component\Finder\Glob;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessBuilder;
 
 class GitVersionCollection extends VersionCollection
 {
@@ -105,9 +104,7 @@ class GitVersionCollection extends VersionCollection
     {
         array_unshift($arguments, $this->gitPath);
 
-        $builder = new ProcessBuilder($arguments);
-        $builder->setWorkingDirectory($this->repo);
-        $process = $builder->getProcess();
+        $process = new Process($arguments, $this->repo);
         $process->run();
 
         if (!$process->isSuccessful()) {
