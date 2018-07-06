@@ -183,7 +183,7 @@ class DocBlockParserTest extends TestCase
                 * @covers SomeClass::SomeMethod
                 * @deprecated 1.0 for ever
                 * @todo Something needs to be done
-                * @example Description
+                * @example my_file.php 2 1 Description
                 * @link http://www.google.com
                 * @method void setInteger(integer $integer)
                 * @property-read string $myProperty
@@ -203,7 +203,7 @@ class DocBlockParserTest extends TestCase
                         'covers' => array('SomeClass::SomeMethod'),
                         'deprecated' => array('1.0 for ever'),
                         'todo' => array('Something needs to be done'),
-                        'example' => array('Description'),
+                        'example' => array(array('my_file.php', 2, 1, 'Description')),
                         'link' => array('http://www.google.com'),
                         'method' => array('void setInteger(integer $integer)'),
                         'property-read' => array(   // array of all properties
@@ -244,7 +244,7 @@ class DocBlockParserTest extends TestCase
                         ),
                         'see' => array(array('SomeClass::SomeMethod This is a description.', 'SomeClass::SomeMethod', 'This is a description.')),
                         'since' => array('1.0.1 First time this was introduced.'),
-                        'source' => array('2 1 Check that ensures lazy counting.'),
+                        'source' => array(array(2, 1, 'Check that ensures lazy counting.')),
                         'uses' => array('MyClass::$items to retrieve the count from.'),
                         'version' => array('1.0.1'),
                         'unknown' => array('any text'),

@@ -167,6 +167,9 @@
                 <td class="last">
                     <p><em>{{ constant.shortdesc|desc(class) }}</em></p>
                     <p>{{ constant.longdesc|desc(class) }}</p>
+                    {% if constant.source %}
+                        <pre>{{ constant.source[0]|raw }}</pre>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
@@ -184,7 +187,12 @@
                     {{ hint_link(property.hint) }}
                 </td>
                 <td>${{ property.name|raw }}</td>
-                <td class="last">{{ property.shortdesc|desc(class) }}</td>
+                <td class="last">
+                    {{ property.shortdesc|desc(class) }}
+                    {% if property.source %}
+                        <pre>{{ property.source[0]|raw }}</pre>
+                    {% endif %}
+                </td>
                 <td>
                     {%- if property.class is not same as(class) -%}
                         <small>from&nbsp;{{ property_link(property, false, true) }}</small>
@@ -278,6 +286,23 @@
                 <h4>See also</h4>
 
                 {{ block('see') }}
+            {% endif %}
+
+            {% if method.example %}
+                <h4>Example</h4>
+
+                <div class="table table-condensed">
+                <pre>{{ method.example|raw }}</pre>
+                </div>
+            {% endif %}
+
+            {% if method.source %}
+                <h4>Source</h4>
+
+                <div class="table table-condensed">
+                {%- if method.source[1] -%}<p>{{ method.source[1] }}</p>{%- endif -%}
+                <pre>{{ method.source[0]|raw }}</pre>
+                </div>
             {% endif %}
         </div>
     </div>

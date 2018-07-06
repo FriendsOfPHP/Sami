@@ -14,6 +14,7 @@ namespace Sami\Parser;
 use PhpParser\Node as AbstractNode;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\NodeVisitorAbstract;
+use PhpParser\NodeAbstract;
 use PhpParser\Node\Stmt\ClassConst as ClassConstNode;
 use PhpParser\Node\Stmt\ClassMethod as ClassMethodNode;
 use PhpParser\Node\Stmt\Class_ as ClassNode;
@@ -26,6 +27,7 @@ use PhpParser\Node\Stmt\Trait_ as TraitNode;
 use PhpParser\Node\Stmt\Use_ as UseNode;
 use PhpParser\Node\NullableType;
 use Sami\Project;
+use Sami\Parser\Node\DocBlockNode;
 use Sami\Reflection\ClassReflection;
 use Sami\Reflection\ConstantReflection;
 use Sami\Reflection\MethodReflection;
@@ -198,6 +200,9 @@ class NodeVisitor extends NodeVisitorAbstract
         $method->setShortDesc($comment->getShortDesc());
         $method->setLongDesc($comment->getLongDesc());
         $method->setSee($this->resolveSee($comment->getTag('see')));
+        $method->setExample($this->resolveExample($node, $comment));
+        $method->setSource($this->resolveSource($node, $comment));
+
         if (!$errors = $comment->getErrors()) {
             $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'));
 
@@ -259,6 +264,8 @@ class NodeVisitor extends NodeVisitorAbstract
             $property->setShortDesc($comment->getShortDesc());
             $property->setLongDesc($comment->getLongDesc());
             $property->setSee($this->resolveSee($comment->getTag('see')));
+            $property->setSource($this->resolveSource($prop, $comment));
+
             if ($errors = $comment->getErrors()) {
                 $property->setErrors($errors);
             } else {
@@ -295,6 +302,7 @@ class NodeVisitor extends NodeVisitorAbstract
             $constant->setDocComment($node->getDocComment());
             $constant->setShortDesc($comment->getShortDesc());
             $constant->setLongDesc($comment->getLongDesc());
+            $constant->setSource($this->resolveSource($const, $comment));
 
             $this->context->getClass()->addConstant($constant);
         }
@@ -415,5 +423,85 @@ class NodeVisitor extends NodeVisitorAbstract
         }
 
         return $return;
+    }
+
+    protected function resolveExample(NodeAbstract $node, DocBlockNode $comment)
+    {
+        $example = $comment->getTag('example');
+        if (count($example) === 0) {
+            return null;
+        }
+
+        $example = $example[0];
+        $file = dirname($this->context->getFile()).'/'.$example[0];
+
+        $contents = file($file, FILE_IGNORE_NEW_LINES);
+        if (empty($contents)) {
+            return null;
+        }
+
+        $contents = array_slice($contents, (($example[1] - 1) ?? 0), ($example[2] ?? $example[3] ?? null));
+        $endpos = \count($contents) - 1;
+        $level = 0;
+        $started = false;
+
+        foreach ($contents as $key => $line) {
+            if (!$started || $key === $endpos) {
+                $contents[$key] = ltrim($line);
+                $level = strlen($line) - strlen($contents[$key]);
+                $started = true;
+            } else {
+                $contents[$key] = substr($line, $level);
+            }
+        }
+
+        $content = implode(PHP_EOL, $contents);
+        $highlighted = substr(highlight_string('<?php '.$content, true), 6, -7);
+        $exampleCode = preg_replace('/\<span style\="color\: .*?"\>.*?\<span style\="color\: .*?"\>&lt;\?php&nbsp;\<\/span\>(.*)<\/span\>/is', '$1', $highlighted, 1);
+        $exampleCode = preg_replace('/\<br \/\>(.*?)\<\/span\>/s', '$1</span>', $exampleCode);
+
+        return trim($exampleCode);
+    }
+
+    protected function resolveSource(NodeAbstract $node, DocBlockNode $comment)
+    {
+        $source = $comment->getTag('source');
+        if (count($source) === 0) {
+            return null;
+        }
+
+        $source = $source[0];
+        $attrib = $node->getAttributes();
+        $file = $this->context->getFile();
+
+        $contents = file($file, FILE_IGNORE_NEW_LINES);
+        if (empty($contents)) {
+            return null;
+        }
+
+        $contents = array_slice($contents, ($attrib['startLine'] - 2 + ($source[0] ?? 0)), ($source[1] ?? ($attrib['endLine'] - $attrib['startLine'] + 1)));
+        $endpos = \count($contents) - 1;
+        $level = 0;
+        $started = false;
+
+        foreach ($contents as $key => $line) {
+            if (!$started || $key === $endpos) {
+                $contents[$key] = ltrim($line);
+                $level = strlen($line) - strlen($contents[$key]);
+                $started = true;
+            } else {
+                $contents[$key] = substr($line, $level);
+            }
+        }
+
+        $content = implode(PHP_EOL, $contents);
+        $highlighted = substr(highlight_string('<?php '.$content, true), 6, -7);
+        $sourceCode = preg_replace('/\<span style\="color\: .*?"\>.*?\<span style\="color\: .*?"\>&lt;\?php&nbsp;\<\/span\>(.*)<\/span\>/is', '$1', $highlighted, 1);
+        $sourceCode = preg_replace('/\<br \/\>(.*?)\<\/span\>/s', '$1</span>', $sourceCode);
+
+        return array(
+            trim($sourceCode),
+            ($source[2] ?? ""),
+        );
     }
 }

@@ -21,6 +21,7 @@ class MethodReflection extends Reflection
     protected $modifiers;
     protected $exceptions = array();
     protected $errors = array();
+    protected $example;
 
     public function __toString()
     {
@@ -148,6 +149,16 @@ class MethodReflection extends Reflection
         $this->errors = $errors;
     }
 
+    public function getExample()
+    {
+        return $this->example;
+    }
+
+    public function setExample($example)
+    {
+        $this->example = $example;
+    }
+
     public function getSourcePath()
     {
         return $this->class->getSourcePath($this->line);
@@ -167,6 +178,7 @@ class MethodReflection extends Reflection
             'is_by_ref' => $this->byRef,
             'exceptions' => $this->exceptions,
             'errors' => $this->errors,
+            'example' => $this->example,
             'parameters' => array_map(function ($parameter) {
                 return $parameter->toArray();
             }, $this->parameters),
@@ -185,6 +197,7 @@ class MethodReflection extends Reflection
         $method->byRef = $array['is_by_ref'];
         $method->exceptions = $array['exceptions'];
         $method->errors = $array['errors'];
+        $method->example = $array['example'];
 
         foreach ($array['parameters'] as $parameter) {
             $method->addParameter(ParameterReflection::fromArray($project, $parameter));

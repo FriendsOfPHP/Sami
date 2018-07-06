@@ -32,6 +32,7 @@ abstract class Reflection
     protected $tags;
     protected $docComment;
     protected $see = array();
+    protected $source;
 
     public function __construct($name, $line)
     {
@@ -161,6 +162,16 @@ abstract class Reflection
     public function getDocComment()
     {
         return $this->docComment;
+    }
+
+    public function setSource($source)
+    {
+        $this->source = $source;
+    }
+
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**

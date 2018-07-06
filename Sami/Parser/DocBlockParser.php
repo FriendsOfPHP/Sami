@@ -81,6 +81,22 @@ class DocBlockParser
                     $tag->getType(),
                     $tag->getDescription(),
                 );
+            case 'ExampleTag':
+                return array(
+                    $tag->getFilePath(),
+                    $tag->getStartingLine(),
+                    $tag->getLineCount(),
+                    $tag->getDescription(),
+                );
+            case 'SourceTag':
+                $line = $tag->getStartingLine();
+                $count = $tag->getLineCount();
+
+                return array(
+                    $line,
+                    $count,
+                    substr($tag->getContent(), (strlen((string) $line) + strlen((string) $count) + 2)),
+                );
             case 'SeeTag':
                 // For backwards compatibility, in first cell we store content.
                 // In second - only a referer for further parsing.
