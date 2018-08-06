@@ -8,7 +8,7 @@ Installation
 
 .. caution::
 
-    Sami requires **PHP 7**.
+    Sami requires **PHP 7.1**.
 
 Get Sami as a `phar file`_:
 
