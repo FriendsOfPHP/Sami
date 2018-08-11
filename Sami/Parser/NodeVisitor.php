@@ -130,6 +130,7 @@ class NodeVisitor extends NodeVisitorAbstract
         $class->setDocComment($node->getDocComment());
         $class->setShortDesc($comment->getShortDesc());
         $class->setLongDesc($comment->getLongDesc());
+        $class->setSee($this->resolveSee($comment->getTag('see')));
         if ($errors = $comment->getErrors()) {
             $class->setErrors($errors);
         } else {
@@ -180,7 +181,13 @@ class NodeVisitor extends NodeVisitorAbstract
             }
 
             if (null !== $typeStr) {
-                $parameter->setHint($this->resolveHint(array(array($typeStr, false))));
+                $typeArr = array(array($typeStr, false));
+
+                if ($param->type instanceof NullableType) {
+                    $typeArr[] = array('null', false);
+                }
+
+                $parameter->setHint($this->resolveHint($typeArr));
             }
 
             $method->addParameter($parameter);
@@ -190,6 +197,7 @@ class NodeVisitor extends NodeVisitorAbstract
         $method->setDocComment($node->getDocComment());
         $method->setShortDesc($comment->getShortDesc());
         $method->setLongDesc($comment->getLongDesc());
+        $method->setSee($this->resolveSee($comment->getTag('see')));
         if (!$errors = $comment->getErrors()) {
             $errors = $this->updateMethodParametersFromTags($method, $comment->getTag('param'));
 
@@ -203,6 +211,31 @@ class NodeVisitor extends NodeVisitorAbstract
         }
 
         $method->setErrors($errors);
+
+        $returnType = $node->getReturnType();
+        $returnTypeStr = null;
+
+        if (is_string($returnType)) {
+            $returnTypeStr = (string) $returnType;
+        } elseif ($returnType instanceof NullableType) {
+            $returnTypeStr = (string) $returnType->type;
+        } elseif (null !== $returnType) {
+            $returnTypeStr = (string) $returnType;
+        }
+
+        if ($returnType instanceof FullyQualified && 0 !== strpos($returnTypeStr, '\\')) {
+            $returnTypeStr = '\\'.$returnTypeStr;
+        }
+
+        if (null !== $returnTypeStr) {
+            $returnTypeArr = array(array($returnTypeStr, false));
+
+            if ($returnType instanceof NullableType) {
+                $returnTypeArr[] = array('null', false);
+            }
+
+            $method->setHint($this->resolveHint($returnTypeArr));
+        }
 
         if ($this->context->getFilter()->acceptMethod($method)) {
             $this->context->getClass()->addMethod($method);
@@ -225,6 +258,7 @@ class NodeVisitor extends NodeVisitorAbstract
             $property->setDocComment($node->getDocComment());
             $property->setShortDesc($comment->getShortDesc());
             $property->setLongDesc($comment->getLongDesc());
+            $property->setSee($this->resolveSee($comment->getTag('see')));
             if ($errors = $comment->getErrors()) {
                 $property->setErrors($errors);
             } else {
@@ -322,18 +356,64 @@ class NodeVisitor extends NodeVisitorAbstract
 
         $class = $this->context->getClass();
 
-        // special aliases
-        if ('self' === $alias || 'static' === $alias || '\$this' === $alias) {
-            return $class->getName();
+        // A class MIGHT or MIGHT NOT be present in context.
+        // It is not present in cases, where eg. `@see` tag refers to non existing class/method.
+        // We may want to run class related checks only, if class is actually present.
+        if ($class) {
+            // special aliases
+            if ('self' === $alias || 'static' === $alias || '\$this' === $alias) {
+                return $class->getName();
+            }
+
+            // an alias defined by a use statement
+            $aliases = $class->getAliases();
+
+            if (isset($aliases[$alias])) {
+                return $aliases[$alias];
+            }
+
+            // a class in the current class namespace
+            return $class->getNamespace().'\\'.$alias;
         }
 
-        // an alias defined by a use statement
-        $aliases = $class->getAliases();
-        if (isset($aliases[$alias])) {
-            return $aliases[$alias];
+        return $alias;
+    }
+
+    protected function resolveSee(array $see)
+    {
+        $return = array();
+        $matches = array();
+
+        foreach ($see as $seeEntry) {
+            $reference = $seeEntry[1];
+            $description = $seeEntry[2];
+            if ((bool) preg_match('/^[\w]+:\/\/.+$/', $reference)) { //URL
+                $return[] = array(
+                    $reference,
+                    $description,
+                    false,
+                    false,
+                    $reference,
+                );
+            } elseif ((bool) preg_match('/(.+)\:\:(.+)\(.*\)/', $reference, $matches)) { //Method
+                $return[] = array(
+                    $reference,
+                    $description,
+                    $this->resolveAlias($matches[1]),
+                    $matches[2],
+                    false,
+                );
+            } else { // We assume, that this is a class reference.
+                $return[] = array(
+                    $reference,
+                    $description,
+                    $this->resolveAlias($reference),
+                    false,
+                    false,
+                );
+            }
         }
 
-        // a class in the current class namespace
-        return $class->getNamespace().'\\'.$alias;
+        return $return;
     }
 }

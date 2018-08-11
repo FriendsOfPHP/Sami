@@ -1,9 +1,24 @@
 CHANGELOG
 =========
 
-* 4.0.14 (2018-XX-XX)
+* 4.1.0 (2018-06-25)
 
- * n/a
+ * dropped support for PHP 7.0
+ * added support for Symfony 4+
+ * allowed `true` and `false` type-hint
+ * added support for php7 return types
+
+* 4.0.16 (2018-04-04)
+
+ * fixed @see tag support
+
+* 4.0.15 (2018-02-22)
+
+ * added extended support for the @see tag
+
+* 4.0.14 (2018-02-05)
+
+ * fixed type null for nullable type parameters not added as type (PHP 7)
 
 * 4.0.13 (2018-01-10)
 

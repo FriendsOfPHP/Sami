@@ -2,8 +2,6 @@ language: php
 
 matrix:
     include:
-        - php: 7.0
-        - php: 7.0
         - php: 7.1
         - php: 7.1
           env: BLACKFIRE=on
@@ -11,6 +9,9 @@ matrix:
     fast_finish: true
 
 sudo: false
+
+git:
+    depth: 1
 
 cache:
     - $HOME/.composer/cache/files
