@@ -1,6 +1,8 @@
 Sami: an API documentation generator
 ====================================
 
+**WARNING**: Sami is not supported nor maintained anymore. Feel free to fork.
+
 Curious about what Sami generates? Have a look at the `Symfony API`_.
 
 Installation
